@@ -1,7 +1,7 @@
 {
-	"name": "@deot/css",
+	"name": "@deot/style",
 	"version": "1.0.0",
-	"description": "A modern alternative to Sass",
+	"description": "Public CSS to HTML5",
 	"main": "./dist/index.css",
 	"type": "module",
 	"files": [
@@ -18,6 +18,11 @@
 		"lint:fix": "npm run lint -- --fix",
 		"lint:watch": "npm run lint -- --watch --fix",
 		"lint:style": "stylelint --fix 'src/**/*.{css,scss}' --cache --cache-location node_modules/.cache/stylelint/"
+	},
+	"scripts-info": {
+	  "dev": "开发模式",
+	  "build": "打包模式",
+	  "test": "执行测试"
 	},
 	"author": "deot",
 	"license": "MIT",

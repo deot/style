@@ -19,21 +19,19 @@ export default {
 	moduleNameMapper: {
 		"^.+\\.(css|less|scss)$": "identity-obj-proxy"
 	},
-	// 匹配规则很重要
-	rootDir: process.cwd(),
 	watchPathIgnorePatterns: ['/node_modules/', '/dist/', '/.git/'],
 	testPathIgnorePatterns: [
 		'/node_modules/'
 	],
 	testMatch: [
-		`<rootDir>/src/__tests__/**.(spec|test).[jt]s?(x)`
+		`<rootDir>/tests/**.(spec|test).[jt]s?(x)`
 	],
 
 	collectCoverage: true,
 	coverageDirectory: 'coverage',
 	collectCoverageFrom: [
 		`src/**/*.scss`,
-		`!src/__tests__/**/*`
+		`!tests/**/*`
 	],
 	coverageThreshold: {
 		global: {

@@ -43,7 +43,7 @@ class Build {
 			input: path.resolve('./src/index.ts'),
 			plugins: [
 				typescript({
-					exclude: [`src/__tests__/**/*`],
+					exclude: [`tests/**/*`],
 					include: [`src/**/*`],
 					compilerOptions: {
 						declaration: true,
