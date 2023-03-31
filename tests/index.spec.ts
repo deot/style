@@ -10,6 +10,11 @@ describe('index.scss', () => {
 		expect(source3.css !== source2.css).toBe(true);
 	});
 
+	it('rem-part', () => {
+		const source = sass.compileString(`@import './index.rem-part.scss'`);
+		expect(source.css).toMatch('.rg-pd-tb-24{padding-bottom:24rem;padding-top:24rem}');
+	});
+
 	it('theme', () => {
 		const source = sass.compileString(`@import './outputs/theme.scss'`);
 
