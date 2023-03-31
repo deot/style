@@ -1,0 +1,32 @@
+@import "../variables/default.scss";
+@import "../mixins/common.scss";
+@import "../functions/helper.scss";
+@import "../functions/theme.scss";
+
+$color: themefix(border-color-default);
+
+#{$computed-prefix}b {
+	@include commonBorder1PX('', $color);
+}
+#{$computed-prefix}bb {
+	@include commonBorder1PX(bottom, $color);
+}
+
+#{$computed-prefix}br {
+	@include commonBorder1PX(right, $color);
+}
+
+#{$computed-prefix}bl {
+	@include commonBorder1PX(left, $color);
+}
+
+#{$computed-prefix}bt {
+	@include commonBorder1PX(top, $color);
+}
+
+#{$computed-prefix}br-circle {
+	border-radius: 100% !important;
+}
+#{$computed-prefix}br-sem {
+	border-radius: themefix(border-radius-default) !important;
+}

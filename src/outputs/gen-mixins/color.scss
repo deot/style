@@ -1,0 +1,54 @@
+@use 'sass:meta';
+
+@import "../../functions";
+
+$color-options: ("name": color);
+$background-options: ("name": background);
+$line-gradient-options: ("name": line-gradient);
+
+/**
+ * 输出全局字体颜色
+ */
+@mixin color($list, $options: ()) {
+	$prefix: prefix($color-options, $options);
+
+	@each $key, $color in $list {
+		@if ($color) {
+			#{$prefix}#{$key} {
+				color: $color !important;
+			}
+		}
+	}
+}
+
+/**
+ * 输出全局背景颜色
+ */
+@mixin backgroundColor($list, $options: ()) {
+	$prefix: prefix($background-options, $options);
+
+	@each $key, $background, $foreground in $list {
+		@if ($background) {
+			#{$prefix}#{$key} {
+				background-color: $background !important;
+
+				@if ($foreground) {
+					color: $foreground;
+				}
+			}
+		}
+	}
+}
+
+@mixin lineGradient($list, $options: ()) {
+	$prefix: prefix($line-gradient-options, $options);
+
+	@each $key, $angle, $color, $color2 in $list {
+		@if (meta.type-of($color) == 'color') {
+			#{$prefix}#{$key} {
+				background: $color2;
+				background-image: linear-gradient($angle, $color, $color2);
+			}
+		}
+	}
+}

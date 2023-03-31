@@ -1,0 +1,95 @@
+@import "../variables/default.scss";
+@import "../functions/helper.scss";
+@import "../functions/theme.scss";
+
+#{$computed-prefix}h-full {
+	height: 100vh;
+}
+
+// 可操作的，如光标移入
+#{$computed-prefix}operable {
+	font-size: unitfix(14);
+	color: themefix(color-highlight) !important;
+	cursor: pointer;
+}
+
+// 禁用
+#{$computed-prefix}disabled {
+	pointer-events: none;
+}
+
+/**
+ * 禁用动画
+ */
+#{$computed-prefix}unanimated {
+	animation: 0 !important;
+}
+
+// 滚动条
+#{$computed-prefix}scroller {
+	// scrollbar width
+	&::-webkit-scrollbar {
+		width: unitfix(4);
+		/* stylelint-disable */
+		&:horizontal {
+			height: unitfix(2);
+		}
+		/* stylelint-enable */
+	}
+	
+	// scrollbar bg
+	&::-webkit-scrollbar-track {
+		background: themefix(scrollbar-track-bg-color);
+		border-radius: unitfix(5);
+		box-shadow: themefix(scrollbar-track-box-shadow);
+	}
+
+	// Handle
+	&::-webkit-scrollbar-thumb {
+		background: themefix(scrollbar-thumb-bg-color);
+		border-radius: unitfix(5);
+	}
+}
+
+// display
+#{$prefix}-none, #{$prefix}-dp-n, #{$prefix}-hide {
+	display: none !important;
+}
+#{$prefix}-show, #{$prefix}-dp-b, #{$prefix}-block {
+	display: block !important;
+}
+#{$prefix}-dp-i, #{$prefix}-inline {
+	display: inline !important;
+}
+#{$prefix}-dp-ib, #{$prefix}-inline-block {
+	display: inline-block !important;
+}
+
+// cursor
+#{$prefix}-pointer {
+	cursor: pointer !important;
+}
+
+// divide 划分
+#{$prefix}-divide {
+	position: relative;
+	display: inline-block;
+	width: unitfix(1);
+	height: unitfix(12);
+	margin: 0 unitfix(8);
+	vertical-align: middle;
+	background: #ccc;
+	box-sizing: border-box;
+}
+
+// dot 圆点
+#{$prefix}-dot {
+	display: block;
+	width: unitfix(5);
+	height: unitfix(5);
+	border-radius: 50%;
+}
+
+#{$prefix}-of-h {
+	overflow: hidden !important;
+}

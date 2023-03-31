@@ -12,7 +12,7 @@ import autoprefixer from "autoprefixer";
 import typescript from '@rollup/plugin-typescript';
 import { rollup as rollupBuilder } from 'rollup';
 
-let filepath = path.resolve('./src/index.scss'); 
+let directory = path.resolve('./src'); 
 class Build { 
 	async impl() {
 		await fs.remove(path.resolve('./dist'));
@@ -21,26 +21,30 @@ class Build {
 	}
 
 	async buildCSS() {
-		const data = sass.compile(filepath, { style: 'compressed' });
-		const source = await postcss()
-			// @imoport资源，引进使用的代码，而不是@import '../xxx';
-			.use(atImport())
-			// css 中 url相对路径转化* inline 为使用base64
-			.use(atUrl())
-			// flex优化
-			.use(flexBugs())
-			// 压缩代码，删除重复部分
-			.use(cssnano())
-			// 适配浏览器前缀
-			.use(autoprefixer({ remove: false }))
-			.process(data.css, { from: filepath });
+		const files = fs.readdirSync(directory).filter(i => /\.scss$/.test(i));
+		await Promise.all(files.map(async file => {
+			let filepath = path.resolve('./src', file);
+			const data = sass.compile(filepath, { style: 'compressed' });
+			const source = await postcss()
+				// @imoport资源，引进使用的代码，而不是@import '../xxx';
+				.use(atImport())
+				// css 中 url相对路径转化* inline 为使用base64
+				.use(atUrl())
+				// flex优化
+				.use(flexBugs())
+				// 压缩代码，删除重复部分
+				.use(cssnano())
+				// 适配浏览器前缀
+				.use(autoprefixer({ remove: false }))
+				.process(data.css, { from: filepath });
 
-		fs.outputFileSync(path.resolve('./dist/index.css'), source.css);
+			fs.outputFileSync(path.resolve(`./dist/${file.replace(/\.scss$/g, '.css')}`), source.css);
+		}));
 	}
 
 	async buildJS() {
 		const builder = await rollupBuilder({
-			input: path.resolve('./src/index.ts'),
+			input: path.resolve('./src/scripts/index.ts'),
 			plugins: [
 				typescript({
 					exclude: [`tests/**/*`],
@@ -60,7 +64,7 @@ class Build {
 			exports: 'named',
 			sourcemap: false
 		});
-		await fs.rename(path.resolve('./dist/src/index.d.ts'), path.resolve('./dist/index.d.ts'));
+		await fs.rename(path.resolve('./dist/src/scripts/index.d.ts'), path.resolve('./dist/index.d.ts'));
 		await fs.remove(path.resolve('./dist/src'));
 	}
 }

@@ -1,0 +1,18 @@
+// 定义默认属性
+
+// 缩放
+$scale: 1 !default;
+
+// 单位
+$unit: px !default;
+
+// 前缀
+$prefix: g !default;
+$computed-prefix: 'any with computed' !default;
+
+@if $prefix {
+	$computed-prefix: #{'.'}#{if($prefix and $prefix != '', #{$prefix}-, '')};
+}
+
+// 允许css-variables
+$allow-css-variables: true !default;

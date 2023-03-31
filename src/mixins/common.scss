@@ -116,7 +116,7 @@
  * 其他只操作before和after;
  * 暂时不抽离公用
  */
-@mixin commonBorder1PX($direction: '', $color: $border-line-color) {
+@mixin commonBorder1PX($direction: '', $color) {
 	position: relative;
 	transform: translateZ(0);
 

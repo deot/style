@@ -1,0 +1,18 @@
+@use "sass:list";
+
+@import "../variables/default.scss";
+@import "./gen-mixins/padding.scss";
+
+// 水平间距
+
+$padding-list: 5, 8, 10, 12, 13, 15, 16, 18, 20, 21, 24, 25, 30, 32, 48, 56, 60;
+
+@if $scale > 1 {
+	$padding-list: list.join($padding-list, (3, 4, 5, 6, 7, 9));
+}
+
+$padding-keys: '', 'tb', 'lr', 't', 'l', 'r', 'b';
+$padding-options: (unit: $unit, scale: $scale, prefix: g, name: pd);
+
+// 如g-pd-10, g-pd-tb-10...
+@include padding($padding-keys, $padding-list, $padding-options);

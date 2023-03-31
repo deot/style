@@ -1,0 +1,70 @@
+@use "sass:map";
+
+@import "../variables/color.scss";
+@import "../variables/default.scss";
+@import "../functions/helper.scss";
+@import "../functions/theme.scss";
+@import "./gen-mixins/color.scss";
+
+$color-list: ('red-mid', $red-mid),
+	('pink-mid', $pink_mid),
+	('pink-light', $pink_light),
+	('blue-dark', $blue-dark),
+	('blue-mid', $blue-mid),
+	('blue-light', $blue-light),
+	('yellow-dark', $yellow_dark),
+	('yellow-mid', $yellow_mid),
+	('yellow-light', $yellow_light),
+	('orange-dark', $orange-dark),
+	('orange-mid', $orange-mid),
+	('orange-light', $orange-light),
+	('gray-dark', $gray-dark),
+	('gray-mid', $gray-mid),
+	('gray-light', $gray-light),
+	('black-dark', $black_dark),
+	('black-mid', $black_mid),
+	('black-light', $black_light),
+	('purple-dark', $purple_dark),
+	('purple-mid', $purple_mid),
+	('purple-light', $purple_light),
+	('black', $black),
+	('white', $white),
+	('444', $c444),
+	('67', $c67),
+	('f2', $cf2),
+	('f8', $cf8),
+	('ef', $cef),
+	('cd', $ccd),
+	('e8', $ce8),
+	('d9', $cd9),
+	('f4', $cf4),
+	('f9', $cf9),
+	('000', $c000),
+	('333', $c333),
+	('51', $c51),
+	('666', $c666),
+	('999', $c999),
+	('aaa', $caaa),
+	('bbb', $cbbb),
+	('bd', $cbd),
+	('info', themefix(color-info)),
+	('success', themefix(color-success)),
+	('error', themefix(color-error)),
+	('warning', themefix(color-warning));
+
+$line-gradient-list: ('blue', to right, $blue-mid, $blue-light),
+	('yellow', to right, $yellow-mid, $yellow-light);
+
+$options: (unit: $unit, prefix: g);
+
+@include color($color-list, map.merge($options, (name: c))); // g-c-*
+@include backgroundColor($color-list, map.merge($options, (name: bg))); // g-bg-*
+@include lineGradient($line-gradient-list, map.merge($options, (name: bg-lg))); // g-bg-lg-*
+
+[class*="#{$computed-prefix}bg-white"], [class*="#{$computed-prefix}bg-gray-"] {
+	color: inherit;
+}
+
+[class*="#{$computed-prefix}bg-"] input {
+	color: $black;
+}

@@ -1,3 +1,5 @@
+@use 'sass:string';
+
 /* Var
  -------------------------- */
 $B: '';
@@ -20,7 +22,7 @@ $state-has-prefix: 'has-';
 @function containsModifier($selector) {
 	$selector: selectortostring($selector);
 
-	@if str-index($selector, $modifier-separator) {
+	@if string.index($selector, $modifier-separator) {
 		@return true;
 	}
 
@@ -32,7 +34,7 @@ $state-has-prefix: 'has-';
 @function containWhenFlag($selector) {
 	$selector: selectortostring($selector);
 
-	@if str-index($selector, '.' + $state-is-prefix) or str-index($selector, '.' + $state-has-prefix) {
+	@if string.index($selector, '.' + $state-is-prefix) or string.index($selector, '.' + $state-has-prefix) {
 		@return true;
 	}
 
@@ -44,7 +46,7 @@ $state-has-prefix: 'has-';
 @function containPseudoClass($selector) {
 	$selector: selectortostring($selector);
 
-	@if str-index($selector, ':') {
+	@if string.index($selector, ':') {
 		@return true;
 	}
 

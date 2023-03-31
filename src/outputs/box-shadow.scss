@@ -1,0 +1,11 @@
+@import "../variables/default.scss";
+@import "../functions/helper.scss";
+@import "../functions/theme.scss";
+
+#{$computed-prefix}bs {
+	box-shadow: themefix(border-shadow-default) !important;
+}
+
+#{$computed-prefix}bs-t {
+	box-shadow: themefix(border-shadow-default-top) !important;
+}

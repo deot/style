@@ -1,0 +1,9 @@
+$allow-css-variables: true;
+$unit: rem;
+$scale: 2;
+$prefix: rg;
+
+@import "./outputs/font-size.scss";
+@import "./outputs/line-height.scss";
+@import "./outputs/margin.scss";
+@import "./outputs/padding.scss";

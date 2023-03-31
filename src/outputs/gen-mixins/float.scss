@@ -1,0 +1,23 @@
+@use 'sass:math';
+
+@import "../../functions";
+
+$base-options: null;
+// 输出全局栅格，浮动
+@mixin float($total, $options: ()) {
+	$prefix: prefix($base-options, $options);
+
+	%float {
+		float: left;
+	}
+
+	@for $i from 1 through $total {
+		#{$prefix}w-#{$i} {
+			width: percentw($i, $total);
+		}
+		#{$prefix}fw-#{$i} {
+			@extend %float;
+			@extend #{$prefix}w-#{$i};
+		}
+	}
+}

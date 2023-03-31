@@ -1,0 +1,28 @@
+@import "../variables/default.scss";
+
+#{$computed-prefix}fixed {
+	position: fixed !important;
+}
+#{$computed-prefix}relative {
+	position: relative !important;
+}
+
+#{$computed-prefix}absolute {
+	position: absolute !important;
+}
+
+#{$computed-prefix}fixed-full {
+	position: fixed !important;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+#{$computed-prefix}absolute-full {
+	position: absolute !important;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}

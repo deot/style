@@ -1,0 +1,21 @@
+@use "sass:map";
+@use "sass:list";
+
+@import "../../functions";
+
+$base-options: ("name": line-height);
+// 如输出全局g-lh-#{值}
+@mixin lineHeight($list, $options: ()) {
+	$options: merge($base-options, $options);
+	$prefix: prefix($base-options, $options);
+
+	@for $i from 1 through length($list) {
+		$value: list.nth($list, $i);
+		$_value: unitfix($value, $options);
+
+		$suffix: suffix($value, $options);
+		#{$prefix}#{$suffix} {
+			line-height: $_value;
+		}
+	}
+}

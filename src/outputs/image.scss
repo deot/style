@@ -1,0 +1,12 @@
+@use "sass:map";
+
+@import "../variables/default.scss";
+@import "./gen-mixins/image.scss";
+
+$options: (unit: $unit, scale: $scale, prefix: g);
+$image-size-list: 256, 150, 128, 100, 96, 64, 56, 40, 32, 24;
+
+// 输出全局g-#{名称}-#{值}
+@include imageSize($image-size-list, map.merge($options, (name: img)));
+@include imageSize($image-size-list, map.merge($options, (name: imgc, mode: 'circle')));
+@include imageSize($image-size-list, map.merge($options, (name: imgr, mode: 'radius')));

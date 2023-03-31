@@ -1,0 +1,6 @@
+@import "./gen-mixins/theme.scss";
+@import "../variables/theme.scss";
+
+$theme-options: (allow-css-variables: $allow-css-variables, theme: $theme);
+
+@include theme(":root", $theme-options);

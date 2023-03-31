@@ -1,0 +1,32 @@
+@import "../variables/default.scss";
+@import "./gen-mixins/float.scss";
+
+$float-options: (prefix: $prefix);
+
+@include float(12, $float-options);
+
+#{$computed-prefix}clearfix::before,
+#{$computed-prefix}clearfix::after,
+#{$computed-prefix}row::before,
+#{$computed-prefix}row::after {
+	display: table;
+	content: " ";
+}
+
+#{$computed-prefix}clearfix::after,
+#{$computed-prefix}row::after {
+	clear: both;
+}
+
+#{$computed-prefix}row {
+	padding: 0;
+	margin: 0;
+}
+
+#{$computed-prefix}fr {
+	float: right;
+}
+
+#{$computed-prefix}fl {
+	float: left;
+}
