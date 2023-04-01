@@ -5,7 +5,7 @@
 
 # @deot/style
 
-用于开发的公共CSS资源[document](./DOCUMENT.md)
+用于开发的公共CSS资源[文档](./DOCUMENT.md)
 
 ## 安装
 
@@ -58,7 +58,7 @@ $ npm run pub
 - [TypeScript](https://www.typescriptlang.org/) JS开发语言
 - [Rollup](https://rollupjs.org) 打包
 - [Jest](https://jestjs.io/) 测试
-- [ESLint](https://prettier.io/) 代码校验和格式化
+- [ESLint](https://prettier.io/) 、[Stylelint](https://stylelint.io/)代码校验和格式化
 
 ## 关联
 

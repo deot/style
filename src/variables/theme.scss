@@ -1,3 +1,5 @@
+@use "sass:map";
+
 @import "../functions";
 
 /**
@@ -8,6 +10,11 @@
  * 不要设置--black: black; 这是具体色值，即具体值移入./color.scss
  *
  * 命名规则：新的分类 -> *-default, *-xx
+ *
+ * 主题相关请使用../functions/theme.scss下的 themefix(value)
+ * 	这样可以在allow-css-variables
+ * 		为false时使用具体数值
+ * 		为true时使用会转化为var(--value)
  */
 $theme: (
 	color-default: #f5f6fa,
@@ -41,4 +48,10 @@ $theme: (
 	scrollbar-track-bg-color: rgba(0, 0, 0, 0),
 	scrollbar-thumb-bg-color: rgba(0, 0, 0, 0.2),
 	scrollbar-track-box-shadow: inset 0 0 unitfix(10) rgba(0, 0, 0, 0)
-);
+) !default;
+
+$theme-merge-data: false !default;
+
+@if $theme-merge-data and meta.type-of($theme-merge-data) == 'map' {
+	$theme: map.merge($theme, $theme-merge-data);
+}

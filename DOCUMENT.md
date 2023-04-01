@@ -1,24 +1,24 @@
-
 [1. 准则](#1)  
 
 [2. 文件目录](#2)
- 
+
 [3. 命名规范](#3) 
 
 [4. 使用方式](#4)
 
 [5. 样式输出](#5)
 
-> [主题](./src/variables/theme.scss)
-
-* [ 5.1 Flex ](#5.1) 
-* [ 5.2 Layout ](#5.2) 
-* [ 5.3 柵格 ](#5.3) 
-* [ 5.4 定位 ](#5.4) 
-* [ 5.5 辅助 ](#5.5) 
-* [ 5.6 动画 ](#5.6) 
+* [ 5.1 主题 ](#5.1) 
+* [ 5.2 Flex ](#5.2) 
+* [ 5.3 Layout ](#5.3) 
+* [ 5.4 柵格 ](#5.4) 
+* [ 5.5 网格 ](#5.5) 
+* [ 5.6 定位 ](#5.6) 
+* [ 5.7 辅助 ](#5.7) 
+* [ 5.8 动画 ](#5.8) 
 
 ### <h3 id="1">1. 准则</h3>
+
 1. 以flex布局为主，栅格布局、固定布局、流体布局，绝对定位布局，浮动布局等为辅的一套css样式表。
 2. 常见的flex布局和flex单个属性类。
 3. 辅助布局类。
@@ -72,60 +72,60 @@
 ```
 
 ###  <h3 id="5">5. 样式输出</h3>
+####  <h5 id="5.1"> 5.1 [主题](./src/variables/theme.scss) </h5>
 
-####  <h5 id="5.1"> 5.1 [Flex](./src/outputs/flex.scss) </h5>
+| 值                          | 备注 | 取值                               |
+| -------------------------- | -- | -------------------------------- |
+| color-default              | -  | #f5f6fa                          |
+| color-highlight            | -  | #5495f6                          |
+| color-info                 | -  | #0177de                          |
+| color-success              | -  | #00a854                          |
+| color-error                | -  | #f04134                          |
+| color-warning              | -  | #ffbf00                          |
+| background-color-default   | -  | #f5f6fa                          |
+| background-color-highlight | -  | #5495f6                          |
+| border-radius-default      | -  | 8px                              |
+| border-shadow-default      | -  | 0 0 8px 0 rgba(0, 0, 0, .1)      |
+| border-shadow-default-top  | -  | 0 -2px 10px 0 rgba(0, 0, 0, .08) |
+| line-height-default        | -  | 16px                             |
+| line-height-limit          | -  | 32px                             |
+| border-color-default       | -  | #c9c9c9                          |
+| font-size-default          | -  | 14px                             |
+| font-size-large            | -  | 16px                             |
+| scrollbar-track-bg-color   | -  | rgba(0, 0, 0, 0)                 |
+| scrollbar-thumb-bg-color   | -  | rgba(0, 0, 0, .2)                |
+| scrollbar-track-box-shadow | -  | inset 0 0 10px rgba(0, 0, 0, 0)  |
 
-##### 百分比布局
+- 所有用主题的样式用[themefix](./src/functions/theme.scss)
+- 可以用过`$theme-merge-data`增加，类型map
 
-| class  | 备注  | 关键代码 |
-|:-------------|:---------------|:---------------|
-| .g-flex  | flex布局 | `display: flex` |
-| .g-col   | 占一位 | `flex: 1`  |
-| .g-col-2 | 占两位 | `flex: 2`  |
-| .g-1of1  | 铺满 | `flex: 0 0 100%`  |
-| .g-1of2  | 占50% | `flex: 0 0 50%`   |
-| .g-1of3  | 占1/3 | `flex: 0 0 33.33333333%`  |
-| .g-2of3  | 占2/3 | `flex: 0 0 66.66666666%`  |
-| .g-1of4  | 占1/4 | `flex: 0 0 25%`  |
-| .g-3of4  | 占3/4 | `flex: 0 0 75%`  |
-| .g-1of5  | 占1/5 | `flex: 0 0 20%`  |
-| .g-2of5  | 占2/5 | `flex: 0 0 40%`  |
-| .g-3of5  | 占3/5 | `flex: 0 0 60%`  |
-| .g-4of5  | 占4/5 | `flex: 0 0 80%`  |
+####  <h5 id="5.2"> 5.2 [Flex](./src/outputs/flex.scss) </h5>
 
-##### 圣杯布局
+##### 布局
 
-| class  | 备注  |
-|:-------------|:---------------|
-| .g-flex-holy | |
+| class        | 备注     | 关键代码                                           |
+| ------------ | ------ | ---------------------------------------------- |
+| .g-flex      | flex布局 | `display: flex`                                |
+| .g-flex-holy | 圣杯布局   | `-`                                            |
+| .g-flex-cc   | 水平垂直居中 | `justify-content: center; align-items: center` |
+| .g-flex-ac   | 垂直居中   | `align-items: center`                          |
+| .g-col       | 占一位    | `flex: 1`                                      |
+| .g-col-2     | 占两位    | `flex: 2`                                      |
+| .g-1of1      | 铺满     | `flex: 0 0 100%`                               |
+| .g-1of2      | 占50%   | `flex: 0 0 50%`                                |
+| .g-1of3      | 占1/3   | `flex: 0 0 33.33333333%`                       |
+| .g-2of3      | 占2/3   | `flex: 0 0 66.66666666%`                       |
+| .g-1of4      | 占1/4   | `flex: 0 0 25%`                                |
+| .g-3of4      | 占3/4   | `flex: 0 0 75%`                                |
+| .g-1of5      | 占1/5   | `flex: 0 0 20%`                                |
+| .g-2of5      | 占2/5   | `flex: 0 0 40%`                                |
+| .g-3of5      | 占3/5   | `flex: 0 0 60%`                                |
+| .g-4of5      | 占4/5   | `flex: 0 0 80%`                                |
 
-##### 输入框的布局
 
-```html
-<div class="g-flex">
-	<label></label>
-	<input class="g-col" />
-	<button></button>
-</div>
-```
-##### 悬挂式布局
+##### 单个属性类 以g-(属性名首字母)-(属性值首字母) 命名
 
-```html
-<div class="g-flex g-ai-fs">
-  <img class="g-m-r" src="" alt="">
-  <p class="g-col"></p>
-</div>
-```
-##### 对齐
-
-| class      | 备注      | 关键代码                                           |
-| ---------- | ------- | ---------------------------------------------- |
-| .g-flex-cc | 水平垂直居中 | `justify-content: center; align-items: center` |
-| .g-flex-ac | 垂直居中    | `align-items: center`                          |
-
-##### flex单个属性类 以g-(属性名首字母)-(属性值首字母) 命名
-
-| class    | 备注                                               | 关键代码                             |
+| <div style="width: 65px;">class</div>    | 备注                                               | 关键代码                             |
 | -------- | ------------------------------------------------ | -------------------------------- |
 | .g-fd-c  | 主轴为垂直方向，起点在上                                     | `flex-direction: column`         |
 | .g-fd-cr | 主轴为垂直方向，倒序                                       | `flex-direction: column-reverse` |
@@ -156,17 +156,16 @@
 | .g-as-c  | flex子项在侧轴方向上的对齐方式: 元素位于容器的中心                     | `align-self: center`             |
 | .g-as-s  | 元素被拉伸以适应容器                                       | `align-self: stretch`            |
 
+####  <h5 id="5.3">  5.3 Layout </h5>
 
-####  <h5 id="5.2">  5.2 Layout </h5>
-
-##### [reset](./src/outputs/reset.scss)
+##### [重置](./src/outputs/reset.scss)
 
 | class    | 备注   |
 | -------- | ---- |
 | .g-reset | 用户初始化元素的类 |
 | .g-unset | 避免富文本被其他第三方初始化 |
 
-##### [color/backgroundColor](./src/outputs/color.scss)  g-(c|bg)-(颜色／变量)  颜色效果可在MarkDown编辑器中查看
+##### [颜色](./src/outputs/color.scss)  g-(c|bg)-(颜色／变量)  颜色效果可在MarkDown编辑器中查看
 
 | class                  | 备注        | 颜色效果                                              |
 | ---------------------- | --------- | ------------------------------------------------- |
@@ -213,20 +212,19 @@
 | .g-(c,bg)-error        | `#f04134` | <div style="background: #f04134; height: 10px" /> |
 | .g-(c,bg)-warn         | `#ffbf00` | <div style="background: #ffbf00; height: 10px" /> |
 
-
-##### [font-size](./src/outputs/font-size.scss) g-fs-(字号)
+##### [字号](./src/outputs/font-size.scss) g-fs-(字号)
 
 > 取值范围：10, 12, 13, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 48, 50, 60, 70, 80, 90, 100;
+> 可以用过`$font-size-list-join-data`增加，类型list
 
 | class   | 备注            
 | ------- | -------------- |
 | .g-fs-* | `font-size: *` |
 
-
-
-##### [line-height](./src/outputs/lint-height.scss) g-lh-(值) 
+##### [行高](./src/outputs/lint-height.scss) g-lh-(值) 
 
 > 取值范围：16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 60, 72, 80, 88, 120;
+> 可以用过`$line-height-list-join-data`增加，类型list
 
 | class     | 备注               |
 | --------- | ---------------- |
@@ -234,9 +232,10 @@
 | .g-lh-one | 行高32px, 高度64px   |
 | .g-lh-two | 行高32px, 高度32px   |
 
-##### [padding](./src/outputs/padding.scss) g-pd-(方向)?-(值/变量)
+##### [内边距](./src/outputs/padding.scss) g-pd-(方向)?-(值/变量)
 
 > 取值范围：5, 8, 10, 12, 13, 15, 16, 18, 20, 21, 24, 25, 30, 32, 48, 56, 60;
+> 可以用过`$padding-list-join-data`增加，类型list
 
 | class      | 备注                                  |
 | ---------- | ----------------------------------- |
@@ -248,11 +247,10 @@
 | .g-pd-b-*  | `padding-bottom: *`                 |
 | .g-pd-r-*  | `padding-right: *`                  |
 
-
-
-##### [margin](./src/outputs/margin.scss) g-m-(方向)?-(值/变量) 
+##### [外边距](./src/outputs/margin.scss) g-m-(方向)?-(值/变量) 
 
 > 取值范围：5, 8, 10, 12, 13, 15, 16, 18, 20, 21, 24, 25, 30, 32, 48, 56, 60;
+> 可以用过`$margin-list-join-data`增加，类型list
 
 | class      | 备注                                  |
 | ---------- | ----------------------------------- |
@@ -264,10 +262,10 @@
 | .g-m-b-*  | `margin-bottom: *`                 |
 | .g-m-r-*  | `margin-right: *`                  |
 
-
-##### [image](./src/outputs/image.scss) 大小 g-img-(值) 
+##### [图](./src/outputs/image.scss) 大小 g-img-(值) 
 
 > 取值范围：256, 150, 128, 100, 96, 64, 56, 40, 32, 24
+> 可以用过`$image-size-list-join-data`增加，类型list
 
 | class     | 备注          |
 | --------- | ----------- |
@@ -275,7 +273,7 @@
 | .g-imgc-* | 圆形，长宽`*`    |
 | .g-imgr-* | 圆角4px，长宽`*` |
 
-####  <h5 id="5.3"> 5.3 [柵格](./src/outputs/float.scss) </h5>
+####  <h5 id="5.4"> 5.4 [柵格](./src/outputs/float.scss) </h5>
 
 | class          | 备注                          |
 | -------------- | --------------------------- |
@@ -286,8 +284,11 @@
 | .g-fr          | 右浮                          |
 | .g-fl          | 左浮                          |
 
+####  <h5 id="5.5"> 5.5 Grid </h5>
 
-####  <h5 id="5.4">  5.4 [定位](./src/outputs/position.scss) </h5>
+TODO
+
+####  <h5 id="5.6">  5.6 [定位](./src/outputs/position.scss) </h5>
 
 | class            | 备注   |
 | ---------------- | ---- |
@@ -297,10 +298,10 @@
 | .g-absolute-full | 相对铺满 |
 | .g-fixed-full    | 固定铺满 |
 
-####  <h5 id="5.5"> 5.5 辅助 </h5>
+####  <h5 id="5.7"> 5.7 辅助 </h5>
 
-##### [border](./src/outputs/border.scss)
- 
+##### [边框](./src/outputs/border.scss)
+
 | class        | 备注                    |
 | ------------ | --------------------- |
 | .g-b         | 1像素边框                 |
@@ -312,7 +313,7 @@
 | .g-br-sem    | 默认圆角 (8px)            |
 
 
-##### [text](./src/outputs/text.scss)
+##### [文本](./src/outputs/text.scss)
 
 | class        | 备注     |
 | ------------ | ------ |
@@ -327,7 +328,7 @@
 | .g-line-one                 | 单行省略                    |
 | .g-line-one                 | 两行省略                    |
 
-##### [box-shadow](./src/outputs/box-shadow.scss)
+##### [阴影](./src/outputs/box-shadow.scss)
 
 | class   | 备注   |
 | ------- | ---- |
@@ -352,3 +353,7 @@
 | .g-operable                | 点击文字按钮样式                |
 | .g-disabled                | 无点击事件                   |
 | .g-scroller                | 滚动条                     |
+
+####  <h5 id="5.8"> 5.8 动画 </h5>
+
+目前计划是组件库内处理

@@ -11,6 +11,12 @@ $line-height-list: 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 4
 	$line-height-list: list.join($line-height-list, (8, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 39));
 }
 
+$line-height-list-join-data: false !default;
+
+@if $line-height-list-join-data and meta.type-of($line-height-list-join-data) == 'list' {
+	$line-height-list: list.join($line-height-list, $line-height-list-join-data);
+}
+
 $line-height-options: (unit: $unit, scale: $scale, prefix: $prefix, name: lh);
 
 // 输出全局g-lh-#{值}
