@@ -1,6 +1,6 @@
 {
 	"name": "@deot/style",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Public CSS to HTML5",
 	"main": "./dist/index.css",
 	"type": "module",
@@ -20,9 +20,9 @@
 		"lint:style": "stylelint --fix 'src/**/*.{css,scss}' --cache --cache-location node_modules/.cache/stylelint/"
 	},
 	"scripts-info": {
-	  "dev": "开发模式",
-	  "build": "打包模式",
-	  "test": "执行测试"
+		"dev": "开发模式",
+		"build": "打包模式",
+		"test": "执行测试"
 	},
 	"author": "deot",
 	"license": "MIT",
@@ -33,9 +33,7 @@
 	"bugs": {
 		"url": "https://github.com/deot/sass/issues"
 	},
-	"dependencies": {
-		"normalize.css": "^8.0.1"
-	},
+	"dependencies": {},
 	"devDependencies": {
 		"@rollup/plugin-typescript": "^11.0.0",
 		"@types/fs-extra": "^11.0.1",
@@ -57,6 +55,7 @@
 		"jest": "^29.5.0",
 		"jest-environment-node-single-context": "^29.0.0",
 		"lint-staged": "^13.2.0",
+		"normalize.css": "^8.0.1",
 		"postcss": "^8.4.21",
 		"postcss-flexbugs-fixes": "^5.0.2",
 		"postcss-import": "^15.1.0",

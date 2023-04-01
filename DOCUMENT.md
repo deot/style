@@ -26,24 +26,25 @@
 ### <h3 id="2">2. 文件目录</h3>
 
 ```console
-+ functions                定义公共的函数
-+ mixins                   定义公共的方法
-  - bem.scss               BEM规范
-  - common.scss            公共方法
-+ outputs                  输出实体的样式
-  - flex.scss              输出flex布局
++ functions                     定义公共的函数
++ mixins                        定义公共的方法
+  - bem.scss                    BEM规范
+  - common.scss                 公共方法
++ outputs                       输出实体的样式
+  - flex.scss                   输出flex布局
   - ...
-+ scripts                  用于兼容
++ scripts                       用于兼容
   - ...
-+ variables                常量
-    - default.scss         默认值
-    - colors.scss          颜色的具体数值
-    - theme.scss           主题控制
-- index.scss               输出浏览器可用的（含outputs全部）
-- index.normalize.scss     比上面多一个normalize.css 
-- index.rpx.scss           生成微信可用的rpx，且2倍屏（scale: 2）
-- index.rem.scss           生成移动端可用rem，且2倍屏（scale: 2）
-- index.rem-part.scss      仅含（边距，行高，字体），2倍屏（scale: 2）, 前缀rg-。用于浏览器混入rem开发相关
++ variables                     常量
+    - default.scss              默认值
+    - colors.scss               颜色的具体数值
+    - theme.scss                主题控制
+- index.scss                    输出浏览器可用的（含outputs全部）
+- index.normalize.scss          比上面多一个normalize.css 
+- index.normalize-only.scss     仅打包normalize.css 
+- index.rpx.scss                生成微信可用的rpx，且2倍屏（scale: 2）
+- index.rem.scss                生成移动端可用rem，且2倍屏（scale: 2）
+- index.rem-part.scss           仅含（边距，行高，字体），2倍屏（scale: 2）, 前缀rg-。用于浏览器混入rem开发相关
 
 - ...
 ```
