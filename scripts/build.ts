@@ -8,21 +8,24 @@ import atUrl from "postcss-url";
 import flexBugs from "postcss-flexbugs-fixes";
 import cssnano from "cssnano";
 import autoprefixer from "autoprefixer";
+import { Extractor, ExtractorConfig } from '@microsoft/api-extractor';
 
 import typescript from '@rollup/plugin-typescript';
 import { rollup as rollupBuilder } from 'rollup';
+import { Logger } from '@deot/dev-shared';
 
 let directory = path.resolve('./src'); 
 class Build { 
-	async impl() {
+	async process() {
 		await fs.remove(path.resolve('./dist'));
-		this.buildCSS();
-		this.buildJS();
+		await this.buildCSS();
+		await this.buildJS();
+		await this.buildTypes();
 	}
 
 	async buildCSS() {
-		const files = fs.readdirSync(directory).filter(i => /\.scss$/.test(i));
-		await Promise.all(files.map(async file => {
+		const files = fs.readdirSync(directory).filter((i: string) => /\.scss$/.test(i));
+		await Promise.all(files.map(async (file: string) => {
 			let filepath = path.resolve('./src', file);
 			const data = sass.compile(filepath, { style: 'compressed' });
 			const source = await postcss()
@@ -44,7 +47,7 @@ class Build {
 
 	async buildJS() {
 		const builder = await rollupBuilder({
-			input: path.resolve('./src/scripts/index.ts'),
+			input: path.resolve('./src/index.ts'),
 			plugins: [
 				typescript({
 					exclude: [`tests/**/*`],
@@ -52,7 +55,7 @@ class Build {
 					compilerOptions: {
 						declaration: true,
 						rootDir: '.',
-						outDir: `./dist`
+						outDir: `dist`
 					}
 				})
 			]
@@ -64,9 +67,31 @@ class Build {
 			exports: 'named',
 			sourcemap: false
 		});
-		await fs.rename(path.resolve('./dist/src/scripts/index.d.ts'), path.resolve('./dist/index.d.ts'));
-		await fs.remove(path.resolve('./dist/src'));
+	}
+
+	async buildTypes() {
+		const packageDir = process.cwd();
+		// build types
+		const config = path.resolve(packageDir, `api-extractor.json`);
+		if (fs.existsSync(config)) {
+			const result = Extractor.invoke(
+				ExtractorConfig.loadFileAndPrepare(config), 
+				{
+					localBuild: true,
+					showVerboseMessages: false
+				}
+			);
+
+			if (!result.succeeded) {
+				Logger.error(
+					`API Extractor completed with ${result.errorCount} errors and ${result.warningCount} warnings`
+				);
+				process.exitCode = 1;
+			}			
+		}
+
+		await fs.remove(`${packageDir}/dist/src`);
 	}
 }
 
-new Build().impl();
+new Build().process();
