@@ -117,11 +117,12 @@ export class Release {
 			({ stdout } = await Shell.exec('git', params));
 		}
 
+		const reChunk = /^(fix|feat|break change|style|perf|types|refactor|chore)(\(.+\))?: .*/i;
 		const commits = stdout
 			.split(SUFFIX)
 			.filter((commit: string) => {
 				const chunk = commit.trim();
-				return chunk;
+				return chunk && reChunk.test(chunk);
 			})
 			.map((commit) => {
 				const node = parser.sync(commit);

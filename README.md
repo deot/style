@@ -48,8 +48,19 @@ $ npm run lint
 - 发布
 
 ```console
-$ npm run pub
+$ npm run release
 ```
+
+> 自动提取到ChangeLog中
+
+- `break change`
+- `feat`
+- `fix`
+- `style`
+- `perf`
+- `types`
+- `refactor`
+- `chore`
 
 ## 工具
 
