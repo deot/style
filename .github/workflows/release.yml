@@ -53,6 +53,11 @@ on:
           - minor
           - patch
 
+      customVersion:
+        description: 'Custom Version(x.x.x)'
+        default: ''
+        type: string
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -106,4 +111,5 @@ jobs:
           ${{ !inputs.commit && '--no-commit' || '' }}
           ${{ inputs.forceUpdatePackage && '--force-update-package' || '' }}
           ${{ inputs.skipUpdatePackage && '--skip-update-package' || '' }}
+          ${{ inputs.customVersion && format('--custom-version "{0}"', inputs.customVersion) || ''}}
 
