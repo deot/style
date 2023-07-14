@@ -1,5 +1,5 @@
 import * as path from 'node:path';
-import sass from 'sass';
+import * as sass from 'sass';
 
 export const compile = (filepath?: string, options?: any) => sass.compile(
 	filepath || path.resolve(process.cwd(), `./src/index.scss`), 

@@ -1,19 +1,10 @@
 {
-	"compilerOptions": {
-		"baseUrl": ".",
-		"module": "esnext",
-		"moduleResolution": "node",
-		"lib": ["esnext", "dom"],
-		"types": ["node", "jest"],
-		"strict": true,
-		"sourceMap": false,
-		"declaration": false,
-		"esModuleInterop": true,
-		"typeRoots": [
-		  "node_modules/@types"
-		]
-	},
-	"include": ["src/**/*", "shims.d.ts"],
+	"extends": "@deot/dev/tsconfig.shared.json",
+	"include": [
+		"__tests__/**/*", 
+		"src/**/*", 
+		"shims.d.ts"
+	],
 	"exclude": [
 	  "node_modules/**/*"
 	]

@@ -1,6 +1,6 @@
 {
   "*.scss": [
-  	"stylelint --fix --syntax scss",
+  	"stylelint --fix",
   	"git add"
   ],
   "src/**/*.{js,ts}": [
