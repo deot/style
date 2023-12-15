@@ -1,5 +1,13 @@
 # @deot/style ChangeLog
 
+## v1.0.3
+
+_2023-12-15_
+
+### Updates
+
+- chore: deps updated & lint fix ([48c9d7c](https://github.com/deot/sass/commit/48c9d7c4222e9ff8b81b051cdd58ca9692e9dd7f))
+
 ## v1.0.2
 
 _2023-04-22_
