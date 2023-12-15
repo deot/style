@@ -1,11 +1,10 @@
 @use "sass:map";
 @use "sass:list";
-
 @import "../../functions";
 
 $base-options: ("name": font-size);
 
-@mixin fontSize($list, $options: ()) {
+@mixin font-size($list, $options: ()) {
 	$options: merge($base-options, $options);
 	$prefix: prefix($base-options, $options);
 

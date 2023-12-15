@@ -1,10 +1,10 @@
 @use 'sass:string';
+@use 'sass:meta';
 
 /* Var
  -------------------------- */
 $B: '';
 $E: '';
-
 $element-separator: '__';
 $modifier-separator: '--';
 $state-is-prefix: 'is-';
@@ -12,51 +12,45 @@ $state-has-prefix: 'has-';
 
 /* Func
  -------------------------- */
-@function selectorToString($selector) {
-	$selector: inspect($selector);
-	$selector: str-slice($selector, 2, -2);
+@function selector-to-string($selector) {
+	$selector: meta.inspect($selector);
+	$selector: string.slice($selector, 2, -2);
 
 	@return $selector;
 }
 
-@function containsModifier($selector) {
-	$selector: selectortostring($selector);
+@function contains-modifier($selector) {
+	$selector: selector-to-string($selector);
 
 	@if string.index($selector, $modifier-separator) {
 		@return true;
-	}
-
-	@else {
+	} @else {
 		@return false;
 	}
 }
 
-@function containWhenFlag($selector) {
-	$selector: selectortostring($selector);
+@function contain-when-flag($selector) {
+	$selector: selector-to-string($selector);
 
 	@if string.index($selector, '.' + $state-is-prefix) or string.index($selector, '.' + $state-has-prefix) {
 		@return true;
-	}
-
-	@else {
+	} @else {
 		@return false;
 	}
 }
 
-@function containPseudoClass($selector) {
-	$selector: selectortostring($selector);
+@function contain-pseudo-class($selector) {
+	$selector: selector-to-string($selector);
 
 	@if string.index($selector, ':') {
 		@return true;
-	}
-
-	@else {
+	} @else {
 		@return false;
 	}
 }
 
-@function hitAllSpecialNestRule($selector) {
-	@return containsModifier($selector) or containWhenFlag($selector) or containPseudoClass($selector);
+@function hit-all-special-nest-rule($selector) {
+	@return contains-modifier($selector) or contain-when-flag($selector) or contain-pseudo-class($selector);
 }
 
 /* Mix
@@ -76,32 +70,29 @@ $state-has-prefix: 'has-';
 @mixin element($element, $root: true) {
 	$E: $element !global;
 	$selector: &;
-	$currentSelector: "";
+	$current-selector: "";
+
 	// 支持数组
 	@each $unit in $element {
-		$currentSelector: #{$currentSelector + "." + $B + $element-separator + $unit + ","};
+		$current-selector: #{$current-selector + "." + $B + $element-separator + $unit + ","};
 	}
 
-	@if hitAllSpecialNestRule($selector) {
+	@if hit-all-special-nest-rule($selector) {
 		@at-root {
 			#{$selector} {
-				#{$currentSelector} {
+				#{$current-selector} {
 					@content;
 				}
 			}
 		}
-	}
-
-	@else if $root {
+	} @else if $root {
 		@at-root {
-			#{$currentSelector} {
+			#{$current-selector} {
 				@content;
 			}
 		}
-	}
-
-	@else {
-		#{$currentSelector} {
+	} @else {
+		#{$current-selector} {
 			@content;
 		}
 	}
@@ -109,34 +100,31 @@ $state-has-prefix: 'has-';
 
 @mixin modifier($modifier, $root: true) {
 	$selector: &;
+
 	// 支持数组
-	$currentSelector: "";
+	$current-selector: "";
 
 	@each $unit in $modifier {
-		$currentSelector: #{$currentSelector + & + $modifier-separator + $unit + ","};
+		$current-selector: #{$current-selector + & + $modifier-separator + $unit + ","};
 	}
 
 	// TODO: 待验证第一个判断;
-	@if hitAllSpecialNestRule($selector) {
+	@if hit-all-special-nest-rule($selector) {
 		@at-root {
 			#{$selector} {
-				.#{$B + $currentSelector} {
+				.#{$B + $current-selector} {
 					@content;
 				}
 			}
 		}
-	}
-
-	@else if $root {
+	} @else if $root {
 		@at-root {
-			#{$currentSelector} {
+			#{$current-selector} {
 				@content;
 			}
 		}
-	}
-
-	@else {
-		#{$currentSelector} {
+	} @else {
+		#{$current-selector} {
 			@content;
 		}
 	}
@@ -166,14 +154,14 @@ $state-has-prefix: 'has-';
  * 4. 同block
  */
 @mixin spec-selector($specSelector: '', $element: $E, $modifier: false, $block: $B) {
-	$modifierCombo: '';
+	$modifier-combo: '';
 
 	@if $modifier {
-		$modifierCombo: $modifier-separator + $modifier;
+		$modifier-combo: $modifier-separator + $modifier;
 	}
 
 	@at-root {
-		#{&}#{$specSelector}.#{$block + $element-separator + $element + $modifierCombo} {
+		#{&}#{$specSelector}.#{$block + $element-separator + $element + $modifier-combo} {
 			@content;
 		}
 	}
@@ -181,15 +169,15 @@ $state-has-prefix: 'has-';
 
 @mixin meb($modifier: false, $element: $E, $block: $B) {
 	$selector: &;
-	$modifierCombo: '';
+	$modifier-combo: '';
 
 	@if $modifier {
-		$modifierCombo: $modifier-separator + $modifier;
+		$modifier-combo: $modifier-separator + $modifier;
 	}
 
 	@at-root {
 		#{$selector} {
-			.#{$block + $element-separator + $element + $modifierCombo} {
+			.#{$block + $element-separator + $element + $modifier-combo} {
 				@content;
 			}
 		}
@@ -228,11 +216,11 @@ $state-has-prefix: 'has-';
  * 自定义规则
  */
 @mixin extend-rule($name) {
-	@extend #{'%shared-'+$name};
+	@extend #{'%shared-' + $name};
 }
 
 @mixin share-rule($name) {
-	$rule-name: '%shared-'+$name;
+	$rule-name: '%shared-' + $name;
 
 	@at-root #{$rule-name} {
 		@content;

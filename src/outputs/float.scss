@@ -1,5 +1,5 @@
-@import "../variables/default.scss";
-@import "./gen-mixins/float.scss";
+@import "../variables/default";
+@import "./gen-mixins/float";
 
 $float-options: (prefix: $prefix);
 

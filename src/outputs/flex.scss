@@ -1,4 +1,4 @@
-@import "../variables/default.scss";
+@import "../variables/default";
 @import "./gen-mixins/flex";
 
 /**
@@ -52,8 +52,7 @@ $flex-attrs-map: (
 	"align-content": (flex-start, flex-end, center, space-between, space-around, stretch),
 	"align-self": (auto, flex-start, flex-end, center, baseline, stretch)
 );
-
 $flex-options: (prefix: $prefix);
 
-@include flexArrts($flex-attrs-map, $flex-options);
-@include flexSize(5, $flex-options);
+@include flex-arrts($flex-attrs-map, $flex-options);
+@include flex-size(5, $flex-options);

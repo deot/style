@@ -1,7 +1,7 @@
 /**
  * 相当于 750rem = 100vw
- * @param {number} baseWidth - 基准跨度
- * @returns {void}
+ * @param baseWidth - 基准跨度
+ * @return
  */
 export const useREM = (baseWidth: number = 750): void => {
 	const refreshREM = () => {

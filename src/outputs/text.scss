@@ -1,5 +1,5 @@
-@import "../variables/default.scss";
-@import "../mixins/common.scss";
+@import "../variables/default";
+@import "../mixins/common";
 
 #{$computed-prefix}tc {
 	text-align: center !important;
@@ -42,12 +42,12 @@
  * 一行文字
  */
 #{$computed-prefix}line-one {
-	@include commonTextLine(1);
+	@include common-text-line(1);
 }
 
 /**
  * 两行文字
  */
 #{$computed-prefix}line-two {
-	@include commonTextLine(2);
+	@include common-text-line(2);
 }

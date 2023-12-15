@@ -1,10 +1,8 @@
 {
-  "*.scss": [
-  	"stylelint --fix",
-  	"git add"
+  "**/*.{css,scss}": [
+    "stylelint --fix"
   ],
-  "src/**/*.{js,ts}": [
-  	"esw --ext '.js,.ts' --fix",
-  	"git add"
+  "*.{js,ts,jsx,tsx,md}": [
+    "eslint --fix"
   ]
 }

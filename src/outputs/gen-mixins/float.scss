@@ -1,8 +1,8 @@
 @use 'sass:math';
-
 @import "../../functions";
 
 $base-options: null;
+
 // 输出全局栅格，浮动
 @mixin float($total, $options: ()) {
 	$prefix: prefix($base-options, $options);

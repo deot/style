@@ -1,6 +1,6 @@
-@import "../variables/default.scss";
-@import "../functions/helper.scss";
-@import "../functions/theme.scss";
+@import "../variables/default";
+@import "../functions/helper";
+@import "../functions/theme";
 
 #{$computed-prefix}bs {
 	box-shadow: themefix(border-shadow-default) !important;

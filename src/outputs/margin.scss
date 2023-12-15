@@ -1,7 +1,6 @@
 @use "sass:list";
-
-@import "../variables/default.scss";
-@import "./gen-mixins/margin.scss";
+@import "../variables/default";
+@import "./gen-mixins/margin";
 
 // 水平间距
 

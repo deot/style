@@ -1,7 +1,6 @@
 @use "sass:list";
-
-@import "../variables/default.scss";
-@import "./gen-mixins/padding.scss";
+@import "../variables/default";
+@import "./gen-mixins/padding";
 
 // 水平间距
 

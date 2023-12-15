@@ -1,4 +1,4 @@
-@import "../variables/default.scss";
+@import "../variables/default";
 
 #{$computed-prefix}fixed {
 	position: fixed !important;
@@ -13,16 +13,10 @@
 
 #{$computed-prefix}fixed-full {
 	position: fixed !important;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
+	inset: 0;
 }
 
 #{$computed-prefix}absolute-full {
 	position: absolute !important;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
+	inset: 0;
 }

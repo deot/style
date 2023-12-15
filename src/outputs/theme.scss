@@ -1,5 +1,5 @@
-@import "./gen-mixins/theme.scss";
-@import "../variables/theme.scss";
+@import "./gen-mixins/theme";
+@import "../variables/theme";
 
 $theme-options: (allow-css-variables: $allow-css-variables, theme: $theme);
 

@@ -1,5 +1,4 @@
 @use "sass:map";
-
 @import "../functions";
 
 /**
@@ -35,7 +34,7 @@ $theme: (
 
 	// 行高
 	line-height-default: unitfix(16),
-	line-height-limit: unitfix(32), //限高
+	line-height-limit: unitfix(32), // 限高
 
 	// 边框
 	border-color-default: #c9c9c9,
@@ -49,7 +48,6 @@ $theme: (
 	scrollbar-thumb-bg-color: rgba(0, 0, 0, 0.2),
 	scrollbar-track-box-shadow: inset 0 0 unitfix(10) rgba(0, 0, 0, 0)
 ) !default;
-
 $theme-merge-data: false !default;
 
 @if $theme-merge-data and meta.type-of($theme-merge-data) == 'map' {

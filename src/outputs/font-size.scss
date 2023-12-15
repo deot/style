@@ -1,8 +1,7 @@
 @use "sass:meta";
 @use "sass:list";
-
-@import "../variables/default.scss";
-@import "./gen-mixins/font-size.scss";
+@import "../variables/default";
+@import "./gen-mixins/font-size";
 
 $font-size-list: 10, 12, 13, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 48, 50, 60, 70, 80, 90, 100 !default;
 
@@ -19,4 +18,4 @@ $font-size-join-data: false !default;
 $font-size-options: (unit: $unit, scale: $scale, prefix: $prefix, name: fs);
 
 // 输出全局g-fs-#{值}
-@include fontSize($font-size-list, $font-size-options)
+@include font-size($font-size-list, $font-size-options)

@@ -1,11 +1,10 @@
 @use "sass:map";
 @use "sass:list";
-
 @import "../../functions";
 
 $image-size-options: (name: image-size);
 
-@mixin imageSize($list, $options: ()) {
+@mixin image-size($list, $options: ()) {
 	$options: merge($image-size-options, $options);
 	$prefix: prefix($image-size-options, $options);
 	$mode: map.get($options, 'mode');
@@ -22,11 +21,9 @@ $image-size-options: (name: image-size);
 			min-width: $_value;
 			line-height: $_value;
 
-			@if ($mode == 'circle') {
+			@if  $mode == 'circle' {
 				border-radius: 50%;
-			}
-
-			@else if ($mode == 'radius') {
+			} @else if $mode == 'radius' {
 				border-radius: unitfix(4, $options);
 			}
 		}

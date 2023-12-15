@@ -19,9 +19,8 @@
     "release": "ddc release",
     "update": "ddc update",
     "test": "ddc test",
-    "lint": "esw src --ext .ts,.js --color",
+    "lint": "eslint . --color",
     "lint:fix": "npm run lint -- --fix",
-    "lint:watch": "npm run lint -- --watch --fix",
     "lint:style": "stylelint --fix 'src/**/*.{css,scss}' --cache --cache-location node_modules/.cache/stylelint/"
   },
   "scripts-info": {
@@ -41,7 +40,7 @@
     "url": "https://github.com/deot/sass/issues"
   },
   "devDependencies": {
-    "@deot/dev": "^2.7.0",
+    "@deot/dev": "^2.8.6",
     "normalize.css": "^8.0.1"
   }
 }

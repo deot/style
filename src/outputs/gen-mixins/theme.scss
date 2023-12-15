@@ -1,5 +1,4 @@
 @use "sass:map";
-
 @import "../../functions";
 
 $base-options: (allow-css-variables: false, theme: ());
@@ -9,7 +8,7 @@ $base-options: (allow-css-variables: false, theme: ());
 	$theme: map.get($options, 'theme');
 	$allow-css-variables: map.get($options, 'allow-css-variables');
 
-	@if ($allow-css-variables) {
+	@if  $allow-css-variables {
 		#{$prefix} {
 			@each $key, $value in $theme {
 				--#{$key}: #{$value};

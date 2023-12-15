@@ -1,4 +1,10 @@
-@mixin commonBgLinear($angle: to bottom, $start: #fff, $end: #000) {
+@use 'sass:meta';
+@import "../functions";
+
+
+$unitb: px !default;
+
+@mixin common-bg-linear($angle: to bottom, $start: #fff, $end: #000) {
 	background: $end;
 	background-image: linear-gradient($angle, $start, $end);
 }
@@ -7,7 +13,7 @@
  * 水平垂直居中
  */
 
-@mixin commonFlexCC {
+@mixin common-flex-cc {
 	display: flex;
 	box-sizing: border-box;
 	align-items: center;
@@ -18,7 +24,7 @@
  * 水平垂直居中
  */
 
-@mixin commonFlex {
+@mixin common-flex {
 	display: flex;
 	box-sizing: border-box;
 }
@@ -30,14 +36,14 @@
 /**
  * 一行文字
  */
-@mixin commonEllipsis {
+@mixin common-ellipsis {
 	width: auto;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
-@mixin commonTextLine($line) {
+@mixin common-text-line($line) {
 	display: -webkit-box;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -48,16 +54,16 @@
 /**
  * 单词换行
  */
-@mixin commonBreak {
+@mixin common-break {
 	word-break: break-all;
 	word-wrap: break-word;
 }
 
 /**
- * [commonClearfix 清除浮动]
+ * [common-clear-fix 清除浮动]
  * @return {[type]} [description]
  */
-@mixin commonClearfix($content: false) {
+@mixin common-clear-fix($content: false) {
 	zoom: 1;
 
 	&::before,
@@ -68,9 +74,7 @@
 
 		@if $content {
 			@content;
-		}
-
-		@else {
+		} @else {
 			height: 0;
 			font-size: 0;
 			visibility: hidden;
@@ -78,35 +82,36 @@
 	}
 }
 
-@mixin commonScroll($size: 4px) {
+@mixin common-scroll($size: 4) {
 	/**
 	 * scrollbar width
 	 */
 	&::-webkit-scrollbar {
-		width: $size; // 很有影响
+		/**
+		 * 很有影响
+		 */
+		width: unitfix($size);
 	}
 
-	::-webkit-scrollbar:horizontal {
-		height: $size;
+	&::-webkit-scrollbar:horizontal {
+		height: unitfix($size);
 	}
 
 	/**
 	 * scrollbar bg
 	 */
 	&::-webkit-scrollbar-track {
-		background: rgba(0, 0, 0, 0);
-		-webkit-border-radius: 5px;
-		border-radius: 5px;
-		-webkit-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0);
+		background: rgb(0 0 0 / 0%);
+		border-radius: unitfix(5);
+		box-shadow: inset 0 0 10px rgb(0 0 0 / 0%);
 	}
 
 	/**
 	 * Handle
 	 */
 	&::-webkit-scrollbar-thumb {
-		background: rgba(0, 0, 0, 0.2);
-		-webkit-border-radius: 5px;
-		border-radius: 5px;
+		background: rgb(0 0 0 / 20%);
+		border-radius: unitfix(5);
 	}
 }
 
@@ -116,7 +121,7 @@
  * 其他只操作before和after;
  * 暂时不抽离公用
  */
-@mixin commonBorder1PX($direction: '', $color) {
+@mixin common-border-1px($direction: '', $color, $border-radius: 'inherit') {
 	position: relative;
 	transform: translateZ(0);
 
@@ -124,11 +129,11 @@
 		&::before,
 		&::after {
 			position: absolute;
-			z-index: 1; // 层级应高于其他元素, 否则描边会被遮挡
-			display: block; // 父类为flex, 使用table无法撑开
+			z-index: 1; /* 层级应高于其他元素, 否则描边会被遮挡 */
+			display: block; /* 父类为flex, 使用table无法撑开 */
 			clear: both;
 			pointer-events: none;
-			border-radius: inherit; // 圆角集成
+			border-radius: if(meta.type-of($border-radius) == 'number', unitfix($border-radius), 'inherit');
 			content: " ";
 			box-sizing: border-box;
 		}
@@ -138,84 +143,75 @@
 				top: 0;
 				left: 0;
 				width: 100%;
-				border-top: 1px solid $color;
+				border-top: unitfix(1) solid $color;
 				transform-origin: 0 top;
 			}
-		}
-
-		@else if $direction == 'right' {
+		} @else if $direction == 'right' {
 			&::after {
 				top: 0;
 				right: 0;
 				height: 100%;
-				border-right: 1px solid $color;
+				border-right: unitfix(1) solid $color;
 				transform-origin: right 0;
 			}
-		}
-
-		@else if $direction == 'bottom' {
+		} @else if $direction == 'bottom' {
 			&::after {
 				bottom: 0;
 				left: 0;
 				width: 100%;
-				border-bottom: 1px solid $color;
+				border-bottom: unitfix(1) solid $color;
 				transform-origin: 0 bottom;
 			}
-		}
-
-		@else if $direction == 'left' {
+		} @else if $direction == 'left' {
 			&::before {
 				top: 0;
 				left: 0;
 				height: 100%;
-				border-left: 1px solid $color;
+				border-left: unitfix(1) solid $color;
 				transform-origin: left 0;
 			}
-		}
-
-		@else {
+		} @else {
 			&::after {
 				top: 0;
 				left: 0;
 				width: 100%;
 				height: 100%;
-				border: 1px solid $color;
+				border: unitfix(1) solid $color;
 				transform-origin: 0 0;
 			}
 		}
 	}
 
-	@media (min-resolution: 2dppx) {
+	@media (resolution >= 2dppx) {
 		& {
+			@if  meta.type-of($border-radius) == 'number' {
+				&::before,
+				&::after {
+					border-radius: unitfix($border-radius * 2);
+				}
+			}
+
 			@if $direction == 'top' {
 				&::before {
 					width: 200%;
 					transform: scale(0.5);
 				}
-			}
-
-			@else if $direction == 'right' {
+			} @else if $direction == 'right' {
 				&::after {
 					height: 200%;
 					transform: scale(0.5);
 				}
-			}
-
-			@else if $direction == 'bottom' {
+			} @else if $direction == 'bottom' {
 				&::after {
 					width: 200%;
 					transform: scale(0.5);
 				}
-			}
-
-			@else if $direction == 'left' {
+			} @else if $direction == 'left' {
 				&::before {
 					height: 200%;
 					transform: scale(0.5);
 				}
-			}
-
-			@else {
+			} @else {
 				&::after {
 					width: 200%;
 					height: 200%;
@@ -225,55 +221,42 @@
 		}
 	}
 
-	@media (min-resolution: 3dppx) {
+	@media (resolution >= 3dppx) {
 		& {
+			@if  meta.type-of($border-radius) == 'number' {
+				&::before,
+				&::after {
+					border-radius: unitfix($border-radius * 3);
+				}
+			}
+
 			@if $direction == 'top' {
 				&::before {
 					width: 300%;
-					transform: scale(0.33333333);
+					transform: scale(1 / 3);
 				}
-			}
-
-			@else if $direction == 'right' {
+			} @else if $direction == 'right' {
 				&::after {
 					height: 300%;
-					transform: scale(0.33333333);
+					transform: scale(1 / 3);
 				}
-			}
-
-			@else if $direction == 'bottom' {
+			} @else if $direction == 'bottom' {
 				&::after {
 					width: 300%;
-					transform: scale(0.33333333);
+					transform: scale(1 / 3);
 				}
-			}
-
-			@else if $direction == 'left' {
+			} @else if $direction == 'left' {
 				&::before {
 					height: 300%;
-					transform: scale(0.33333333);
+					transform: scale(1 / 3);
 				}
-			}
-
-			@else {
+			} @else {
 				&::after {
 					width: 300%;
 					height: 300%;
-					transform: scale(0.33333333);
+					transform: scale(1 / 3);
 				}
 			}
 		}
-	}
-}
-
-@mixin commonBorderRadius($size: 1) {
-	border-radius: 1px * $size;
-
-	@media (min-resolution: 2dppx) {
-		border-radius: 2px * $size;
-	}
-
-	@media (min-resolution: 3dppx) {
-		border-radius: 3px * $size;
 	}
 }

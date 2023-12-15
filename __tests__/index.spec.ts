@@ -37,7 +37,6 @@ describe('index.scss', () => {
 		expect(source.css).toMatch(`.g-m-t-56{margin-top:56px}`);
 	});
 
-
 	it('color', () => {
 		const source = sass.compileString(`@import './outputs/color.scss'`);
 		expect(source.css).toMatch(`.g-c-white{color:#fff !important}`);
@@ -75,7 +74,7 @@ describe('index.scss', () => {
 
 	it('position', () => {
 		const source = sass.compileString(`@import './outputs/position.scss'`);
-		expect(source.css).toMatch(`.g-absolute-full{position:absolute !important;top:0;right:0;bottom:0;left:0}`);
+		expect(source.css).toMatch(`.g-absolute-full{position:absolute !important;inset:0}`);
 	});
 
 	it('text', () => {
@@ -90,13 +89,11 @@ describe('index.scss', () => {
 			.toMatch(`.g-b{position:relative;transform:translateZ(0)}.g-b::before,.g-b::after`);
 	});
 
-
 	it('box-shadow', () => {
 		const source = sass.compileString(`@import './outputs/box-shadow.scss'`);
 		expect(source.css)
 			.toMatch(`.g-bs{box-shadow:var(--border-shadow-default) !important}`);
 	});
-
 
 	it('reset', () => {
 		const source = sass.compileString(`@import './outputs/reset.scss'`);
@@ -109,7 +106,6 @@ describe('index.scss', () => {
 		expect(source.css).toMatch(`.g-disabled{pointer-events:none}`);
 		expect(source.css).toMatch(`.g-operable{font-size:14px;color:var(--color-highlight) !important;cursor:pointer}`);
 	});
-
 
 	it('prefix = ""', () => {
 		const source = sass.compileString(`$prefix: ''; @import './outputs/other.scss'`);
@@ -132,5 +128,3 @@ describe('index.scss', () => {
 		expect(source.css).toMatch(`.g-operable{font-size:14px;color:#5495f6 !important;cursor:pointer}`);
 	});
 });
-
-

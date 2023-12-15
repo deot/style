@@ -2,7 +2,6 @@
 @use "sass:math";
 @use "sass:string";
 @use "sass:list";
-
 @import "../../functions";
 
 // 如g-pd-10, g-pd-tb-10...
@@ -14,28 +13,25 @@ $base-options: (unit: px, prefix: g, name: padding);
 	$prefix: prefix($base-options, $options);
 
 	@each $key in $padding-keys {
-		@if (string.length($key) > 4) {
+		@if  string.length($key) > 4 {
 			@debug error padding;
-		}
-
-		@else {
+		} @else {
 			@each $value in $list {
 				$suffix: #{if(string.length($key) >= 1, #{$key}-, '')}#{suffix($value, $options)};
 				$_value: unitfix($value, $options);
 				#{$prefix}#{$suffix} {
-					@if (string.length($key) == 0) {
+					@if  string.length($key) == 0 {
 						padding: $_value;
-					}
-
-					@else {
+					} @else {
 						$len: string.length($key);
 
 						@while $len > 0 {
 							$__key: map.get($direction-map, string.slice($key, $len, $len));
 
-							@if ($__key) {
+							@if  $__key {
 								padding-#{$__key}: $_value;
 							}
+
 							$len: $len - 1;
 						}
 					}

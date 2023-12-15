@@ -1,9 +1,8 @@
 @use "sass:list";
-
-@import "../variables/default.scss";
-@import "../functions/helper.scss";
-@import "../functions/theme.scss";
-@import "./gen-mixins/line-height.scss";
+@import "../variables/default";
+@import "../functions/helper";
+@import "../functions/theme";
+@import "./gen-mixins/line-height";
 
 $line-height-list: 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 60, 72, 80, 88, 120 !default;
 
@@ -20,7 +19,7 @@ $line-height-list-join-data: false !default;
 $line-height-options: (unit: $unit, scale: $scale, prefix: $prefix, name: lh);
 
 // 输出全局g-lh-#{值}
-@include lineHeight($line-height-list, $line-height-options);
+@include line-height($line-height-list, $line-height-options);
 
 /**
  * 两行文字 限高

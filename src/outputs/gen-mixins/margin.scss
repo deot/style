@@ -2,7 +2,6 @@
 @use "sass:math";
 @use "sass:string";
 @use "sass:list";
-
 @import "../../functions";
 
 // 如g-m-10, g-m-tb-10...
@@ -14,28 +13,25 @@ $base-options: (name: margin);
 	$prefix: prefix($base-options, $options);
 
 	@each $key in $margin-keys {
-		@if (string.length($key) > 4) {
+		@if  string.length($key) > 4 {
 			@debug error margin;
-		}
-
-		@else {
+		} @else {
 			@each $value in $list {
 				$suffix: #{if(string.length($key) >= 1, #{$key}-, '')}#{suffix($value, $options)};
 				$_value: unitfix($value, $options);
 				#{$prefix}#{$suffix} {
-					@if (string.length($key) == 0) {
+					@if  string.length($key) == 0 {
 						margin: $_value;
-					}
-
-					@else {
+					} @else {
 						$len: string.length($key);
 
 						@while $len > 0 {
 							$__key: map.get($direction-map, string.slice($key, $len, $len));
 
-							@if ($__key) {
+							@if  $__key {
 								margin-#{$__key}: $_value;
 							}
+
 							$len: $len - 1;
 						}
 					}
