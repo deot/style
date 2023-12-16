@@ -21,7 +21,8 @@
     "test": "ddc test",
     "lint": "eslint . --color",
     "lint:fix": "npm run lint -- --fix",
-    "lint:style": "stylelint --fix 'src/**/*.{css,scss}' --cache --cache-location node_modules/.cache/stylelint/"
+    "lint:style": "stylelint --fix 'src/**/*.{css,scss}' --cache --cache-location node_modules/.cache/stylelint/",
+    "typecheck": "tsc --noEmit --skipLibCheck"
   },
   "scripts-info": {
     "init": "首次安装",
