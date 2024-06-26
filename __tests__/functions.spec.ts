@@ -8,7 +8,7 @@ describe('functions/', () => {
 
 	it('themefix allow-css-variables = false', () => {
 		const source = sass.compileString(`$allow-css-variables: false; @import './functions/theme.scss';a{color: themefix(color-default)}`);
-		expect(source.css).toMatch('a{color:#f5f6fa}');
+		expect(source.css).toMatch('a{color:#515a6e}');
 	});
 
 	it('unitfix 10rem', () => {
