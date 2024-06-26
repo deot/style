@@ -1,5 +1,18 @@
 # @deot/style ChangeLog
 
+## v1.0.4
+
+_2024-06-26_
+
+### Bugfixes
+
+- fix: need import meta when merge theme ([69ad2c3](https://github.com/deot/sass/commit/69ad2c38481fcf513ed010bb4bc6f94f815b98a3))
+- fix: color(default) need diff with background ([ef657ca](https://github.com/deot/sass/commit/ef657ca30fbc2bd6dd95ad23aa0dce6beb2c02f6))
+
+### Updates
+
+- chore: add `typecheck` from ci ([141bb52](https://github.com/deot/sass/commit/141bb5237f77213835d55d8a4402fc97ac6a368a))
+
 ## v1.0.3
 
 _2023-12-15_
