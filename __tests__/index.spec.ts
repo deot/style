@@ -101,6 +101,12 @@ describe('index.scss', () => {
 		expect(source.css).toMatch(`.g-reset`);
 	});
 
+	it('font-weight', () => {
+		const source = sass.compileString(`@import './outputs/font-weight.scss'`);
+		expect(source.css).toMatch(`.g-fw-bold`);
+		expect(source.css).toMatch(`.g-fw-700`);
+	});
+
 	it('other', () => {
 		const source = sass.compileString(`@import './outputs/other.scss'`);
 		expect(source.css).toMatch(`.g-disabled{pointer-events:none}`);

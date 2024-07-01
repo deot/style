@@ -11,6 +11,7 @@ describe('mixins/', () => {
 		expect(source1.css).toBe('');
 		expect(source2.css).toBe('');
 	});
+
 	it('bem.scss', () => {
 		const source = sass.compileString(`
 			@import './mixins/bem.scss';
@@ -94,5 +95,11 @@ describe('mixins/', () => {
 		expect(source.css).toMatch(`.b:hover{margin:40px}`);
 		expect(source.css).toMatch(`.b__e8{margin:50px}`);
 		expect(source.css).toMatch(`.b__e9 .b__e10 .b__e11{margin:50px}`);
+	});
+
+	it('common.scss/common-border-1px', () => {
+		const source = sass.compileString(`@import './mixins/common.scss'; .b { @include common-border-1px('', inherit);}`);
+
+		expect(source.css).toMatch(`border-radius:inherit`);
 	});
 });
