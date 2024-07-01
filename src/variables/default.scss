@@ -16,3 +16,6 @@ $computed-prefix: 'any with computed' !default;
 
 // 允许css-variables
 $allow-css-variables: true !default;
+
+// 允许*通配符
+$allow-asterisk-wildcard: true !default;

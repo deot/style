@@ -127,4 +127,12 @@ describe('index.scss', () => {
 		const source = sass.compileString(`$allow-css-variables: false; @import './outputs/other.scss';`);
 		expect(source.css).toMatch(`.g-operable{font-size:14px;color:#5495f6 !important;cursor:pointer}`);
 	});
+
+	it('allow-asterisk-wildcard', () => {
+		const source1 = sass.compileString(`$allow-asterisk-wildcard: false; @import './outputs/reset.scss';`);
+		expect(source1.css).not.toMatch(`*::before`);
+
+		const source2 = sass.compileString(`$allow-asterisk-wildcard: true; @import './outputs/reset.scss';`);
+		expect(source2.css).toMatch(`*::before`);
+	});
 });
