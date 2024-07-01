@@ -9,7 +9,7 @@
     "dist/**",
     "examples/**"
   ],
-  "packageManager": "pnpm@8.x.x",
+  "packageManager": "pnpm@latest",
   "scripts": {
     "prepare": "husky install",
     "init": "npx pnpm install",
@@ -41,7 +41,7 @@
     "url": "https://github.com/deot/sass/issues"
   },
   "devDependencies": {
-    "@deot/dev": "^2.8.6",
+    "@deot/dev": "^2.8.8",
     "normalize.css": "^8.0.1"
   }
 }
