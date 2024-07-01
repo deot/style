@@ -1,4 +1,5 @@
 @use 'sass:meta';
+@use 'sass:math';
 @import "../functions";
 
 
@@ -121,7 +122,7 @@ $unitb: px !default;
  * 其他只操作before和after;
  * 暂时不抽离公用
  */
-@mixin common-border-1px($direction: '', $color, $border-radius: 'inherit') {
+@mixin common-border-1px($direction: '', $color, $border-radius: inherit) {
 	position: relative;
 	transform: translateZ(0);
 
@@ -133,7 +134,7 @@ $unitb: px !default;
 			display: block; /* 父类为flex, 使用table无法撑开 */
 			clear: both;
 			pointer-events: none;
-			border-radius: if(meta.type-of($border-radius) == 'number', unitfix($border-radius), 'inherit');
+			border-radius: if(meta.type-of($border-radius) == 'number', unitfix($border-radius), inherit);
 			content: " ";
 			box-sizing: border-box;
 		}
@@ -233,28 +234,28 @@ $unitb: px !default;
 			@if $direction == 'top' {
 				&::before {
 					width: 300%;
-					transform: scale(1 / 3);
+					transform: scale(math.div(1, 3));
 				}
 			} @else if $direction == 'right' {
 				&::after {
 					height: 300%;
-					transform: scale(1 / 3);
+					transform: scale(math.div(1, 3));
 				}
 			} @else if $direction == 'bottom' {
 				&::after {
 					width: 300%;
-					transform: scale(1 / 3);
+					transform: scale(math.div(1, 3));
 				}
 			} @else if $direction == 'left' {
 				&::before {
 					height: 300%;
-					transform: scale(1 / 3);
+					transform: scale(math.div(1, 3));
 				}
 			} @else {
 				&::after {
 					width: 300%;
 					height: 300%;
-					transform: scale(1 / 3);
+					transform: scale(math.div(1, 3));
 				}
 			}
 		}
