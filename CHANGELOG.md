@@ -1,5 +1,21 @@
 # @deot/style ChangeLog
 
+## v1.0.5
+
+_2024-07-01_
+
+### Bugfixes
+
+- fix: border-1px(3dp invalid) ([7ac3e53](https://github.com/deot/sass/commit/7ac3e538c79af664c6ad06a156a238ca7453c915))
+
+### Features
+
+- feat: add font-weight(g-fw-*) ([b32295e](https://github.com/deot/sass/commit/b32295ed28b27e0b7de96b72db18491e1dc3e472))
+
+### Updates
+
+- chore: add `$allow-asterisk-wildcard`, avoid error in mp-weixin ([a95bdb1](https://github.com/deot/sass/commit/a95bdb1c8269ede70576a4a96a7cd076bd2d948d))
+
 ## v1.0.4
 
 _2024-06-26_
