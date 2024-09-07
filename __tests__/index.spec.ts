@@ -106,6 +106,7 @@ describe('index.scss', () => {
 		const source = sass.compileString(`@import './outputs/font-weight.scss'`);
 		expect(source.css).toMatch(`.g-fw-bold`);
 		expect(source.css).toMatch(`.g-fw-700`);
+		expect(source.css).toMatch(`.g-fw-400{font-weight:400}`);
 	});
 
 	it('other', () => {

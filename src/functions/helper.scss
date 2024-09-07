@@ -49,6 +49,9 @@ $direction-map: ('l': left, 'r': right, 't': top, 'b': bottom);
 // 当scale = 2时: g-fs-10 -> g-fs-20; 仅当字符串时，保持不变
 @function suffix($value, $rest...) {
 	$options: merge((scale: $scale), $rest...);
+	$scale: map.get($options, 'scale');
+	
+	@debug $options;
 
 	@if  meta.type-of($value) == 'number' {
 		$value: $value * $scale;

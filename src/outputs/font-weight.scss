@@ -3,14 +3,14 @@
 @import "./gen-mixins/font-weight";
 
 $font-weight-list: bold, 400, 500, 600, 700 !default;
-
 $font-weight-list-join-data: false !default;
 
 @if $font-weight-list-join-data and meta.type-of($font-weight-list-join-data) == 'list' {
 	$font-weight-list: list.join($font-weight-list, $font-weight-list-join-data);
 }
 
-$font-weight-options: (unit: $unit, scale: $scale, prefix: $prefix, name: fw);
+// 强制scale为1
+$font-weight-options: (unit: $unit, scale: 1, prefix: $prefix, name: fw);
 
 // 输出全局g-lh-#{值}
 @include font-weight($font-weight-list, $font-weight-options);
