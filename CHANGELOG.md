@@ -1,5 +1,18 @@
 # @deot/style ChangeLog
 
+## v1.0.8
+
+_2024-09-07_
+
+### Bugfixes
+
+- fix: border-radius-list args ([3dbdba0](https://github.com/deot/sass/commit/3dbdba0b49542661877ea9a33fd2bf05fd2aa521))
+- fix: keep default scale(font-weight) ([d6cd590](https://github.com/deot/sass/commit/d6cd590361dc42ac45bc6942ea0c4cc9aa082ffe))
+
+### Features
+
+- feat: add line-height-default ([7eadf48](https://github.com/deot/sass/commit/7eadf481515351792ec69bd5a83bf57dadbc3ace))
+
 ## v1.0.7
 
 _2024-09-07_

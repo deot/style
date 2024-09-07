@@ -1,6 +1,6 @@
 {
   "name": "@deot/style",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Public CSS to HTML5",
   "main": "./dist/index.css",
   "type": "module",
