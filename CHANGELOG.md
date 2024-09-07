@@ -1,5 +1,13 @@
 # @deot/style ChangeLog
 
+## v1.0.7
+
+_2024-09-07_
+
+### Bugfixes
+
+- fix: some prefix error(`g` -> `.g`) ([f5f0dda](https://github.com/deot/sass/commit/f5f0dda570e07876d23a8a39fb5cbe1d870a648b))
+
 ## v1.0.6
 
 _2024-09-07_
