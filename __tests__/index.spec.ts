@@ -45,8 +45,12 @@ describe('index.scss', () => {
 	});
 
 	it('line-height', () => {
-		const source = sass.compileString(`@import './outputs/line-height.scss'`);
+		const source = sass.compileString(`$allow-css-variables: false; @import './outputs/line-height.scss'`);
 		expect(source.css).toMatch(`.g-lh-16{line-height:16px}`);
+		expect(source.css).toMatch(`.g-lh-1{line-height:1}`);
+		expect(source.css).toMatch(`.g-lh-default{line-height:1.5}`);
+		expect(source.css).toMatch(`.g-lh-one{height:32px;line-height:32px}`);
+		expect(source.css).toMatch(`.g-lh-two{height:calc(32px*2);line-height:32px}`);
 	});
 
 	it('font-size', () => {

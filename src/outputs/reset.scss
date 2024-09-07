@@ -16,7 +16,7 @@ body {
 	font-size: themefix(font-size-default);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	line-height: 1.5;
+	line-height: themefix(line-height-default);
 	color: themefix(color-default);
 	background-color: themefix(background-color-default);
 }

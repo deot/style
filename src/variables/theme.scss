@@ -34,8 +34,8 @@ $theme: (
 	border-shadow-default-top: 0 unitfix(-2) unitfix(10) 0 rgba(0, 0, 0, 0.08),
 
 	// 行高
-	line-height-default: unitfix(16),
-	line-height-limit: unitfix(32), // 限高
+	line-height-default: 1.5,
+	line-height-limit: unitfix(32), // 单行文字限高
 
 	// 边框
 	border-color-default: #c9c9c9,

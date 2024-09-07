@@ -50,8 +50,6 @@ $direction-map: ('l': left, 'r': right, 't': top, 'b': bottom);
 @function suffix($value, $rest...) {
 	$options: merge((scale: $scale), $rest...);
 	$scale: map.get($options, 'scale');
-	
-	@debug $options;
 
 	@if  meta.type-of($value) == 'number' {
 		$value: $value * $scale;

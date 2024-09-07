@@ -36,3 +36,11 @@ $line-height-options: (unit: $unit, scale: $scale, prefix: $prefix, name: lh);
 	height: themefix(line-height-limit);
 	line-height: themefix(line-height-limit);
 }
+
+#{$computed-prefix}lh-default {
+	line-height: themefix(line-height-default);
+}
+
+#{$computed-prefix}lh-1 {
+	line-height: 1;
+}
