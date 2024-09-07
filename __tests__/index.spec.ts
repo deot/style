@@ -110,6 +110,8 @@ describe('index.scss', () => {
 
 	it('other', () => {
 		const source = sass.compileString(`@import './outputs/other.scss'`);
+		expect(source.css).toMatch(`.g-pointer`);
+		expect(source.css).toMatch(`.g-bs-bb`);
 		expect(source.css).toMatch(`.g-disabled{pointer-events:none}`);
 		expect(source.css).toMatch(`.g-operable{font-size:14px;color:var(--color-highlight) !important;cursor:pointer}`);
 	});

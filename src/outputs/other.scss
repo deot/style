@@ -52,26 +52,26 @@
 }
 
 // display
-#{$prefix}-none, #{$prefix}-dp-n, #{$prefix}-hide {
+#{$computed-prefix}none, #{$computed-prefix}dp-n, #{$computed-prefix}hide {
 	display: none !important;
 }
-#{$prefix}-show, #{$prefix}-dp-b, #{$prefix}-block {
+#{$computed-prefix}show, #{$computed-prefix}dp-b, #{$computed-prefix}block {
 	display: block !important;
 }
-#{$prefix}-dp-i, #{$prefix}-inline {
+#{$computed-prefix}dp-i, #{$computed-prefix}inline {
 	display: inline !important;
 }
-#{$prefix}-dp-ib, #{$prefix}-inline-block {
+#{$computed-prefix}dp-ib, #{$computed-prefix}inline-block {
 	display: inline-block !important;
 }
 
 // cursor
-#{$prefix}-pointer {
+#{$computed-prefix}pointer {
 	cursor: pointer !important;
 }
 
 // divide 划分
-#{$prefix}-divide {
+#{$computed-prefix}divide {
 	position: relative;
 	display: inline-block;
 	width: unitfix(1);
@@ -83,18 +83,18 @@
 }
 
 // dot 圆点
-#{$prefix}-dot {
+#{$computed-prefix}dot {
 	display: block;
 	width: unitfix(5);
 	height: unitfix(5);
 	border-radius: 50%;
 }
 
-#{$prefix}-of-h {
+#{$computed-prefix}of-h {
 	overflow: hidden !important;
 }
 
-#{$prefix}-bs-bb {
+#{$computed-prefix}bs-bb {
 	box-sizing: border-box;
 }
 
