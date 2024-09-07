@@ -1,5 +1,18 @@
 # @deot/style ChangeLog
 
+## v1.0.6
+
+_2024-09-07_
+
+### Features
+
+- feat: add box-sizing(g-bs-bb) ([028abae](https://github.com/deot/sass/commit/028abae16fd3ed06846d36a2bf503cf33f889289))
+- feat: add border-radius(g-br-{number}) ([58b3e1d](https://github.com/deot/sass/commit/58b3e1dd1290a879a8ec0feed2d488028f1c8a4a))
+
+### Updates
+
+- style: `length` -> `list.length` ([521d357](https://github.com/deot/sass/commit/521d35726f7dae4dd33d4fd5617f3eef8c867f15))
+
 ## v1.0.5
 
 _2024-07-01_
