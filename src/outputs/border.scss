@@ -1,7 +1,9 @@
+@use "sass:list";
 @import "../variables/default";
 @import "../mixins/common";
 @import "../functions/helper";
 @import "../functions/theme";
+@import "./gen-mixins/border-radius";
 
 $color: themefix(border-color-default);
 
@@ -27,6 +29,16 @@ $color: themefix(border-color-default);
 #{$computed-prefix}br-circle {
 	border-radius: 100% !important;
 }
-#{$computed-prefix}br-sem {
+#{$computed-prefix}br-default {
 	border-radius: themefix(border-radius-default) !important;
 }
+
+$border-radius-list: 2, 4, 6, 8, 10, 12, 14, 16, 18, 20,  !default;
+
+@if $scale > 1 {
+	$border-radius-list: list.join($line-height-list, (1, 3, 5, 7, 9));
+}
+
+$border-radius-options: (unit: $unit, scale: $scale, prefix: $prefix, name: br);
+
+@include border-radius($border-radius-list, $border-radius-options);

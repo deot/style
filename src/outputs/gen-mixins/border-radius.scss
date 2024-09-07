@@ -1,0 +1,20 @@
+@use "sass:map";
+@use "sass:list";
+@import "../../functions";
+
+$base-options: ("name": border-radius);
+
+// 如输出全局g-br-#{值}
+@mixin border-radius($list, $options: ()) {
+	$options: merge($base-options, $options);
+	$prefix: prefix($base-options, $options);
+
+	@for $i from 1 through list.length($list) {
+		$value: list.nth($list, $i);
+		$_value: unitfix($value, $options);
+		$suffix: suffix($value, $options);
+		#{$prefix}#{$suffix} {
+			border-radius: $_value;
+		}
+	}
+}

@@ -303,15 +303,19 @@ TODO
 
 ##### [边框](./src/outputs/border.scss)
 
-| class        | 备注                    |
-| ------------ | --------------------- |
-| .g-b         | 1像素边框                 |
-| .g-bb        | 1像素下(border-bottom)边框 |
-| .g-br        | 1像素右(border-right)边框  |
-| .g-bl        | 1像素左(border-left)边框   |
-| .g-bt        | 1像素上(border-top)边框    |
-| .g-br-circle | border-radius: 100%;  |
-| .g-br-sem    | 默认圆角 (8px)            |
+> 取值范围： 2, 4, 6, 8, 10, 12, 14, 16, 18, 20;
+> 可以用过`$border-radius-list-join-data`增加，类型list
+
+| class          | 备注                    |
+| -------------- | --------------------- |
+| .g-b           | 1像素边框                 |
+| .g-bb          | 1像素下(border-bottom)边框 |
+| .g-br          | 1像素右(border-right)边框  |
+| .g-bl          | 1像素左(border-left)边框   |
+| .g-bt          | 1像素上(border-top)边框    |
+| .g-br-circle   | border-radius: 100%;  |
+| .g-br-default  | 默认圆角 (8px)            |
+| .g-br-{number} | 圆角 ({number}px)            |
 
 
 ##### [文本](./src/outputs/text.scss)

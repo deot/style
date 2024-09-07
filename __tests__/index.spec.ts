@@ -87,6 +87,7 @@ describe('index.scss', () => {
 		const source = sass.compileString(`@import './outputs/border.scss'`);
 		expect(source.css)
 			.toMatch(`.g-b{position:relative;transform:translateZ(0)}.g-b::before,.g-b::after`);
+		expect(source.css).toMatch(`.g-br-4{border-radius:4px}`);
 	});
 
 	it('box-shadow', () => {
