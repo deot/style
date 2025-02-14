@@ -1,5 +1,17 @@
 # @deot/style ChangeLog
 
+## v1.1.0
+
+_2025-02-14_
+
+### Features
+
+- feat: remove `@import` -> `@use` ([2f9db23](https://github.com/deot/sass/commit/2f9db232e41bfb988614a99041408c8c0ed553dd))
+
+### Updates
+
+- chore: deps updated ([5e29f04](https://github.com/deot/sass/commit/5e29f041be3a620895f69e5a7c4e3e3b2a7daa87))
+
 ## v1.0.8
 
 _2024-09-07_
