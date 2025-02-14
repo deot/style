@@ -11,7 +11,7 @@
   ],
   "packageManager": "pnpm@latest",
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky",
     "init": "npx pnpm install",
     "init:force": "rm -rf ./node_modules pnpm-lock.yaml && npm run init",
     "dev": "npm run test -- --watch",
@@ -41,7 +41,7 @@
     "url": "https://github.com/deot/sass/issues"
   },
   "devDependencies": {
-    "@deot/dev": "^2.8.8",
+    "@deot/dev": "^2.9.0",
     "normalize.css": "^8.0.1"
   }
 }
