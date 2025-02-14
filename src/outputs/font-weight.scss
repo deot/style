@@ -1,6 +1,6 @@
 @use "sass:list";
-@import "../variables/default";
-@import "./gen-mixins/font-weight";
+@use "../variables/default" as vd;
+@use "./gen-mixins/font-weight" as gm;
 
 $font-weight-list: bold, 400, 500, 600, 700 !default;
 $font-weight-list-join-data: false !default;
@@ -10,7 +10,7 @@ $font-weight-list-join-data: false !default;
 }
 
 // 强制scale为1
-$font-weight-options: (unit: $unit, scale: 1, prefix: $prefix, name: fw);
+$font-weight-options: (unit: vd.$unit, scale: 1, prefix: vd.$prefix, name: fw);
 
 // 输出全局g-lh-#{值}
-@include font-weight($font-weight-list, $font-weight-options);
+@include gm.font-weight($font-weight-list, $font-weight-options);

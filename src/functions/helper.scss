@@ -3,7 +3,7 @@
 @use 'sass:meta';
 @use 'sass:string';
 @use 'sass:math';
-@import "../variables/default";
+@use "../variables/default" as vd;
 
 $direction-map: ('l': left, 'r': right, 't': top, 'b': bottom);
 
@@ -22,7 +22,7 @@ $direction-map: ('l': left, 'r': right, 't': top, 'b': bottom);
 }
 
 @function prefix($rest...) {
-	$options: merge((unit: $unit, prefix: $prefix), $rest...);
+	$options: merge((unit: vd.$unit, prefix: vd.$prefix), $rest...);
 	$unit: map.get($options, 'unit');
 	$prefix: map.get($options, 'prefix');
 	$name: map.get($options, 'name');
@@ -33,7 +33,7 @@ $direction-map: ('l': left, 'r': right, 't': top, 'b': bottom);
 // 10/10px是number类型, 后者带单位; "10px"是string类型
 // 当scale = 2时: 10px -> 20px; 当单位为rem时：10 -> 10rem; 仅当字符串时，保持不变
 @function unitfix($value, $rest...) {
-	$options: merge((unit: $unit, scale: $scale), $rest...);
+	$options: merge((unit: vd.$unit, scale: vd.$scale), $rest...);
 	$unit: map.get($options, 'unit');
 	$scale: map.get($options, 'scale');
 
@@ -48,7 +48,7 @@ $direction-map: ('l': left, 'r': right, 't': top, 'b': bottom);
 
 // 当scale = 2时: g-fs-10 -> g-fs-20; 仅当字符串时，保持不变
 @function suffix($value, $rest...) {
-	$options: merge((scale: $scale), $rest...);
+	$options: merge((scale: vd.$scale), $rest...);
 	$scale: map.get($options, 'scale');
 
 	@if  meta.type-of($value) == 'number' {

@@ -2,23 +2,23 @@
 @use "sass:math";
 @use "sass:string";
 @use "sass:list";
-@import "../../functions";
+@use "../../functions/index" as fi;
 
 // 如g-m-10, g-m-tb-10...
 
 $base-options: (name: margin);
 
 @mixin margin($keys, $list, $options: ()) {
-	$options: merge($base-options, $options);
-	$prefix: prefix($base-options, $options);
+	$options: fi.merge($base-options, $options);
+	$prefix: fi.prefix($base-options, $options);
 
-	@each $key in $margin-keys {
+	@each $key in $keys {
 		@if  string.length($key) > 4 {
 			@debug error margin;
 		} @else {
 			@each $value in $list {
-				$suffix: #{if(string.length($key) >= 1, #{$key}-, '')}#{suffix($value, $options)};
-				$_value: unitfix($value, $options);
+				$suffix: #{if(string.length($key) >= 1, #{$key}-, '')}#{fi.suffix($value, $options)};
+				$_value: fi.unitfix($value, $options);
 				#{$prefix}#{$suffix} {
 					@if  string.length($key) == 0 {
 						margin: $_value;
@@ -26,7 +26,7 @@ $base-options: (name: margin);
 						$len: string.length($key);
 
 						@while $len > 0 {
-							$__key: map.get($direction-map, string.slice($key, $len, $len));
+							$__key: map.get(fi.$direction-map, string.slice($key, $len, $len));
 
 							@if  $__key {
 								margin-#{$__key}: $_value;

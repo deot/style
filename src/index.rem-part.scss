@@ -1,9 +1,10 @@
-$allow-css-variables: true;
-$unit: rem;
-$scale: 2;
-$prefix: rg;
-
-@import "./outputs/font-size";
-@import "./outputs/line-height";
-@import "./outputs/margin";
-@import "./outputs/padding";
+@use "./variables/default" with (
+	$allow-css-variables: true,
+	$unit: rem,
+	$scale: 2,
+	$prefix: rg,
+);
+@use "./outputs/font-size";
+@use "./outputs/line-height";
+@use "./outputs/margin";
+@use "./outputs/padding";

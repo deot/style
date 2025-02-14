@@ -1,11 +1,10 @@
-@import "../variables/default";
-@import "../functions/helper";
-@import "../functions/theme";
+@use "../variables/default" as vd;
+@use "../functions/theme" as ft;
 
-#{$computed-prefix}bs {
-	box-shadow: themefix(border-shadow-default) !important;
+#{vd.$computed-prefix}bs {
+	box-shadow: ft.themefix(border-shadow-default) !important;
 }
 
-#{$computed-prefix}bs-t {
-	box-shadow: themefix(border-shadow-default-top) !important;
+#{vd.$computed-prefix}bs-t {
+	box-shadow: ft.themefix(border-shadow-default-top) !important;
 }

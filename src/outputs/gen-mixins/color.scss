@@ -1,5 +1,5 @@
 @use 'sass:meta';
-@import "../../functions";
+@use "../../functions/index" as fi;
 
 $color-options: ("name": color);
 $background-options: ("name": background);
@@ -9,7 +9,7 @@ $line-gradient-options: ("name": line-gradient);
  * 输出全局字体颜色
  */
 @mixin color($list, $options: ()) {
-	$prefix: prefix($color-options, $options);
+	$prefix: fi.prefix($color-options, $options);
 
 	@each $key, $color in $list {
 		@if  $color {
@@ -24,7 +24,7 @@ $line-gradient-options: ("name": line-gradient);
  * 输出全局背景颜色
  */
 @mixin background-color($list, $options: ()) {
-	$prefix: prefix($background-options, $options);
+	$prefix: fi.prefix($background-options, $options);
 
 	@each $key, $background, $foreground in $list {
 		@if  $background {
@@ -40,7 +40,7 @@ $line-gradient-options: ("name": line-gradient);
 }
 
 @mixin line-gradient($list, $options: ()) {
-	$prefix: prefix($line-gradient-options, $options);
+	$prefix: fi.prefix($line-gradient-options, $options);
 
 	@each $key, $angle, $color, $color2 in $list {
 		@if  meta.type-of($color) == 'color' {

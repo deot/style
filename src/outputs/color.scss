@@ -1,67 +1,67 @@
 @use "sass:map";
-@import "../variables/color";
-@import "../variables/default";
-@import "../functions/helper";
-@import "../functions/theme";
-@import "./gen-mixins/color";
+@use "../variables/color" as vc;
+@use "../variables/default" as vd;
+@use "../functions/helper" as fh;
+@use "../functions/theme" as ft;
+@use "./gen-mixins/color" as gm;
 
-$color-list: ('red-mid', $red-mid),
-	('pink-mid', $pink_mid),
-	('pink-light', $pink_light),
-	('blue-dark', $blue-dark),
-	('blue-mid', $blue-mid),
-	('blue-light', $blue-light),
-	('yellow-dark', $yellow_dark),
-	('yellow-mid', $yellow_mid),
-	('yellow-light', $yellow_light),
-	('orange-dark', $orange-dark),
-	('orange-mid', $orange-mid),
-	('orange-light', $orange-light),
-	('gray-dark', $gray-dark),
-	('gray-mid', $gray-mid),
-	('gray-light', $gray-light),
-	('black-dark', $black_dark),
-	('black-mid', $black_mid),
-	('black-light', $black_light),
-	('purple-dark', $purple_dark),
-	('purple-mid', $purple_mid),
-	('purple-light', $purple_light),
-	('black', $black),
-	('white', $white),
-	('444', $c444),
-	('67', $c67),
-	('f2', $cf2),
-	('f8', $cf8),
-	('ef', $cef),
-	('cd', $ccd),
-	('e8', $ce8),
-	('d9', $cd9),
-	('f4', $cf4),
-	('f9', $cf9),
-	('000', $c000),
-	('333', $c333),
-	('51', $c51),
-	('666', $c666),
-	('999', $c999),
-	('aaa', $caaa),
-	('bbb', $cbbb),
-	('bd', $cbd),
-	('info', themefix(color-info)),
-	('success', themefix(color-success)),
-	('error', themefix(color-error)),
-	('warning', themefix(color-warning));
-$line-gradient-list: ('blue', to right, $blue-mid, $blue-light),
-	('yellow', to right, $yellow-mid, $yellow-light);
-$options: (unit: $unit, prefix: g);
+$color-list: ('red-mid', vc.$red-mid),
+	('pink-mid', vc.$pink_mid),
+	('pink-light', vc.$pink_light),
+	('blue-dark', vc.$blue-dark),
+	('blue-mid', vc.$blue-mid),
+	('blue-light', vc.$blue-light),
+	('yellow-dark', vc.$yellow_dark),
+	('yellow-mid', vc.$yellow_mid),
+	('yellow-light', vc.$yellow_light),
+	('orange-dark', vc.$orange-dark),
+	('orange-mid', vc.$orange-mid),
+	('orange-light', vc.$orange-light),
+	('gray-dark', vc.$gray-dark),
+	('gray-mid', vc.$gray-mid),
+	('gray-light', vc.$gray-light),
+	('black-dark', vc.$black_dark),
+	('black-mid', vc.$black_mid),
+	('black-light', vc.$black_light),
+	('purple-dark', vc.$purple_dark),
+	('purple-mid', vc.$purple_mid),
+	('purple-light', vc.$purple_light),
+	('black', vc.$black),
+	('white', vc.$white),
+	('444', vc.$c444),
+	('67', vc.$c67),
+	('f2', vc.$cf2),
+	('f8', vc.$cf8),
+	('ef', vc.$cef),
+	('cd', vc.$ccd),
+	('e8', vc.$ce8),
+	('d9', vc.$cd9),
+	('f4', vc.$cf4),
+	('f9', vc.$cf9),
+	('000', vc.$c000),
+	('333', vc.$c333),
+	('51', vc.$c51),
+	('666', vc.$c666),
+	('999', vc.$c999),
+	('aaa', vc.$caaa),
+	('bbb', vc.$cbbb),
+	('bd', vc.$cbd),
+	('info', ft.themefix(color-info)),
+	('success', ft.themefix(color-success)),
+	('error', ft.themefix(color-error)),
+	('warning', ft.themefix(color-warning));
+$line-gradient-list: ('blue', to right, vc.$blue-mid, vc.$blue-light),
+	('yellow', to right, vc.$yellow-mid, vc.$yellow-light);
+$options: (unit: vd.$unit, prefix: vd.$prefix);
 
-@include color($color-list, map.merge($options, (name: c))); // g-c-*
-@include background-color($color-list, map.merge($options, (name: bg))); // g-bg-*
-@include line-gradient($line-gradient-list, map.merge($options, (name: bg-lg))); // g-bg-lg-*
+@include gm.color($color-list, map.merge($options, (name: c))); // g-c-*
+@include gm.background-color($color-list, map.merge($options, (name: bg))); // g-bg-*
+@include gm.line-gradient($line-gradient-list, map.merge($options, (name: bg-lg))); // g-bg-lg-*
 
-[class*="#{$computed-prefix}bg-white"], [class*="#{$computed-prefix}bg-gray-"] {
+[class*="#{vd.$computed-prefix}bg-white"], [class*="#{vd.$computed-prefix}bg-gray-"] {
 	color: inherit;
 }
 
-[class*="#{$computed-prefix}bg-"] input {
-	color: $black;
+[class*="#{vd.$computed-prefix}bg-"] input {
+	color: vc.$black;
 }

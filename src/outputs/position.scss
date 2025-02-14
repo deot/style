@@ -1,22 +1,22 @@
-@import "../variables/default";
+@use "../variables/default" as vd;
 
-#{$computed-prefix}fixed {
+#{vd.$computed-prefix}fixed {
 	position: fixed !important;
 }
-#{$computed-prefix}relative {
+#{vd.$computed-prefix}relative {
 	position: relative !important;
 }
 
-#{$computed-prefix}absolute {
+#{vd.$computed-prefix}absolute {
 	position: absolute !important;
 }
 
-#{$computed-prefix}fixed-full {
+#{vd.$computed-prefix}fixed-full {
 	position: fixed !important;
 	inset: 0;
 }
 
-#{$computed-prefix}absolute-full {
+#{vd.$computed-prefix}absolute-full {
 	position: absolute !important;
 	inset: 0;
 }

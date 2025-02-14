@@ -1,13 +1,13 @@
 @use "sass:map";
-@import "./helper";
-@import "../variables/default";
-@import "../variables/theme";
+@use "./helper" as fh;
+@use "../variables/default" as vd;
+@use "../variables/theme" as vt;
 
 @function themefix($value, $rest...) {
-	$options: merge((allow-css-variables: $allow-css-variables, theme: $theme), $rest...);
+	$options: fh.merge((allow-css-variables: vd.$allow-css-variables, theme: vt.$theme), $rest...);
 	$theme: map.get($options, 'theme');
 
-	@if  $allow-css-variables {
+	@if vd.$allow-css-variables {
 		@return var(--#{$value});
 	}
 

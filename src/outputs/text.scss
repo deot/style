@@ -1,37 +1,37 @@
-@import "../variables/default";
-@import "../mixins/common";
+@use "../variables/default" as vd;
+@use "../mixins/common" as mc;
 
-#{$computed-prefix}tc {
+#{vd.$computed-prefix}tc {
 	text-align: center !important;
 }
 
-#{$computed-prefix}tl {
+#{vd.$computed-prefix}tl {
 	text-align: left !important;
 }
 
-#{$computed-prefix}tr {
+#{vd.$computed-prefix}tr {
 	text-align: right !important;
 }
 
-#{$computed-prefix}td-lh {
+#{vd.$computed-prefix}td-lh {
 	text-decoration: line-through !important;
 }
 
-#{$computed-prefix}td-ul {
+#{vd.$computed-prefix}td-ul {
 	text-decoration: underline !important;
 }
 
-#{$computed-prefix}nowrap {
+#{vd.$computed-prefix}nowrap {
 	white-space: nowrap !important;
 }
 
-#{$computed-prefix}break {
+#{vd.$computed-prefix}break {
 	word-break: break-all;
 	word-wrap: break-word;
 }
 
 // 不建议给节点加高度
-#{$computed-prefix}break-all {
+#{vd.$computed-prefix}break-all {
 	overflow: hidden;
 	word-break: break-all;
 	word-wrap: break-word;
@@ -41,13 +41,13 @@
 /**
  * 一行文字
  */
-#{$computed-prefix}line-one {
-	@include common-text-line(1);
+#{vd.$computed-prefix}line-one {
+	@include mc.common-text-line(1);
 }
 
 /**
  * 两行文字
  */
-#{$computed-prefix}line-two {
-	@include common-text-line(2);
+#{vd.$computed-prefix}line-two {
+	@include mc.common-text-line(2);
 }

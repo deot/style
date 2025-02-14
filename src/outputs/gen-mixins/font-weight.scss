@@ -1,17 +1,17 @@
 @use "sass:map";
 @use "sass:list";
-@import "../../functions";
+@use "../../functions/index" as fi;
 
 $base-options: ("name": font-weight);
 
 // 如输出全局g-fw-#{值}
 @mixin font-weight($list, $options: ()) {
-	$options: merge($base-options, $options);
-	$prefix: prefix($base-options, $options);
+	$options: fi.merge($base-options, $options);
+	$prefix: fi.prefix($base-options, $options);
 
 	@for $i from 1 through list.length($list) {
 		$value: list.nth($list, $i);
-		$suffix: suffix($value, $options);
+		$suffix: fi.suffix($value, $options);
 		#{$prefix}#{$suffix} {
 			font-weight: $value;
 		}

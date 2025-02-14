@@ -4,7 +4,7 @@ import * as sass from './fixtures/sass';
 describe('mixins/', () => {
 	it('index.scss', () => {
 		const source1 = sass.compile(path.resolve(process.cwd(), `./src/mixins/index.scss`));
-		const source2 = sass.compileString(`@import './mixins/index.scss'`);
+		const source2 = sass.compileString(`@use './mixins/index.scss'`);
 
 		// mixins转css后不存在了
 		expect(source1.css).toBe(source2.css);
@@ -14,7 +14,7 @@ describe('mixins/', () => {
 
 	it('bem.scss', () => {
 		const source = sass.compileString(`
-			@import './mixins/bem.scss';
+			@use './mixins/bem.scss' as *;
 			$block: b;
 
 			@include share-rule(border) {
@@ -98,7 +98,7 @@ describe('mixins/', () => {
 	});
 
 	it('common.scss/common-border-1px', () => {
-		const source = sass.compileString(`@import './mixins/common.scss'; .b { @include common-border-1px('', inherit);}`);
+		const source = sass.compileString(`@use './mixins/common.scss' as *; .b { @include common-border-1px('', inherit);}`);
 
 		expect(source.css).toMatch(`border-radius:inherit`);
 	});

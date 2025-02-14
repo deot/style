@@ -1,5 +1,6 @@
-$allow-css-variables: true;
-$unit: rem;
-$scale: 2;
-
-@import "./index";
+@use "./variables/default" with (
+	$allow-css-variables: true,
+	$unit: rem,
+	$scale: 2,
+);
+@use "./index";

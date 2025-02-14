@@ -1,5 +1,5 @@
 @use "sass:string";
-@import "../../functions";
+@use "../../functions/index" as fi;
 
 // concat
 @function concat($val) {
@@ -18,7 +18,7 @@
 $base-options: null;
 
 @mixin flex-arrts($attrs-map, $options: ()) {
-	$prefix: prefix($base-options, $options);
+	$prefix: fi.prefix($base-options, $options);
 
 	@each $key, $attrs in $attrs-map {
 		$short: concat($key);
@@ -32,12 +32,12 @@ $base-options: null;
 }
 
 @mixin flex-size($total, $options: ()) {
-	$prefix: prefix($base-options, $options);
+	$prefix: fi.prefix($base-options, $options);
 
 	@for $i from 1 through $total {
 		@for $j from 1 through $i - 1 {
 			#{$prefix}#{$j}of#{$i} {
-				flex: 0 0 percentw($j, $i);
+				flex: 0 0 fi.percentw($j, $i);
 			}
 		}
 	}

@@ -1,6 +1,8 @@
-$allow-css-variables: false;
-$allow-asterisk-wildcard: false;
-$unit: rpx;
-$scale: 2;
+@use "./variables/default" as vd;
 
-@import "./index";
+vd.$allow-css-variables: false;
+vd.$allow-asterisk-wildcard: false;
+vd.$unit: rpx;
+vd.$scale: 2;
+
+@use "./index";

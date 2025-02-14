@@ -1,6 +1,6 @@
 @use 'sass:meta';
 @use 'sass:math';
-@import "../functions";
+@use "../functions/index" as fi;
 
 
 $unitb: px !default;
@@ -91,11 +91,11 @@ $unitb: px !default;
 		/**
 		 * 很有影响
 		 */
-		width: unitfix($size);
+		width: fi.unitfix($size);
 	}
 
 	&::-webkit-scrollbar:horizontal {
-		height: unitfix($size);
+		height: fi.unitfix($size);
 	}
 
 	/**
@@ -103,7 +103,7 @@ $unitb: px !default;
 	 */
 	&::-webkit-scrollbar-track {
 		background: rgb(0 0 0 / 0%);
-		border-radius: unitfix(5);
+		border-radius: fi.unitfix(5);
 		box-shadow: inset 0 0 10px rgb(0 0 0 / 0%);
 	}
 
@@ -112,7 +112,7 @@ $unitb: px !default;
 	 */
 	&::-webkit-scrollbar-thumb {
 		background: rgb(0 0 0 / 20%);
-		border-radius: unitfix(5);
+		border-radius: fi.unitfix(5);
 	}
 }
 
@@ -134,7 +134,7 @@ $unitb: px !default;
 			display: block; /* 父类为flex, 使用table无法撑开 */
 			clear: both;
 			pointer-events: none;
-			border-radius: if(meta.type-of($border-radius) == 'number', unitfix($border-radius), inherit);
+			border-radius: if(meta.type-of($border-radius) == 'number', fi.unitfix($border-radius), inherit);
 			content: " ";
 			box-sizing: border-box;
 		}
@@ -144,7 +144,7 @@ $unitb: px !default;
 				top: 0;
 				left: 0;
 				width: 100%;
-				border-top: unitfix(1) solid $color;
+				border-top: fi.unitfix(1) solid $color;
 				transform-origin: 0 top;
 			}
 		} @else if $direction == 'right' {
@@ -152,7 +152,7 @@ $unitb: px !default;
 				top: 0;
 				right: 0;
 				height: 100%;
-				border-right: unitfix(1) solid $color;
+				border-right: fi.unitfix(1) solid $color;
 				transform-origin: right 0;
 			}
 		} @else if $direction == 'bottom' {
@@ -160,7 +160,7 @@ $unitb: px !default;
 				bottom: 0;
 				left: 0;
 				width: 100%;
-				border-bottom: unitfix(1) solid $color;
+				border-bottom: fi.unitfix(1) solid $color;
 				transform-origin: 0 bottom;
 			}
 		} @else if $direction == 'left' {
@@ -168,7 +168,7 @@ $unitb: px !default;
 				top: 0;
 				left: 0;
 				height: 100%;
-				border-left: unitfix(1) solid $color;
+				border-left: fi.unitfix(1) solid $color;
 				transform-origin: left 0;
 			}
 		} @else {
@@ -177,7 +177,7 @@ $unitb: px !default;
 				left: 0;
 				width: 100%;
 				height: 100%;
-				border: unitfix(1) solid $color;
+				border: fi.unitfix(1) solid $color;
 				transform-origin: 0 0;
 			}
 		}
@@ -188,7 +188,7 @@ $unitb: px !default;
 			@if  meta.type-of($border-radius) == 'number' {
 				&::before,
 				&::after {
-					border-radius: unitfix($border-radius * 2);
+					border-radius: fi.unitfix($border-radius * 2);
 				}
 			}
 
@@ -227,7 +227,7 @@ $unitb: px !default;
 			@if  meta.type-of($border-radius) == 'number' {
 				&::before,
 				&::after {
-					border-radius: unitfix($border-radius * 3);
+					border-radius: fi.unitfix($border-radius * 3);
 				}
 			}
 

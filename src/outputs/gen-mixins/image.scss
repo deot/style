@@ -1,18 +1,18 @@
 @use "sass:map";
 @use "sass:list";
-@import "../../functions";
+@use "../../functions/index" as fi;
 
 $image-size-options: (name: image-size);
 
 @mixin image-size($list, $options: ()) {
-	$options: merge($image-size-options, $options);
-	$prefix: prefix($image-size-options, $options);
+	$options: fi.merge($image-size-options, $options);
+	$prefix: fi.prefix($image-size-options, $options);
 	$mode: map.get($options, 'mode');
 
 	@for $i from 1 through list.length($list) {
 		$value: list.nth($list, $i);
-		$suffix: #{suffix($value, $options)};
-		$_value: unitfix($value, $options);
+		$suffix: #{fi.suffix($value, $options)};
+		$_value: fi.unitfix($value, $options);
 
 		#{$prefix}#{$suffix} {
 			width: $_value;
@@ -24,7 +24,7 @@ $image-size-options: (name: image-size);
 			@if  $mode == 'circle' {
 				border-radius: 50%;
 			} @else if $mode == 'radius' {
-				border-radius: unitfix(4, $options);
+				border-radius: fi.unitfix(4, $options);
 			}
 		}
 	}

@@ -1,17 +1,17 @@
-@import "../variables/default";
-@import "./gen-mixins/flex";
+@use "../variables/default" as vd;
+@use "./gen-mixins/flex" as gm;
 
 /**
  * flex
  */
 
-#{$computed-prefix}flex {
+#{vd.$computed-prefix}flex {
 	display: flex;
 	box-sizing: border-box;
 }
 
 // 圣杯布局
-#{$computed-prefix}flex-holy {
+#{vd.$computed-prefix}flex-holy {
 	display: flex;
 	min-height: 100vh;
 	box-sizing: border-box;
@@ -19,28 +19,28 @@
 }
 
 // 水平垂直对齐
-#{$computed-prefix}flex-cc {
+#{vd.$computed-prefix}flex-cc {
 	display: flex;
 	box-sizing: border-box;
 	align-items: center;
 	justify-content: center;
 }
 
-#{$computed-prefix}flex-ac {
+#{vd.$computed-prefix}flex-ac {
 	display: flex;
 	box-sizing: border-box;
 	align-items: center;
 }
 
-#{$computed-prefix}col {
+#{vd.$computed-prefix}col {
 	flex: 1;
 }
 
-#{$computed-prefix}col-2 {
+#{vd.$computed-prefix}col-2 {
 	flex: 2;
 }
 
-#{$computed-prefix}1of1 {
+#{vd.$computed-prefix}1of1 {
 	flex: 0 0 100%;
 }
 
@@ -52,7 +52,7 @@ $flex-attrs-map: (
 	"align-content": (flex-start, flex-end, center, space-between, space-around, stretch),
 	"align-self": (auto, flex-start, flex-end, center, baseline, stretch)
 );
-$flex-options: (prefix: $prefix);
+$flex-options: (prefix: vd.$prefix);
 
-@include flex-arrts($flex-attrs-map, $flex-options);
-@include flex-size(5, $flex-options);
+@include gm.flex-arrts($flex-attrs-map, $flex-options);
+@include gm.flex-size(5, $flex-options);

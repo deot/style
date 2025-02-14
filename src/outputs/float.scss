@@ -1,32 +1,32 @@
-@import "../variables/default";
-@import "./gen-mixins/float";
+@use "../variables/default" as vd;
+@use "./gen-mixins/float" as gm;
 
-$float-options: (prefix: $prefix);
+$float-options: (prefix: vd.$prefix);
 
-@include float(12, $float-options);
+@include gm.float(12, $float-options);
 
-#{$computed-prefix}clearfix::before,
-#{$computed-prefix}clearfix::after,
-#{$computed-prefix}row::before,
-#{$computed-prefix}row::after {
+#{vd.$computed-prefix}clearfix::before,
+#{vd.$computed-prefix}clearfix::after,
+#{vd.$computed-prefix}row::before,
+#{vd.$computed-prefix}row::after {
 	display: table;
 	content: " ";
 }
 
-#{$computed-prefix}clearfix::after,
-#{$computed-prefix}row::after {
+#{vd.$computed-prefix}clearfix::after,
+#{vd.$computed-prefix}row::after {
 	clear: both;
 }
 
-#{$computed-prefix}row {
+#{vd.$computed-prefix}row {
 	padding: 0;
 	margin: 0;
 }
 
-#{$computed-prefix}fr {
+#{vd.$computed-prefix}fr {
 	float: right;
 }
 
-#{$computed-prefix}fl {
+#{vd.$computed-prefix}fl {
 	float: left;
 }

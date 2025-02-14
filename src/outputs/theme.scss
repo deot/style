@@ -1,6 +1,7 @@
-@import "./gen-mixins/theme";
-@import "../variables/theme";
+@use "./gen-mixins/theme" as gm;
+@use "../variables/theme" as vt;
+@use "../variables/default" as vd;
 
-$theme-options: (allow-css-variables: $allow-css-variables, theme: $theme);
+$theme-options: (allow-css-variables: vd.$allow-css-variables, theme: vt.$theme);
 
-@include theme(":root", $theme-options);
+@include gm.theme(":root", $theme-options);

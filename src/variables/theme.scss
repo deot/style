@@ -1,6 +1,6 @@
 @use "sass:map";
 @use 'sass:meta';
-@import "../functions";
+@use "../functions/index" as fi;
 
 /**
  * 项目主题采用CSS Variables
@@ -29,25 +29,25 @@ $theme: (
 	background-color-highlight: #5495f6,
 
 	// 圆角
-	border-radius-default: unitfix(8),
-	border-shadow-default: 0 0 unitfix(8) 0 rgba(0, 0, 0, 0.1),
-	border-shadow-default-top: 0 unitfix(-2) unitfix(10) 0 rgba(0, 0, 0, 0.08),
+	border-radius-default: fi.unitfix(8),
+	border-shadow-default: 0 0 fi.unitfix(8) 0 rgba(0, 0, 0, 0.1),
+	border-shadow-default-top: 0 fi.unitfix(-2) fi.unitfix(10) 0 rgba(0, 0, 0, 0.08),
 
 	// 行高
 	line-height-default: 1.5,
-	line-height-limit: unitfix(32), // 单行文字限高
+	line-height-limit: fi.unitfix(32), // 单行文字限高
 
 	// 边框
 	border-color-default: #c9c9c9,
 
 	// 字体尺寸
-	font-size-default: unitfix(14),
-	font-size-large: unitfix(16),
+	font-size-default: fi.unitfix(14),
+	font-size-large: fi.unitfix(16),
 
 	// 滚动条
 	scrollbar-track-bg-color: rgba(0, 0, 0, 0),
 	scrollbar-thumb-bg-color: rgba(0, 0, 0, 0.2),
-	scrollbar-track-box-shadow: inset 0 0 unitfix(10) rgba(0, 0, 0, 0)
+	scrollbar-track-box-shadow: inset 0 0 fi.unitfix(10) rgba(0, 0, 0, 0)
 ) !default;
 $theme-merge-data: false !default;
 

@@ -1,44 +1,44 @@
 @use "sass:list";
-@import "../variables/default";
-@import "../mixins/common";
-@import "../functions/helper";
-@import "../functions/theme";
-@import "./gen-mixins/border-radius";
+@use "../variables/default" as vd;
+@use "../mixins/common" as mc;
+@use "../functions/helper" as fi;
+@use "../functions/theme" as ft;
+@use "./gen-mixins/border-radius" as gm;
 
-$color: themefix(border-color-default);
+$color: ft.themefix(border-color-default);
 
-#{$computed-prefix}b {
-	@include common-border-1px('', $color);
+#{vd.$computed-prefix}b {
+	@include mc.common-border-1px('', $color);
 }
-#{$computed-prefix}bb {
-	@include common-border-1px(bottom, $color);
-}
-
-#{$computed-prefix}br {
-	@include common-border-1px(right, $color);
+#{vd.$computed-prefix}bb {
+	@include mc.common-border-1px(bottom, $color);
 }
 
-#{$computed-prefix}bl {
-	@include common-border-1px(left, $color);
+#{vd.$computed-prefix}br {
+	@include mc.common-border-1px(right, $color);
 }
 
-#{$computed-prefix}bt {
-	@include common-border-1px(top, $color);
+#{vd.$computed-prefix}bl {
+	@include mc.common-border-1px(left, $color);
 }
 
-#{$computed-prefix}br-circle {
+#{vd.$computed-prefix}bt {
+	@include mc.common-border-1px(top, $color);
+}
+
+#{vd.$computed-prefix}br-circle {
 	border-radius: 100% !important;
 }
-#{$computed-prefix}br-default {
-	border-radius: themefix(border-radius-default) !important;
+#{vd.$computed-prefix}br-default {
+	border-radius: ft.themefix(border-radius-default) !important;
 }
 
 $border-radius-list: 2, 4, 6, 8, 10, 12, 14, 16, 18, 20,  !default;
 
-@if $scale > 1 {
+@if vd.$scale > 1 {
 	$border-radius-list: list.join($border-radius-list, (1, 3, 5, 7, 9));
 }
 
-$border-radius-options: (unit: $unit, scale: $scale, prefix: $prefix, name: br);
+$border-radius-options: (unit: vd.$unit, scale: vd.$scale, prefix: vd.$prefix, name: br);
 
-@include border-radius($border-radius-list, $border-radius-options);
+@include gm.border-radius($border-radius-list, $border-radius-options);

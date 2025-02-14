@@ -1,8 +1,8 @@
 @use "sass:map";
-@import "../variables/default";
-@import "./gen-mixins/image";
+@use "../variables/default" as vd;
+@use "./gen-mixins/image" as gm;
 
-$options: (unit: $unit, scale: $scale, prefix: g);
+$options: (unit: vd.$unit, scale: vd.$scale, prefix: vd.$prefix);
 $image-size-list: 256, 150, 128, 100, 96, 64, 56, 40, 32, 24;
 $image-size-list-join-data: false !default;
 
@@ -11,6 +11,6 @@ $image-size-list-join-data: false !default;
 }
 
 // 输出全局g-#{名称}-#{值}
-@include image-size($image-size-list, map.merge($options, (name: img)));
-@include image-size($image-size-list, map.merge($options, (name: imgc, mode: 'circle')));
-@include image-size($image-size-list, map.merge($options, (name: imgr, mode: 'radius')));
+@include gm.image-size($image-size-list, map.merge($options, (name: img)));
+@include gm.image-size($image-size-list, map.merge($options, (name: imgc, mode: 'circle')));
+@include gm.image-size($image-size-list, map.merge($options, (name: imgr, mode: 'radius')));

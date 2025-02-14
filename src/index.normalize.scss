@@ -1,2 +1,2 @@
-@import "normalize.css";
-@import "./index";
+@use "./index";
+@import "normalize.css"; // 当前样式会被前置

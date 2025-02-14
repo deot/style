@@ -1,11 +1,11 @@
 @use 'sass:math';
-@import "../../functions";
+@use "../../functions/index" as fi;
 
 $base-options: null;
 
 // 输出全局栅格，浮动
 @mixin float($total, $options: ()) {
-	$prefix: prefix($base-options, $options);
+	$prefix: fi.prefix($base-options, $options);
 
 	%float {
 		float: left;
@@ -13,7 +13,7 @@ $base-options: null;
 
 	@for $i from 1 through $total {
 		#{$prefix}w-#{$i} {
-			width: percentw($i, $total);
+			width: fi.percentw($i, $total);
 		}
 		#{$prefix}fw-#{$i} {
 			@extend %float;

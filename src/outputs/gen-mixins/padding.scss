@@ -2,23 +2,23 @@
 @use "sass:math";
 @use "sass:string";
 @use "sass:list";
-@import "../../functions";
+@use "../../functions/index" as fi;
 
 // 如g-pd-10, g-pd-tb-10...
 
 $base-options: (unit: px, prefix: g, name: padding);
 
 @mixin padding($keys, $list, $options: ()) {
-	$options: merge($base-options, $options);
-	$prefix: prefix($base-options, $options);
+	$options: fi.merge($base-options, $options);
+	$prefix: fi.prefix($base-options, $options);
 
-	@each $key in $padding-keys {
+	@each $key in $keys {
 		@if  string.length($key) > 4 {
 			@debug error padding;
 		} @else {
 			@each $value in $list {
-				$suffix: #{if(string.length($key) >= 1, #{$key}-, '')}#{suffix($value, $options)};
-				$_value: unitfix($value, $options);
+				$suffix: #{if(string.length($key) >= 1, #{$key}-, '')}#{fi.suffix($value, $options)};
+				$_value: fi.unitfix($value, $options);
 				#{$prefix}#{$suffix} {
 					@if  string.length($key) == 0 {
 						padding: $_value;
@@ -26,7 +26,7 @@ $base-options: (unit: px, prefix: g, name: padding);
 						$len: string.length($key);
 
 						@while $len > 0 {
-							$__key: map.get($direction-map, string.slice($key, $len, $len));
+							$__key: map.get(fi.$direction-map, string.slice($key, $len, $len));
 
 							@if  $__key {
 								padding-#{$__key}: $_value;
