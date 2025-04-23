@@ -227,15 +227,17 @@
 > 取值范围：16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 60, 72, 80, 88, 120;
 > 可以用过`$line-height-list-join-data`增加，类型list
 
-| class     | 备注               |
-| --------- | ---------------- |
-| .g-lh-*   | `line-height: *` |
-| .g-lh-one | 行高32px, 高度64px   |
-| .g-lh-two | 行高32px, 高度32px   |
+| class     | 备注                 |
+| --------- | ------------------ |
+| .g-lh-*   | `line-height: *px` |
+| .g-lh-1   | `line-height: 1`   |
+| .g-lh-2   | `line-height: 2`   |
+| .g-lh-one | 行高32px, 高度64px     |
+| .g-lh-two | 行高32px, 高度32px     |
 
 ##### [内边距](./src/outputs/padding.scss) g-pd-(方向)?-(值/变量)
 
-> 取值范围：5, 8, 10, 12, 13, 15, 16, 18, 20, 21, 24, 25, 30, 32, 48, 56, 60;
+> 取值范围：4, 5, 8, 10, 12, 13, 15, 16, 18, 20, 21, 24, 25, 30, 32, 48, 56, 60;
 > 可以用过`$padding-list-join-data`增加，类型list
 
 | class      | 备注                                  |
@@ -247,10 +249,17 @@
 | .g-pd-l-*  | `padding-left: *`                   |
 | .g-pd-b-*  | `padding-bottom: *`                 |
 | .g-pd-r-*  | `padding-right: *`                  |
+| .g-pd-s    | `safe-area-inset-*`                 |
+| .g-pd-tb-s | `safe-area-inset-*`                 |
+| .g-pd-lr-s | `safe-area-inset-*`                 |
+| .g-pd-t-s  | `safe-area-inset-top`               |
+| .g-pd-l-s  | `safe-area-inset-left`              |
+| .g-pd-b-s  | `safe-area-inset-bottom`            |
+| .g-pd-r-s  | `safe-area-inset-right`             |
 
 ##### [外边距](./src/outputs/margin.scss) g-m-(方向)?-(值/变量) 
 
-> 取值范围：5, 8, 10, 12, 13, 15, 16, 18, 20, 21, 24, 25, 30, 32, 48, 56, 60;
+> 取值范围：4, 5, 8, 10, 12, 13, 15, 16, 18, 20, 21, 24, 25, 30, 32, 48, 56, 60;
 > 可以用过`$margin-list-join-data`增加，类型list
 
 | class      | 备注                                  |

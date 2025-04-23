@@ -19,8 +19,9 @@
     "release": "ddc release",
     "update": "ddc update",
     "test": "ddc test",
-    "lint": "eslint . --color",
-    "lint:fix": "npm run lint -- --fix",
+    "lint": "npm run lint:es && npm run lint:style",
+    "lint:fix": "npm run lint:es -- --fix && npm run lint:style -- --fix",
+    "lint:es": "eslint . --color",
     "lint:style": "stylelint --fix 'src/**/*.{css,scss}' --cache --cache-location node_modules/.cache/stylelint/",
     "typecheck": "tsc --noEmit --skipLibCheck"
   },

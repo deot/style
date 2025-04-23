@@ -43,3 +43,7 @@ $line-height-options: (unit: vd.$unit, scale: vd.$scale, prefix: vd.$prefix, nam
 #{vd.$computed-prefix}lh-1 {
 	line-height: 1;
 }
+
+#{vd.$computed-prefix}lh-2 {
+	line-height: 2;
+}
