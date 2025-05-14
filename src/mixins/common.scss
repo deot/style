@@ -35,6 +35,15 @@ $unitb: px !default;
  */
 
 /**
+  * 单词换行
+  */
+@mixin common-break {
+	word-break: break-all;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+}
+
+/**
  * 一行文字
  */
 @mixin common-ellipsis {
@@ -50,15 +59,8 @@ $unitb: px !default;
 	text-overflow: ellipsis;
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: $line;
-}
 
-/**
- * 单词换行
- */
-@mixin common-break {
-	word-break: break-all;
-	word-wrap: break-word;
-}
+	@include common-break; }
 
 /**
  * [common-clear-fix 清除浮动]
