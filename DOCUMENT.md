@@ -232,8 +232,8 @@
 | .g-lh-*   | `line-height: *px` |
 | .g-lh-1   | `line-height: 1`   |
 | .g-lh-2   | `line-height: 2`   |
-| .g-lh-one | 行高32px, 高度64px     |
-| .g-lh-two | 行高32px, 高度32px     |
+| .g-lh-one | 行高32px, 高度32px     |
+| .g-lh-two | 行高32px, 高度64px     |
 
 ##### [内边距](./src/outputs/padding.scss) g-pd-(方向)?-(值/变量)
 
@@ -339,8 +339,8 @@ TODO
 | .g-nowrap    | 不换行    |
 | .g-break     | 字母数字换行 |
 | .g-break-all | 所有文本换行 |
-| .g-line-one                 | 单行省略                    |
-| .g-line-one                 | 两行省略                    |
+| .g-line-one  | 单行省略(break-all前置)   |
+| .g-line-two  | 两行省略(break-all前置)   |
 
 ##### [阴影](./src/outputs/box-shadow.scss)
 
@@ -353,7 +353,9 @@ TODO
 
 | class                      | 备注                      |
 | -------------------------- | ----------------------- |
-| .g-h-full                  | height: 100vh;          |
+| .g-height-full             | `height: 100%`          |
+| .g-width-full              | width: 100%`            |
+| .g-size-full               | `width/height: 100%`    |
 | .g-disabled                | 禁用事件                    |
 | .g-unanimated              | 禁用动画                    |
 | .g-show, .g-block, .g-dp-b | `display: block`        |
