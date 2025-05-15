@@ -1,5 +1,20 @@
 # @deot/style ChangeLog
 
+## v1.1.1
+
+_2025-05-15_
+
+### Features
+
+- feat: layout-full -> size-full ([e13da0c](https://github.com/deot/sass/commit/e13da0c85d3a15a87a2e987d69d4ee2523a8a2f4))
+- feat: add work break all（line-*） ([3ccfa75](https://github.com/deot/sass/commit/3ccfa75dc9f3f5035dac330043093b4f4083e71a))
+- feat: safe-area & layout-full && small padding/margin ([2542722](https://github.com/deot/sass/commit/2542722b5a6c3e57ca289355ecf3ee6260fbdd15))
+
+### Updates
+
+- chore: deps updated ([dba0e27](https://github.com/deot/sass/commit/dba0e272547c7c69d8354413e4bf4f7b4ab669ac))
+- chore: deps updated ([b0e389c](https://github.com/deot/sass/commit/b0e389c5a5e6a39054ba2cf4b3d6c4e4fa9fa7bf))
+
 ## v1.1.0
 
 _2025-02-14_
