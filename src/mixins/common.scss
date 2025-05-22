@@ -60,7 +60,8 @@ $unitb: px !default;
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: $line;
 
-	@include common-break; }
+	@include common-break;
+}
 
 /**
  * [common-clear-fix 清除浮动]
