@@ -1,5 +1,17 @@
 # @deot/style ChangeLog
 
+## v1.1.2
+
+_2025-06-30_
+
+### Features
+
+- feat: fs-11 & pd/m-2/6 ([8340e41](https://github.com/deot/sass/commit/8340e41d1dcd5f809b48505d137fc6634e124cba))
+
+### Updates
+
+- style: lint fix ([b379aa9](https://github.com/deot/sass/commit/b379aa9223ba5ba147d878539a6f3c014c5c9b94))
+
 ## v1.1.1
 
 _2025-05-15_
