@@ -1,5 +1,13 @@
 # @deot/style ChangeLog
 
+## v1.1.3
+
+_2025-11-20_
+
+### Bugfixes
+
+- fix: dynamic size with rem, remove `font-size` set ([e33ca12](https://github.com/deot/sass/commit/e33ca12cc7656131ec809fad7942b3c70e855fc8))
+
 ## v1.1.2
 
 _2025-06-30_
