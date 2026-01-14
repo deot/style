@@ -11,7 +11,7 @@ $prefix: g !default;
 $computed-prefix: 'any with computed' !default;
 
 @if $prefix {
-	$computed-prefix: #{'.'}#{if($prefix and $prefix != '', #{$prefix}-, '')};
+	$computed-prefix: #{'.'}#{if(sass($prefix and $prefix != ""): #{$prefix}-; else: "")};
 }
 
 // 允许css-variables

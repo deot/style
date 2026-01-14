@@ -6,7 +6,7 @@
 export const useREM = (baseWidth: number = 750): void => {
 	const refreshREM = () => {
 		const html = document.documentElement;
-		const screenWidth = html.getBoundingClientRect().width;
+		const screenWidth = html.getBoundingClientRect().width || window.innerWidth;
 		html.style.setProperty('font-size', screenWidth / baseWidth + 'px', 'important');
 	};
 

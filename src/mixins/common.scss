@@ -39,7 +39,7 @@ $unitb: px !default;
   */
 @mixin common-break {
 	word-break: break-all;
-	word-wrap: break-word;
+	text-wrap: wrap;
 	overflow-wrap: break-word;
 }
 
@@ -137,7 +137,7 @@ $unitb: px !default;
 			display: block; /* 父类为flex, 使用table无法撑开 */
 			clear: both;
 			pointer-events: none;
-			border-radius: if(meta.type-of($border-radius) == 'number', fi.unitfix($border-radius), inherit);
+			border-radius: if(sass(meta.type-of($border-radius) == "number"): fi.unitfix($border-radius); else: inherit);
 			content: " ";
 			box-sizing: border-box;
 		}

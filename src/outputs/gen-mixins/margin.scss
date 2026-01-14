@@ -17,7 +17,7 @@ $base-options: (name: margin);
 			@debug error margin;
 		} @else {
 			@each $value in $list {
-				$suffix: #{if(string.length($key) >= 1, #{$key}-, '')}#{fi.suffix($value, $options)};
+				$suffix: #{if(sass(string.length($key) >= 1): #{$key}-; else: "")}#{fi.suffix($value, $options)};
 				$_value: fi.unitfix($value, $options);
 				#{$prefix}#{$suffix} {
 					@if  string.length($key) == 0 {

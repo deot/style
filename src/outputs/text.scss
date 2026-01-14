@@ -21,21 +21,14 @@
 	text-decoration: underline !important;
 }
 
-#{vd.$computed-prefix}nowrap {
+#{vd.$computed-prefix}line-nowrap, #{vd.$computed-prefix}nowrap {
 	white-space: nowrap !important;
 }
 
-#{vd.$computed-prefix}break {
+#{vd.$computed-prefix}line-wrap, #{vd.$computed-prefix}break {
 	word-break: break-all;
-	word-wrap: break-word;
-}
-
-// 不建议给节点加高度
-#{vd.$computed-prefix}break-all {
-	overflow: hidden;
-	word-break: break-all;
-	word-wrap: break-word;
 	overflow-wrap: break-word;
+	text-wrap: wrap;
 }
 
 /**

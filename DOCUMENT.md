@@ -331,18 +331,17 @@ TODO
 
 ##### [文本](./src/outputs/text.scss)
 
-| class        | 备注     |
-| ------------ | ------ |
-| .g-tc        | 居中     |
-| .g-tl        | 居左     |
-| .g-tr        | 居右     |
-| .g-td-lh     | 删除线    |
-| .g-td-ul     | 下划线    |
-| .g-nowrap    | 不换行    |
-| .g-break     | 字母数字换行 |
-| .g-break-all | 所有文本换行 |
-| .g-line-one  | 单行省略(break-all前置)   |
-| .g-line-two  | 两行省略(break-all前置)   |
+| class                   | 备注                |
+| ----------------------- | ----------------- |
+| .g-tc                   | 居中                |
+| .g-tl                   | 居左                |
+| .g-tr                   | 居右                |
+| .g-td-lh                | 删除线               |
+| .g-td-ul                | 下划线               |
+| .g-line-nowrap/g-nowrap | 不换行               |
+| .g-line-wrap/g-break    | 字母、数字、文本换行        |
+| .g-line-one             | 单行省略(break-all前置) |
+| .g-line-two             | 两行省略(break-all前置) |
 
 ##### [阴影](./src/outputs/box-shadow.scss)
 

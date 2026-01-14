@@ -42,7 +42,7 @@
     "url": "https://github.com/deot/sass/issues"
   },
   "devDependencies": {
-    "@deot/dev": "^2.9.5",
+    "@deot/dev": "^2.9.9",
     "normalize.css": "^8.0.1"
   }
 }

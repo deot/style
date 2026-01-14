@@ -27,7 +27,7 @@ $direction-map: ('l': left, 'r': right, 't': top, 'b': bottom);
 	$prefix: map.get($options, 'prefix');
 	$name: map.get($options, 'name');
 
-	@return #{'.'}#{if($prefix and $prefix != '', #{$prefix}-, '')}#{if($name and $name != '', #{$name}-, '')};
+	@return #{'.'}#{if(sass($prefix and $prefix != ""): #{$prefix}-; else: "")}#{if(sass($name and $name != ""): #{$name}-; else: "")};
 }
 
 // 10/10px是number类型, 后者带单位; "10px"是string类型
@@ -38,7 +38,7 @@ $direction-map: ('l': left, 'r': right, 't': top, 'b': bottom);
 	$scale: map.get($options, 'scale');
 
 	@if  meta.type-of($value) == 'number' {
-		$value: if(math.is_unitless($value), #{$value * $scale}#{$unit}, #{$value * $scale});
+		$value: if(sass(math.is_unitless($value)): #{$value * $scale}#{$unit}; else: #{$value * $scale});
 	} @else if meta.type-of($value) == 'string' {
 		$value: string.unquote($value);
 	}

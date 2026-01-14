@@ -85,7 +85,7 @@ describe('index.scss', () => {
 		const source = sass.compileString(`@use './outputs/text.scss'`);
 		expect(source.css)
 			// eslint-disable-next-line @stylistic/max-len
-			.toMatch(`.g-line-two{display:-webkit-box;overflow:hidden;text-overflow:ellipsis;-webkit-box-orient:vertical;-webkit-line-clamp:2;word-break:break-all;word-wrap:break-word;overflow-wrap:break-word}`);
+			.toMatch(`.g-line-two{display:-webkit-box;overflow:hidden;text-overflow:ellipsis;-webkit-box-orient:vertical;-webkit-line-clamp:2;word-break:break-all;text-wrap:wrap;overflow-wrap:break-word}`);
 	});
 
 	it('border', () => {
