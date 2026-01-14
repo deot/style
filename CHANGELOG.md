@@ -1,5 +1,13 @@
 # @deot/style ChangeLog
 
+## v1.1.4
+
+_2026-01-14_
+
+### Features
+
+- feat: deprecation warning [if-function] & remove word-wrap ([d4214a4](https://github.com/deot/sass/commit/d4214a4da05c0453ca62b3218d092116772fbdd1))
+
 ## v1.1.3
 
 _2025-11-20_
