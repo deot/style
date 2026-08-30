@@ -1,0 +1,158 @@
+# Sass API
+
+`@deot/style` 会随 npm 包发布 `src/**`，支持通过 Sass 模块系统配置后再生成样式。以下示例假设构建工具能够从 `node_modules` 解析 `@use`。
+
+## 完整入口
+
+配置模块必须在 `src/index` 首次加载前完成：
+
+```scss
+@use '@deot/style/src/variables/default' with (
+	$prefix: app,
+	$unit: px,
+	$scale: 1,
+	$allow-css-variables: true,
+	$allow-asterisk-wildcard: true
+);
+
+@use '@deot/style/src/variables/theme' with (
+	$theme-merge-data: (
+		color-highlight: #7c3aed,
+		border-radius-default: 12px
+	)
+);
+
+@use '@deot/style/src/index';
+```
+
+上述配置会把默认 `.g-*` 类改为 `.app-*`，并覆盖两项主题值。
+
+## 默认配置
+
+| 变量 | 默认值 | 说明 |
+| --- | --- | --- |
+| `$scale` | `1` | 数字值和数字类名后缀的缩放倍数 |
+| `$unit` | `px` | 无单位数字转换后的单位 |
+| `$prefix` | `g` | 工具类前缀；空字符串会移除前缀 |
+| `$allow-css-variables` | `true` | 使用 `var(--*)` 输出主题引用 |
+| `$allow-asterisk-wildcard` | `true` | 输出全局 `*` reset 规则 |
+
+## 主题
+
+默认主题定义在 [`src/variables/theme.scss`](../src/variables/theme.scss)。主题支持两种配置方式：
+
+- `$theme-merge-data`：覆盖同名键并保留其他默认值，适合只调整部分主题。
+- `$theme`：替换完整主题 map，适合由项目统一维护全部主题键；缺少的键不会自动补回。
+
+两个 map 都可以加入 `color-primary` 等业务语义键，并通过 `themefix()` 使用。完整加载顺序见[项目接入实践](./integration.md)。
+
+| 键 | 默认值 |
+| --- | --- |
+| `color-default` | `#515a6e` |
+| `color-highlight` | `#5495f6` |
+| `color-info` | `#0177de` |
+| `color-success` | `#00a854` |
+| `color-error` | `#f04134` |
+| `color-warning` | `#ffbf00` |
+| `background-color-default` | `#f5f6fa` |
+| `background-color-highlight` | `#5495f6` |
+| `border-radius-default` | `8px` |
+| `border-shadow-default` | `0 0 8px 0 rgb(0 0 0 / 10%)` |
+| `border-shadow-default-top` | `0 -2px 10px 0 rgb(0 0 0 / 8%)` |
+| `line-height-default` | `1.5` |
+| `line-height-limit` | `32px` |
+| `border-color-default` | `#c9c9c9` |
+| `font-size-default` | `14px` |
+| `font-size-large` | `16px` |
+
+滚动条主题还包括 `scrollbar-track-bg-color`、`scrollbar-thumb-bg-color` 与 `scrollbar-track-box-shadow`。启用 CSS Variables 时，`src/outputs/theme.scss` 会把完整主题输出到 `:root`；关闭后，`themefix()` 会直接返回 map 中的具体值。
+
+## 函数
+
+### Helper
+
+从 `src/functions/helper` 加载：
+
+| 函数 | 说明 |
+| --- | --- |
+| `merge($rest...)` | 合并传入的 map 或嵌套 list 中的 map |
+| `prefix($rest...)` | 根据 `prefix` 与 `name` 生成类选择器前缀 |
+| `unitfix($value, $rest...)` | 缩放数字并补单位；字符串保持原值 |
+| `suffix($value, $rest...)` | 缩放数字类名后缀；字符串保持原值 |
+| `percentw($col, $total)` | 将分栏比例转换为百分比 |
+
+```scss
+@use '@deot/style/src/functions/helper' as helper;
+
+.card {
+	padding: helper.unitfix(16);
+	width: helper.percentw(1, 3);
+}
+```
+
+### Theme
+
+从 `src/functions/theme` 加载：
+
+```scss
+@use '@deot/style/src/functions/theme' as theme;
+
+.card {
+	color: theme.themefix(color-default);
+	box-shadow: theme.themefix(border-shadow-default);
+}
+```
+
+## Common mixin
+
+从 `src/mixins/common` 加载：
+
+| Mixin | 说明 |
+| --- | --- |
+| `common-bg-linear` | 输出线性渐变及纯色回退 |
+| `common-flex` | Flex 容器与 border-box |
+| `common-flex-cc` | Flex 水平垂直居中 |
+| `common-break` | 长文本与连续字符换行 |
+| `common-ellipsis` | 单行省略 |
+| `common-text-line($line)` | 指定行数截断 |
+| `common-clear-fix` | 清除浮动 |
+| `common-scroll($size)` | WebKit 滚动条样式 |
+| `common-border-1px(...)` | 适配 2x/3x 屏的 1px 边框 |
+
+## BEM mixin
+
+从 `src/mixins/bem` 加载。默认使用 `__` 连接元素、`--` 连接修饰符，并提供 `is-` 与 `has-` 状态前缀。
+
+```scss
+@use '@deot/style/src/mixins/bem' as *;
+
+@include block(card) {
+	@include element(title) {
+		font-weight: 600;
+	}
+
+	@include modifier(active) {
+		@include when(selected) {
+			color: #0177de;
+		}
+	}
+}
+```
+
+常用 mixin 包括 `block`、`element`、`modifier`、`when`、`pseudo`、`share-rule`、`extend-rule`、`spec-selector` 与 `meb`。
+
+## 按需生成
+
+不需要完整入口时可以只加载一个或多个输出模块：
+
+```scss
+@use '@deot/style/src/variables/default' with (
+	$prefix: app
+);
+
+@use '@deot/style/src/outputs/flex';
+@use '@deot/style/src/outputs/margin';
+@use '@deot/style/src/outputs/padding';
+```
+
+可选输出模块与[工具类参考](./DOCUMENT.md)中的分类一一对应。

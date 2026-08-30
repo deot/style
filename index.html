@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<title>@deot/style 文档</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@deot/docs-client/dist/index.style.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@deot/docs-renderer/dist/index.style.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@deot/docs-markdown/dist/index.style.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@deot/docs-playground/dist/index.style.css">
+</head>
+<body>
+	<div id="app"></div>
+	<script>
+		const repositoryRaw = 'https://raw.githubusercontent.com/deot/style/refs/heads/main/';
+		const repositoryBlob = 'https://github.com/deot/style/blob/main/';
+		const locales = {
+			'zh-CN': { label: '简体中文' },
+			'en-US': { label: 'English' }
+		};
+		const documents = [
+			{ label: { zh: '简介', en: 'Introduction' }, value: 'introduction', source: 'README.md' },
+			{ label: { zh: '快速开始', en: 'Getting Started' }, value: 'getting-started', source: 'docs/getting-started.md' },
+			{ label: { zh: '项目接入实践', en: 'Integration Recipes' }, value: 'integration', source: 'docs/integration.md' },
+			{ label: { zh: 'Sass API', en: 'Sass API' }, value: 'sass', source: 'docs/sass.md' },
+			{ label: { zh: '在线示例', en: 'Playground' }, value: 'playground', source: 'docs/playground.md' },
+			{ label: { zh: '工具类参考', en: 'Utilities' }, value: 'utilities', source: 'docs/DOCUMENT.md' }
+		];
+		const readmes = Object.fromEntries(documents.map(item => [item.value, item.source]));
+		const readmeRoutes = Object.fromEntries(documents.map(item => [
+			item.source,
+			`/guide/${item.value}`
+		]));
+		const localeReadmes = Object.fromEntries(Object.keys(locales).map(lang => [lang, readmes]));
+		const documentItem = (value, lang) => {
+			const item = documents.find(document => document.value === value);
+			return {
+				label: lang === 'zh-CN' ? item.label.zh : item.label.en,
+				value: `/guide/${value}`
+			};
+		};
+		const sidebars = Object.fromEntries(Object.keys(locales).map(lang => [
+			lang,
+			[
+				documentItem('introduction', lang),
+				{
+					label: lang === 'zh-CN' ? '指南' : 'Guide',
+					children: [
+						documentItem('getting-started', lang),
+						documentItem('integration', lang),
+						documentItem('playground', lang)
+					]
+				},
+				{
+					label: lang === 'zh-CN' ? '参考' : 'Reference',
+					children: [
+						documentItem('sass', lang),
+						documentItem('utilities', lang)
+					]
+				}
+			]
+		]));
+
+		const createHomeDocument = (lang) => {
+			const t = (zh, en) => (lang === 'zh-CN' ? zh : en);
+			const accent = '#be185d';
+			const accentSecondary = '#0f766e';
+			const accents = [accent, accentSecondary, '#d97706'];
+			const action = (label, to, variant = 'solid') => ({
+				label,
+				to: `/${lang}${to}`,
+				variant,
+				size: 'large',
+				color: accent,
+				textColor: variant === 'solid' ? '#ffffff' : accent
+			});
+			const stack = {
+				marginTop: 0,
+				marginBottom: 80,
+				paddingTop: 0,
+				paddingBottom: 0,
+				maxWidth: 1200
+			};
+			const block = (id, type, props, appearance = stack) => ({
+				id,
+				module: { type, version: 1, props },
+				appearance
+			});
+			const cards = items => items.map((item, index) => ({
+				...item,
+				accent: item.accent || accents[index]
+			}));
+
+			return {
+				schemaVersion: 2,
+				meta: { id: `style-home-${lang}`, title: '@deot/style' },
+				layout: {
+					mode: 'sortable',
+					maxWidth: 1920,
+					minHeight: 600,
+					background: '#ffffff'
+				},
+				blocks: [
+					block('home-hero', 'hero', {
+						eyebrow: '@deot/style',
+						title: t('为多端界面准备的 Sass/CSS 工具集', 'Sass and CSS utilities for every interface'),
+						description: t(
+							'组合布局、间距、颜色与排版工具类，并按需要输出 px、rem、rpx 或 normalize 样式。',
+							'Compose layout, spacing, color and typography utilities, then ship px, rem, rpx or normalized CSS.'
+						),
+						align: 'left',
+						accent,
+						accentSecondary,
+						background: '',
+						showVisual: true,
+						minHeight: 500,
+						highlights: [
+							{ value: 'g-*', label: t('可组合工具类', 'Composable utilities') },
+							{ value: 'Sass', label: t('配置与按需生成', 'Configurable source') },
+							{ value: 'px / rem / rpx', label: t('多端产物', 'Multiple outputs') }
+						],
+						actions: [
+							action(t('快速开始', 'Get Started'), '/guide/getting-started'),
+							action(t('在线体验', 'Open Playground'), '/guide/playground', 'outline')
+						]
+					}, { ...stack, marginBottom: 64, fullWidth: true }),
+					block('home-features', 'features', {
+						eyebrow: t('核心能力', 'Capabilities'),
+						title: t('从设计约束到最终样式', 'From design constraints to shipped CSS'),
+						description: t(
+							'使用预编译文件快速开始，或从 Sass 源码配置前缀、单位、缩放和主题。',
+							'Start with prebuilt files or configure prefixes, units, scale and theme from Sass source.'
+						),
+						columns: 3,
+						gap: 24,
+						items: cards([
+							{
+								title: t('组合式工具类', 'Composable utilities'),
+								description: t('Flex、间距、颜色、排版、边框与辅助类各司其职。', 'Focused utilities cover flex, spacing, color, typography, borders and more.'),
+								badge: 'g-*',
+								icon: 'grid'
+							},
+							{
+								title: t('Sass 可配置', 'Configurable Sass'),
+								description: t('按项目调整类名前缀、单位、缩放、主题和 reset。', 'Tune prefixes, units, scale, theme and reset behavior per project.'),
+								badge: 'Sass',
+								icon: 'filter'
+							},
+							{
+								title: t('多端输出', 'Multiple targets'),
+								description: t('直接选择 px、rem、rpx、normalize 或局部 rem 产物。', 'Choose px, rem, rpx, normalized or partial-rem output directly.'),
+								badge: 'CSS',
+								icon: 'link'
+							}
+						])
+					}),
+					block('home-steps', 'steps', {
+						eyebrow: t('开始使用', 'Start'),
+						title: t('三步组成页面样式', 'Build a styled page in three steps'),
+						columns: 3,
+						items: cards([
+							{ title: t('安装', 'Install'), description: 'pnpm add @deot/style', icon: '01' },
+							{ title: t('选择产物', 'Pick an output'), description: t('引入默认 CSS，或选择 rem、rpx 与 normalize。', 'Import the default CSS or choose rem, rpx and normalize.'), icon: '02' },
+							{ title: t('组合类名', 'Compose classes'), description: t('用 g-* 工具类表达布局、间距和视觉状态。', 'Use g-* utilities for layout, spacing and visual state.'), icon: '03' }
+						])
+					}),
+					block('home-cta', 'cta', {
+						eyebrow: 'Playground',
+						title: t('在浏览器中调整工具类', 'Tune utilities in the browser'),
+						description: t('切换布局、卡片预设和视口，直接查看源码与结果。', 'Change layouts, card presets and viewport sizes while viewing source and output.'),
+						align: 'center',
+						accent,
+						accentSecondary,
+						background: '',
+						actions: [action(t('打开在线示例', 'Open Playground'), '/guide/playground')]
+					}, { ...stack, marginBottom: 0, fullWidth: true })
+				]
+			};
+		};
+
+		const pathSegments = location.pathname.split('/');
+		const localeIndex = pathSegments.findIndex(segment => Boolean(locales[segment]));
+		const basePath = localeIndex >= 0
+			? `${pathSegments.slice(0, localeIndex).join('/')}/`
+			: location.pathname.endsWith('/')
+				? location.pathname
+				: new URL('./', location.href).pathname;
+
+		window.$docs = {
+			base: new URL(basePath, location.origin).href,
+			namespace: '@deot/style-site',
+			repository: 'https://github.com/deot/style',
+			theme: { default: 'system' },
+			locales,
+			routes: Object.fromEntries([
+				['/', {
+					content: {
+						'zh-CN': createHomeDocument('zh-CN'),
+						'en-US': createHomeDocument('en-US')
+					}
+				}],
+				...documents.map(item => [`/guide/${item.value}`, {
+					value: item.value,
+					content: 'default',
+					sidebar: sidebars,
+					header: 'default',
+					footer: 'default',
+					extra: null
+				}]),
+				['*', '/guide/getting-started']
+			]),
+			resolve: {
+				markdown: ({ lang, value }) => (
+					localeReadmes[lang] || localeReadmes['zh-CN']
+				)[value],
+				resource: ({ source, runtime }) => {
+					if (source === 'README.md' || /^docs\/[^/]+\.md$/.test(source)) {
+						return runtime.mode === 'development'
+							? `/${source}`
+							: new URL(source, repositoryRaw).href;
+					}
+					return undefined;
+				},
+				link: ({ href, lang, source }) => {
+					const logicalOrigin = 'https://docs.local';
+					let target;
+					try {
+						target = new URL(href, new URL(source, `${logicalOrigin}/`));
+					} catch {
+						return undefined;
+					}
+					if (target.origin !== logicalOrigin) return undefined;
+					const path = target.pathname.replace(/^\//, '');
+					const route = readmeRoutes[path];
+					if (route) return `/${lang}${route}${target.search}${target.hash}`;
+					return `${new URL(path, repositoryBlob).href}${target.search}${target.hash}`;
+				}
+			},
+			modules: {
+				'@deot/style': 'https://cdn.jsdelivr.net/npm/@deot/style@1.1.4/dist/index.js',
+				'@deot/style/dist': 'https://cdn.jsdelivr.net/npm/@deot/style@1.1.4/dist/index.js'
+			},
+			styles: {
+				'@deot/style/dist/index.normalize-only.css': 'https://cdn.jsdelivr.net/npm/@deot/style@1.1.4/dist/index.normalize-only.css',
+				'@deot/style/dist/index.css': 'https://cdn.jsdelivr.net/npm/@deot/style@1.1.4/dist/index.css'
+			}
+		};
+	</script>
+	<script type="module" src="https://cdn.jsdelivr.net/npm/@deot/docs-client/+esm"></script>
+</body>
+</html>

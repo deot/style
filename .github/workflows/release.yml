@@ -68,19 +68,19 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
         with:
           run_install: false
 
-      - name: Set node version to latest
-        uses: actions/setup-node@v4
+      - name: Set node version to lts/*
+        uses: actions/setup-node@v6
         with:
-          node-version: latest
+          node-version: lts/*
           cache: 'pnpm'
 
       - name: Checkout main

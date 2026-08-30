@@ -14,6 +14,7 @@
     "prepare": "husky",
     "init": "npx pnpm install",
     "init:force": "rm -rf ./node_modules pnpm-lock.yaml && npm run init",
+    "docs:dev": "doc dev --workspace .",
     "dev": "npm run test -- --watch",
     "build": "ddc build",
     "release": "ddc release",
@@ -42,7 +43,8 @@
     "url": "https://github.com/deot/sass/issues"
   },
   "devDependencies": {
-    "@deot/dev": "^2.9.9",
+    "@deot/dev": "^2.9.15",
+    "@deot/docs": "^1.0.9",
     "normalize.css": "^8.0.1"
   }
 }

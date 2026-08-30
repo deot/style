@@ -1,3 +1,11 @@
 import { configure } from '@deot/dev-eslint';
 
-export default configure();
+export default [
+	...await configure(),
+	{
+		files: ['**/*.md/**'],
+		rules: {
+			'no-useless-assignment': 'off'
+		}
+	}
+];
