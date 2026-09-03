@@ -3,6 +3,9 @@
 
 $float-options: (prefix: vd.$prefix);
 
+/*
+ * fw-1～12 表示十二列宽度并左浮动；更大的数字后缀由字重规则处理。
+ */
 @include gm.float(12, $float-options);
 
 #{vd.$computed-prefix}clearfix::before,

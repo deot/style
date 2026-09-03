@@ -54,5 +54,8 @@ $flex-attrs-map: (
 );
 $flex-options: (prefix: vd.$prefix);
 
+/*
+ * fw-w/wr/n 表示 flex-wrap；fw 的数字后缀还被浮动宽度和字重共用。
+ */
 @include gm.flex-arrts($flex-attrs-map, $flex-options);
 @include gm.flex-size(5, $flex-options);

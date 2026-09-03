@@ -31,7 +31,19 @@ export const createFlexRules = (options: ResolvedPresetStyleOptions): Rule[] => 
 			([, value]) => ({ flex: `${Number(value ?? 1)}` })
 		],
 		/*
-		 * 只接受有效分数，避免 0ofN、分子大于分母等无意义规则。
+		 * 推荐的 Flex 分数使用 g-f-{part}/{total}，与 Mini 的 g-flex-* 区分。
+		 */
+		[
+			new RegExp(`^${patternPrefix}f-(\\d+)\\/(\\d+)$`),
+			([, value, total]) => {
+				const part = Number(value);
+				const count = Number(total);
+				if (part < 1 || count < 1 || part > count) return;
+				return { flex: `0 0 ${percent(part, count)}` };
+			}
+		],
+		/*
+		 * @deprecated 使用 g-f-{part}/{total}。
 		 */
 		[
 			new RegExp(`^${patternPrefix}(\\d+)of(\\d+)$`),

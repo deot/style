@@ -7,6 +7,9 @@
 
 $color: ft.themefix(border-color-default);
 
+/*
+ * br 表示右侧高清边框；带数值或语义后缀的 br-* 表示 border-radius。
+ */
 #{vd.$computed-prefix}b {
 	@include mc.common-border-1px('', $color);
 }

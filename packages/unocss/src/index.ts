@@ -1,5 +1,5 @@
 import type { Preset } from 'unocss';
-import { presetMini } from 'unocss';
+import { presetMini, transformerVariantGroup } from 'unocss';
 import { createPreflights } from './preflights';
 import { createRules } from './rules';
 import type { PresetStyleOptions } from './types';
@@ -23,13 +23,17 @@ export const presetStyle = (options: PresetStyleOptions = {}): Preset => {
 	return {
 		name: '@deot/style-unocss',
 		/*
-		 * d-style 与 Mini 存在同名类时，必须以后置 preset 的语义为准。
+		 * @deot/style 与 Mini 存在同名类时，必须以后置 preset 的语义为准。
 		 * https://unocss.dev/presets/mini
 		 */
 		enforce: 'post',
 		presets: [presetMini({ prefix: resolved.prefix })],
 		preflights: createPreflights(resolved),
 		rules: createRules(resolved),
+		/*
+		 * 只启用 : 分组，避免 g-w-(--variable) 被 - 分组语法错误展开。
+		 */
+		transformers: [transformerVariantGroup({ separators: [':'] })],
 		options: resolved
 	};
 };

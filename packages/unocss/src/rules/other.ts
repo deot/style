@@ -3,11 +3,7 @@ import type { ResolvedPresetStyleOptions } from '../types';
 import { createStaticRule, unitValue, withSelector } from './utils';
 
 export const createOtherRules = (options: ResolvedPresetStyleOptions): Rule[] => {
-	const rules: Rule[] = [
-		createStaticRule(options, 'height-full', { height: '100%' }),
-		createStaticRule(options, 'width-full', { width: '100%' }),
-		createStaticRule(options, 'size-full', { width: '100%', height: '100%' })
-	];
+	const rules: Rule[] = [];
 	/*
 	 * 保留历史类名及语义别名，避免迁移到 UnoCSS 后出现行为差异。
 	 */
@@ -65,6 +61,9 @@ export const createOtherRules = (options: ResolvedPresetStyleOptions): Rule[] =>
 			'border-radius': '50%'
 		}),
 		createStaticRule(options, 'of-h', { overflow: 'hidden !important' }),
+		/*
+		 * g-bs-bb 是历史 box-sizing 缩写，与 box-shadow 的 g-bs-* 共用前缀。
+		 */
 		createStaticRule(options, 'bs-bb', { 'box-sizing': 'border-box' })
 	);
 

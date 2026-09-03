@@ -23,6 +23,53 @@ export const unitValue = (value: number, options: ResolvedPresetStyleOptions) =>
  */
 export const numericValue = (value: string, options: ResolvedPresetStyleOptions) => `${value}${options.unit}`;
 
+/*
+ * 方括号语法与 UnoCSS 的任意值保持一致：未转义的下划线表示空格，
+ * 反斜杠转义的下划线保留为普通字符。
+ */
+const arbitraryValue = (value: string) => {
+	if (!value.startsWith('[') || !value.endsWith(']')) return;
+	const body = value.slice(1, -1);
+	if (!body) return;
+
+	let brackets = 0;
+	for (const character of body) {
+		if (character === '[') brackets++;
+		if (character === ']' && --brackets < 0) return;
+	}
+	if (brackets) return;
+
+	const normalized = body
+		.replace(/(url\(.*?\))/g, item => item.replace(/_/g, '\\_'))
+		.replace(/(^|[^\\])_/g, '$1 ')
+		.replace(/\\_/g, '_');
+	/*
+	 * calc、clamp、min、max 的加减运算符需要保留空格，
+	 * 同时暂存 var() 名称，避免变量名中的连字符被误处理。
+	 */
+	return normalized.replace(/(?:calc|clamp|max|min)\((.*)/g, (matched) => {
+		const variables: string[] = [];
+		return matched
+			.replace(/var\((--.+?)[,)]/g, (item, variable: string) => {
+				variables.push(variable);
+				return item.replace(variable, '--un-calc');
+			})
+			.replace(/(-?\d*\.?\d(?!-\d.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g, '$1 $2 ')
+			.replace(/--un-calc/g, () => variables.shift() ?? '');
+	});
+};
+
+/*
+ * 裸数字使用配置单位；[] 表示任意 CSS 值；() 只接受 CSS Variable。
+ * 动态值已经完整表达最终尺寸，因此不再应用 scale。
+ */
+export const resolveDynamicValue = (value: string, options: ResolvedPresetStyleOptions) => {
+	if (/^\d+$/.test(value)) return numericValue(value, options);
+	const variable = value.match(/^\((--[\w-]+)\)$/)?.[1];
+	if (variable) return `var(${variable})`;
+	return arbitraryValue(value);
+};
+
 export const createStaticRule = (
 	options: ResolvedPresetStyleOptions,
 	name: string,
@@ -41,9 +88,10 @@ export const createSpacingRule = (
 	property: 'margin' | 'padding',
 	options: ResolvedPresetStyleOptions
 ): Rule => [
-	new RegExp(`^${createPatternPrefix(options)}${name}(?:-(tb|lr|t|r|b|l))?-(\\d+)$`),
+	new RegExp(`^${createPatternPrefix(options)}${name}(?:-(tb|lr|t|r|b|l))?-(.+)$`),
 	([, direction, value]) => {
-		const result = numericValue(value, options);
+		const result = resolveDynamicValue(value, options);
+		if (result === void 0) return;
 		if (!direction) return { [property]: result };
 		const directions = direction === 'tb'
 			? ['top', 'bottom']

@@ -17,7 +17,7 @@
 - 两个包默认使用 `g-` 前缀，并覆盖相同的公共工具类语义。
 - `@deot/style` 支持配置单位、缩放、前缀、CSS Variables、主题与全局 reset。
 - `@deot/style` 提供完整 CSS、normalize、rem、rpx 和局部 rem 构建产物。
-- `@deot/style-unocss` 组合 `presetMini` 与 `@deot/style` 兼容规则，支持动态数值 token 与 variants。
+- `@deot/style-unocss` 组合 `presetMini` 与本仓库规则，支持动态值、CSS Variables、Variant Group 与 variants。
 - 内置 Flex、浮动栅格、主题变量、BEM mixin 与常用 Sass 函数。
 - JavaScript 入口提供 `Style.useREM()`，用于按视口宽度设置根字号。
 

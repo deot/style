@@ -1,6 +1,9 @@
 @use "../variables/default" as vd;
 @use "../functions/theme" as ft;
 
+/*
+ * bs 在这里表示 box-shadow；历史类 bs-bb 表示 box-sizing。
+ */
 #{vd.$computed-prefix}bs {
 	box-shadow: ft.themefix(border-shadow-default) !important;
 }

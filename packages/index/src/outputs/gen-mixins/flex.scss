@@ -34,6 +34,21 @@ $base-options: null;
 @mixin flex-size($total, $options: ()) {
 	$prefix: fi.prefix($base-options, $options);
 
+	#{$prefix}f-1\/1 {
+		flex: 0 0 100%;
+	}
+
+	@for $i from 2 through $total {
+		@for $j from 1 through $i - 1 {
+			#{$prefix}f-#{$j}\/#{$i} {
+				flex: 0 0 fi.percentw($j, $i);
+			}
+		}
+	}
+
+	/**
+	 * @deprecated 使用 g-f-{part}/{total}。
+	 */
 	@for $i from 1 through $total {
 		@for $j from 1 through $i - 1 {
 			#{$prefix}#{$j}of#{$i} {

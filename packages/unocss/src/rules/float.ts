@@ -15,14 +15,14 @@ export const createFloatRules = (options: ResolvedPresetStyleOptions): Rule[] =>
 	createStaticRule(options, 'fl', { float: 'left' }),
 	createStaticRule(options, 'fr', { float: 'right' }),
 	/*
-	 * g-w-N 只设置十二列宽度；g-fw-N 在相同宽度基础上增加左浮动。
+	 * g-fw-1～12 是历史浮动栅格；g-w-* 已由尺寸规则接管。
 	 */
 	[
-		new RegExp(`^${createPatternPrefix(options)}(f?w)-(\\d+)$`),
-		([, mode, value]) => {
+		new RegExp(`^${createPatternPrefix(options)}fw-(\\d+)$`),
+		([, value]) => {
 			const column = Number(value);
 			if (column < 1 || column > 12) return;
-			return { width: percent(column, 12), ...(mode === 'fw' ? { float: 'left' } : {}) };
+			return { width: percent(column, 12), float: 'left' };
 		}
 	]
 ];

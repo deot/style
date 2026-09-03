@@ -82,6 +82,9 @@ const createBorderRule = (
 };
 
 export const createBorderRules = (options: ResolvedPresetStyleOptions): Rule[] => [
+	/*
+	 * br-N 表示 border-radius；不带后缀的 g-br 表示右侧高清边框。
+	 */
 	[
 		new RegExp(`^${createPatternPrefix(options)}br-(\\d+)$`),
 		([, value]) => ({ 'border-radius': numericValue(value, options) })

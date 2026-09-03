@@ -12,12 +12,13 @@ $base-options: null;
 	}
 
 	@for $i from 1 through $total {
-		#{$prefix}w-#{$i} {
+		#{$prefix}w-#{$i}\/#{$total} {
 			width: fi.percentw($i, $total);
 		}
 		#{$prefix}fw-#{$i} {
 			@extend %float;
-			@extend #{$prefix}w-#{$i};
+
+			width: fi.percentw($i, $total);
 		}
 	}
 }

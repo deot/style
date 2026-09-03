@@ -1,4 +1,5 @@
 import { createGenerator } from 'unocss';
+import MagicString from 'magic-string';
 import { presetStyle } from '../src';
 
 const generate = async (tokens: string, options = {}) => {
@@ -25,9 +26,9 @@ const colorNames = [
 
 const staticUtilities = [
 	'g-reset', 'g-unset',
-	'g-flex', 'g-flex-holy', 'g-flex-cc', 'g-flex-ac', 'g-col', 'g-col-2', 'g-1of1',
+	'g-flex', 'g-flex-holy', 'g-flex-cc', 'g-flex-ac', 'g-col', 'g-col-2', 'g-f-1/1',
 	...Array.from({ length: 4 }, (_, index) => index + 2).flatMap(total => (
-		Array.from({ length: total - 1 }, (_, index) => `g-${index + 1}of${total}`)
+		Array.from({ length: total - 1 }, (_, index) => `g-f-${index + 1}/${total}`)
 	)),
 	'g-fd-r', 'g-fd-c', 'g-fd-rr', 'g-fd-cr',
 	'g-fw-w', 'g-fw-wr', 'g-fw-n',
@@ -46,7 +47,7 @@ const staticUtilities = [
 	'g-bg-lg-blue', 'g-bg-lg-yellow',
 	'g-fixed', 'g-relative', 'g-absolute', 'g-fixed-full', 'g-absolute-full',
 	'g-b', 'g-bt', 'g-br', 'g-bb', 'g-bl', 'g-br-circle', 'g-br-default', 'g-bs', 'g-bs-t',
-	'g-height-full', 'g-width-full', 'g-size-full',
+	'g-h-full', 'g-w-full', 'g-size-full',
 	'g-none', 'g-dp-n', 'g-hide', 'g-show', 'g-dp-b', 'g-block',
 	'g-dp-i', 'g-inline', 'g-dp-ib', 'g-inline-block',
 	'g-operable', 'g-pointer', 'g-disabled', 'g-unanimated', 'g-scroller',
@@ -55,7 +56,7 @@ const staticUtilities = [
 
 const numericUtilities = [
 	'g-fs-37', 'g-lh-43', 'g-br-19', 'g-img-41', 'g-imgc-41', 'g-imgr-41',
-	'g-col-7', 'g-3of7', 'g-fw-350',
+	'g-col-7', 'g-f-3/7', 'g-fw-350',
 	...['m', 'pd'].flatMap(name => [
 		`g-${name}-7`,
 		...['tb', 'lr', 't', 'r', 'b', 'l'].map(direction => `g-${name}-${direction}-7`)
@@ -91,7 +92,7 @@ describe('presetStyle', () => {
 		expect(disabledCSS).toContain('--font-size-default:14px;');
 	});
 
-	it('combines presetMini with d-style overrides', async () => {
+	it('combines presetMini with @deot/style overrides', async () => {
 		const { css: source, matched } = await generate('flex g-flex g-min-h-screen g-m-4 hover:g-m-l-8');
 		const css = compact(source);
 
@@ -102,6 +103,31 @@ describe('presetStyle', () => {
 		expect(css).toContain('.g-m-4{margin:4px}');
 		expect(css).not.toContain('.g-m-4{margin:1rem}');
 		expect(css).toContain('.hover\\:g-m-l-8:hover{margin-left:8px}');
+	});
+
+	it('expands variant groups without consuming CSS Variable shorthand', async () => {
+		const code = new MagicString([
+			'hover:(g-c-white g-bg-black)',
+			'g-w-(--panel-width)',
+			'g-c-(--brand-color)'
+		].join(' '));
+		const transformer = presetStyle().transformers?.[0];
+		await transformer?.transform(code, 'fixture.vue', {} as never);
+		const transformed = code.toString();
+		const { css: source, matched } = await generate(transformed);
+		const css = compact(source);
+
+		expect(transformed).toContain('hover:g-c-white hover:g-bg-black');
+		expect(transformed).toContain('g-w-(--panel-width)');
+		expect(transformed).toContain('g-c-(--brand-color)');
+		expect(matched).toContain('hover:g-c-white');
+		expect(matched).toContain('hover:g-bg-black');
+		expect(matched).toContain('g-w-(--panel-width)');
+		expect(matched).toContain('g-c-(--brand-color)');
+		expect(css).toContain('.hover\\:g-c-white:hover{color:#fff!important}');
+		expect(css).toContain('.hover\\:g-bg-black:hover{background-color:#000!important}');
+		expect(css).toContain('.g-w-\\(--panel-width\\){width:var(--panel-width)}');
+		expect(css).toContain('.g-c-\\(--brand-color\\){color:var(--brand-color)!important}');
 	});
 
 	it('supports arbitrary non-negative integer dimensions', async () => {
@@ -126,30 +152,118 @@ describe('presetStyle', () => {
 		expect(css).toMatch(/\.g-imgr-27\{[^}]*width:27px[^}]*border-radius:4px/);
 	});
 
+	it('supports arbitrary values and CSS Variables for property rules', async () => {
+		const { css: source } = await generate([
+			'g-c-[#123456]', 'g-bg-[rgb(0_0_0)]', 'g-bg-(--surface)',
+			'g-fs-[clamp(1rem,_2vw,_2rem)]', 'g-fs-(--font-size)',
+			'g-lh-[1.25]', 'g-lh-(--line-height)',
+			'g-m-[auto]', 'g-m-t-[-8px]', 'g-m-l-(--offset)',
+			'g-pd-[calc(1rem_+_2px)]', 'g-pd-tb-(--space)'
+		].join(' '));
+		const css = compact(source);
+
+		expect(css).toContain('.g-c-\\[\\#123456\\]{color:#123456!important}');
+		expect(css).toContain('background-color:rgb(000)!important');
+		expect(css).toContain('.g-bg-\\(--surface\\){background-color:var(--surface)!important}');
+		expect(css).toContain('font-size:clamp(1rem,2vw,2rem)');
+		expect(css).toContain('.g-fs-\\(--font-size\\){font-size:var(--font-size)}');
+		expect(css).toContain('.g-lh-\\[1\\.25\\]{line-height:1.25}');
+		expect(css).toContain('.g-lh-\\(--line-height\\){line-height:var(--line-height)}');
+		expect(css).toContain('.g-m-\\[auto\\]{margin:auto}');
+		expect(css).toContain('margin-top:-8px');
+		expect(css).toContain('.g-m-l-\\(--offset\\){margin-left:var(--offset)}');
+		expect(css).toContain('padding:calc(1rem+2px)');
+		expect(source).toContain('padding:calc(1rem + 2px);');
+		expect(css).toContain('padding-top:var(--space);padding-bottom:var(--space)');
+	});
+
+	it('generates width, height, combined size, and width fractions', async () => {
+		const { css: source } = await generate([
+			'g-w-4', 'g-h-8', 'g-size-12',
+			'g-w-full', 'g-h-screen', 'g-size-screen',
+			'g-w-min', 'g-h-max', 'g-size-fit',
+			'g-w-[calc(100%_-_1rem)]', 'g-h-(--panel-height)',
+			'g-size-(--avatar-size)', 'g-w-1/12', 'g-w-7/12', 'g-w-12/12'
+		].join(' '));
+		const css = compact(source);
+
+		expect(css).toContain('.g-w-4{width:4px}');
+		expect(css).toContain('.g-h-8{height:8px}');
+		expect(css).toContain('.g-size-12{width:12px;height:12px}');
+		expect(css).toContain('.g-w-full{width:100%}');
+		expect(css).toContain('.g-h-screen{height:100vh}');
+		expect(css).toContain('.g-size-screen{width:100vw;height:100vh}');
+		expect(css).toContain('.g-w-min{width:min-content}');
+		expect(css).toContain('.g-h-max{height:max-content}');
+		expect(css).toContain('.g-size-fit{width:fit-content;height:fit-content}');
+		expect(css).toContain('width:calc(100%-1rem)');
+		expect(source).toContain('width:calc(100% - 1rem);');
+		expect(css).toContain('.g-h-\\(--panel-height\\){height:var(--panel-height)}');
+		expect(css).toContain('.g-size-\\(--avatar-size\\){width:var(--avatar-size);height:var(--avatar-size)}');
+		expect(source).toContain('.g-w-1\\/12{width:8.3333333333%;}');
+		expect(source).toContain('.g-w-7\\/12{width:58.3333333333%;}');
+		expect(source).toContain('.g-w-12\\/12,\n.g-w-full{width:100%;}');
+	});
+
+	it('uses g-g-* for repository gap rules and keeps Mini g-gap-*', async () => {
+		const { css: source } = await generate([
+			'g-g-4', 'g-gap-4', 'g-g-[1.5rem]', 'g-g-(--gap)',
+			'g-g-x-8', 'g-g-col-(--column-gap)', 'g-g-y-[2vh]', 'g-g-row-12'
+		].join(' '));
+		const css = compact(source);
+
+		expect(css).toContain('.g-g-4{gap:4px}');
+		expect(css).toContain('.g-gap-4{gap:1rem}');
+		expect(css).toContain('.g-g-\\[1\\.5rem\\]{gap:1.5rem}');
+		expect(css).toContain('.g-g-\\(--gap\\){gap:var(--gap)}');
+		expect(css).toContain('.g-g-x-8{column-gap:8px}');
+		expect(css).toContain('column-gap:var(--column-gap)');
+		expect(css).toContain('row-gap:2vh');
+		expect(css).toContain('.g-g-row-12{row-gap:12px}');
+	});
+
 	it('generates flex columns, fractions, and numeric font weights dynamically', async () => {
-		const { css: source } = await generate('g-col g-col-0 g-col-7 g-3of7 g-7of7 g-fw-4 g-fw-350 g-fw-950');
+		const { css: source } = await generate([
+			'g-col', 'g-col-0', 'g-col-7',
+			'g-f-3/7', 'g-f-7/7', 'g-3of7', 'g-7of7', 'g-flex-1/2',
+			'g-fw-4', 'g-fw-350', 'g-fw-950'
+		].join(' '));
 		const css = compact(source);
 
 		expect(css).toContain('.g-col{flex:1}');
 		expect(css).toContain('.g-col-0{flex:0}');
 		expect(css).toContain('.g-col-7{flex:7}');
-		expect(source).toContain('.g-3of7{flex:0 0 42.8571428571%;}');
-		expect(source).toContain('.g-7of7{flex:0 0 100%;}');
+		expect(source).toMatch(/\.g-3of7,\n\.g-f-3\\\/7\{flex:0 0 42\.8571428571%;}/);
+		expect(source).toMatch(/\.g-7of7,\n\.g-f-7\\\/7\{flex:0 0 100%;}/);
+		expect(source).toContain('.g-flex-1\\/2{flex:50%;}');
 		expect(css).toContain('.g-fw-4{width:33.3333333333%;float:left}');
 		expect(css).toContain('.g-fw-350{font-weight:350}');
 		expect(css).toContain('.g-fw-950{font-weight:950}');
 
-		const { matched } = await generateStyleOnly('g-0of7 g-8of7 g-fw-0 g-fw-1001');
+		const { matched } = await generateStyleOnly([
+			'g-f-0/7', 'g-f-8/7', 'g-0of7', 'g-8of7',
+			'g-w-0/7', 'g-w-8/7', 'g-w-1/0',
+			'g-w-()', 'g-w-[]', 'g-w-(invalid)', 'g-s-4', 'g-fw-0', 'g-fw-1001'
+		].join(' '));
 		expect(matched).toEqual(new Set());
 	});
 
-	it('keeps d-style semantics for utilities that collide with presetMini', async () => {
+	it('keeps source-only deprecated utilities compatible', async () => {
+		const { css: source } = await generateStyleOnly('g-3of7 g-height-full g-width-full');
+		const css = compact(source);
+
+		expect(source).toContain('.g-3of7{flex:0 0 42.8571428571%;}');
+		expect(css).toContain('.g-height-full{height:100%}');
+		expect(css).toContain('.g-width-full{width:100%}');
+	});
+
+	it('keeps @deot/style semantics for utilities that collide with presetMini', async () => {
 		const { css: source } = await generate('g-ai-c g-col g-w-12 g-fw-4 g-fw-400 g-br-4 g-bg-blue-mid g-block');
 		const css = compact(source);
 
 		expect(css).toContain('.g-ai-c{align-items:center}');
 		expect(css).toContain('.g-col{flex:1}');
-		expect(css).toContain('.g-w-12{width:100%}');
+		expect(css).toContain('.g-w-12{width:12px}');
 		expect(css).toContain('.g-fw-4{width:33.3333333333%;float:left}');
 		expect(css).toContain('.g-fw-400{font-weight:400}');
 		expect(css).toContain('.g-br-4{border-radius:4px}');
@@ -157,9 +271,23 @@ describe('presetStyle', () => {
 		expect(css).toContain('.g-block{display:block!important}');
 	});
 
+	it('keeps historical shared abbreviations within their existing ranges', async () => {
+		const { css: source } = await generate('g-fw-w g-fw-4 g-fw-400 g-bs g-bs-t g-bs-bb g-br g-br-4');
+		const css = compact(source);
+
+		expect(css).toContain('.g-fw-w{flex-wrap:wrap}');
+		expect(css).toContain('.g-fw-4{width:33.3333333333%;float:left}');
+		expect(css).toContain('.g-fw-400{font-weight:400}');
+		expect(css).toContain('.g-bs{box-shadow:var(--border-shadow-default)!important}');
+		expect(css).toContain('.g-bs-t{box-shadow:var(--border-shadow-default-top)!important}');
+		expect(css).toContain('.g-bs-bb{box-sizing:border-box}');
+		expect(source).toContain('.g-br::before,.g-br::after');
+		expect(css).toContain('.g-br-4{border-radius:4px}');
+	});
+
 	it('applies unit to numeric rules and scale only to fixed dimensions', async () => {
 		const { css: source, matched } = await generate(
-			'x-fs-14 x-lh-1 x-lh-2 x-lh-3 x-lh-5 x-lh-6 x-m-l-4 x-dot x-divide x-br-default g-fs-14',
+			'x-fs-14 x-lh-1 x-lh-2 x-lh-3 x-lh-5 x-lh-6 x-m-l-4 x-w-4 x-size-8 x-g-6 x-dot x-divide x-br-default g-fs-14',
 			{ prefix: 'x-', unit: 'rem', scale: 2 }
 		);
 		const css = compact(source);
@@ -172,6 +300,9 @@ describe('presetStyle', () => {
 		expect(css).toContain('.x-lh-5{line-height:5}');
 		expect(css).toContain('.x-lh-6{line-height:6rem}');
 		expect(css).toContain('.x-m-l-4{margin-left:4rem}');
+		expect(css).toContain('.x-w-4{width:4rem}');
+		expect(css).toContain('.x-size-8{width:8rem;height:8rem}');
+		expect(css).toContain('.x-g-6{gap:6rem}');
 		expect(css).toContain('.x-dot{display:block;width:10rem;height:10rem;border-radius:50%}');
 		expect(css).toMatch(/\.x-divide\{[^}]*width:2rem[^}]*height:24rem/);
 		expect(css).toContain('--border-radius-default:16rem;');
@@ -253,7 +384,7 @@ describe('presetStyle', () => {
 		expect(source).toContain('.g-unset h1,.g-unset h2');
 	});
 
-	it('implements every documented utility without relying on presetMini', async () => {
+	it('implements every documented repository utility without relying on presetMini', async () => {
 		const utilities = [...staticUtilities, ...numericUtilities];
 		const { matched } = await generateStyleOnly(utilities.join(' '));
 

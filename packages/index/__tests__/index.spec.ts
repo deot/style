@@ -60,12 +60,15 @@ describe('index.scss', () => {
 
 	it('float', () => {
 		const source = sass.compileString(`@use './outputs/float.scss'`);
-		expect(source.css).toMatch(`.g-w-12,.g-fw-12{width:100%}`);
+		expect(source.css).toMatch(`.g-w-12\\/12{width:100%}`);
+		expect(source.css).toMatch(`.g-fw-12{width:100%}`);
+		expect(source.css).not.toMatch(`.g-w-12{width:100%}`);
 	});
 
 	it('flex', () => {
 		const source = sass.compileString(`@use './outputs/flex.scss'`);
 		expect(source.css).toMatch(`.g-ai-c{align-items:center}`);
+		expect(source.css).toMatch(`.g-f-1\\/5{flex:0 0 20%}`);
 		expect(source.css).toMatch(`.g-1of5{flex:0 0 20%}`);
 	});
 
@@ -116,6 +119,8 @@ describe('index.scss', () => {
 
 	it('other', () => {
 		const source = sass.compileString(`@use './outputs/other.scss'`);
+		expect(source.css).toMatch(`.g-w-full{width:100%}`);
+		expect(source.css).toMatch(`.g-h-full{height:100%}`);
 		expect(source.css).toMatch(`.g-pointer`);
 		expect(source.css).toMatch(`.g-bs-bb`);
 		expect(source.css).toMatch(`.g-disabled{pointer-events:none}`);

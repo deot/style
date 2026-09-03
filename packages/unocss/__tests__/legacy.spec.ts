@@ -12,6 +12,15 @@ const LEGACY_EXCLUDED_UTILITIES = new Set([
 	'g-0of1'
 ]);
 
+const CURRENT_ADDITIONS = new Set([
+	'g-h-full',
+	'g-w-full',
+	'g-f-1/1',
+	...Array.from({ length: 4 }, (_, index) => index + 2).flatMap(total => (
+		Array.from({ length: total - 1 }, (_, index) => `g-f-${index + 1}/${total}`)
+	))
+]);
+
 const generateStyleOnly = async (tokens: string) => {
 	const { rules = [] } = presetStyle();
 	const uno = await createGenerator({ rules });
@@ -30,8 +39,12 @@ const normalizeCSSValue = (value: string) => value
 	});
 
 const extractUtility = (selector: string) => (
-	selector.match(/^\.(g-[a-z0-9-]+)(?=$|[^a-z0-9-])/i)?.[1]
+	selector
+		.match(/^\.(g-[a-z0-9-]+(?:\\\/[a-z0-9-]+)?)(?=$|[^a-z0-9-/])/i)?.[1]
+		?.replace('\\/', '/')
 );
+
+const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const extractLegacyUtilities = (css: string) => {
 	const utilities = new Set<string>();
@@ -60,8 +73,9 @@ const collectUtilityDeclarations = (css: string, utilities: string[]) => {
 				}
 				parent = parent.parent;
 			}
+			const selectorUtility = utility.replace('/', '\\/');
 			const normalizedSelector = selector
-				.replace(new RegExp(`^\\.${utility}`), '&')
+				.replace(new RegExp(`^\\.${escapeRegExp(selectorUtility)}`), '&')
 				.replace(/\s+/g, ' ')
 				.trim();
 			const context = [...parents, normalizedSelector].join('|');
@@ -95,12 +109,14 @@ const collectUtilityDeclarations = (css: string, utilities: string[]) => {
 };
 
 describe('legacy utilities', () => {
-	it('matches all 600 legacy utility declarations', async () => {
+	it('matches all 600 legacy utilities and current canonical additions', async () => {
 		const legacyCSS = compile().css;
 		const utilities = extractLegacyUtilities(legacyCSS);
 		const { css, matched } = await generateStyleOnly(utilities.join(' '));
+		const legacyUtilities = utilities.filter(utility => !CURRENT_ADDITIONS.has(utility));
 
-		expect(utilities).toHaveLength(600);
+		expect(legacyUtilities).toHaveLength(600);
+		expect(utilities).toHaveLength(613);
 		expect([...matched].sort()).toEqual(utilities);
 		expect(collectUtilityDeclarations(css, utilities))
 			.toEqual(collectUtilityDeclarations(legacyCSS, utilities));

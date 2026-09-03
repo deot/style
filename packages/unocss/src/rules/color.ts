@@ -1,6 +1,6 @@
 import type { Rule } from 'unocss';
 import type { ResolvedPresetStyleOptions } from '../types';
-import { createStaticRule } from './utils';
+import { createPatternPrefix, createStaticRule, resolveDynamicValue } from './utils';
 
 /*
  * 与 Sass 默认色板保持一致，语义色通过 CSS Variables 允许业务侧覆盖。
@@ -68,6 +68,16 @@ export const createColorRules = (options: ResolvedPresetStyleOptions): Rule[] =>
 			'background-image': `linear-gradient(to right, ${start}, ${end})`
 		}));
 	}
+	rules.push([
+		new RegExp(`^${createPatternPrefix(options)}(c|bg)-(\\[.+\\]|\\(--[\\w-]+\\))$`),
+		([, mode, value]) => {
+			const color = resolveDynamicValue(value, options);
+			if (color === void 0) return;
+			return mode === 'c'
+				? { color: `${color} !important` }
+				: { 'background-color': `${color} !important` };
+		}
+	]);
 
 	return rules;
 };

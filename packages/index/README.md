@@ -58,6 +58,15 @@ Style.useREM(750);
 
 上述配置会把默认 `.g-*` 类改为 `.app-*`，并覆盖两项主题值。
 
+## 尺寸与浮动栅格
+
+- `g-w-full`、`g-h-full`、`g-size-full` 分别填满包含块的宽度、高度或宽高。
+- 十二列百分比宽度使用 `g-w-1/12` 至 `g-w-12/12`。
+- `g-fw-1` 至 `g-fw-12` 保留十二列宽度并增加 `float: left`。
+- Flex 固定占比使用 `g-f-1/2`、`g-f-1/3` 等分数写法。
+
+UnoCSS 还提供 `g-w-{n}` 数值尺寸、`screen`、内容尺寸、任意值和 CSS Variable 等按需规则，详见 [`@deot/style-unocss` README](../unocss/README.md)。
+
 ## 默认配置
 
 | 变量 | 默认值 | 说明 |

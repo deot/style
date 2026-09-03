@@ -12,5 +12,7 @@ $font-weight-list-join-data: false !default;
 // 强制scale为1
 $font-weight-options: (unit: vd.$unit, scale: 1, prefix: vd.$prefix, name: fw);
 
-// 输出全局g-lh-#{值}
+/*
+ * fw 在这里表示 font-weight；1～12 已被浮动宽度占用。
+ */
 @include gm.font-weight($font-weight-list, $font-weight-options);

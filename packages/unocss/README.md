@@ -1,8 +1,6 @@
 # @deot/style-unocss
 
-`@deot/style-unocss` 为使用 UnoCSS 的项目提供 `@deot/style` 公共工具类，并同时启用带相同前缀的 `presetMini`。Preset 按需生成实际使用的规则，不需要再引入 `@deot/style/dist/index.css`。
-
-如果还没有确定使用预编译 CSS、Sass 或 UnoCSS，请先阅读[选择与安装](../../docs/getting-started.md)；从 Sass/CSS 迁移时同时参考[接入与迁移](../../docs/integration.md)。
+`@deot/style-unocss` 为 UnoCSS 项目提供 `@deot/style` 工具类，并组合带相同前缀的 `presetMini`。Preset 按源码中的 token 生成 CSS，不需要再引入 `@deot/style/dist/index.css`。
 
 ## 安装与配置
 
@@ -20,112 +18,226 @@ export default defineConfig({
 });
 ```
 
-Vite 项目仍按 UnoCSS 官方接入方式安装插件并在入口引入 `virtual:uno.css`；`presetStyle` 只负责规则和 preflight，不改变构建模式。
+Vite 项目仍需按 UnoCSS 官方方式安装插件并引入 `virtual:uno.css`。`presetStyle` 负责 rules、preflights 和 Variant Group transformer，不改变项目的构建入口。
 
-## 组合内容
+## 命名约定
 
-- `presetMini({ prefix: 'g-' })` 提供 Mini 的布局、尺寸、颜色、variants 等能力。
-- `@deot/style` 兼容规则覆盖同名工具类，保持 `g-m-4 { margin: 4px }`、`g-flex`、`g-fw-*` 等既有语义。
-- [工具类参考](../../docs/DOCUMENT.md)中的全部公共 `g-*` 均可按需生成，包括高清边框、滚动条、`g-reset` 与 `g-unset`。
-- Preset 注入当前主题的 `:root` CSS Variables，因此 `g-c-info`、`g-bs` 等语义类仍可由项目覆盖变量。
-- Mini 的 variants 同样作用于兼容规则，例如 `hover:g-m-l-8`。
+> 本仓库的工具类以 CSS 原生语义为基础：直接映射单一 CSS 属性或属性值时，优先使用简短且可识别的缩写，例如 `w`、`h`、`fs`、`lh`、`ai`；同时设置多个属性或表达完整布局、状态和行为时，优先使用含义清晰的完整名称，例如 `size`、`reset`、`clearfix`。
+>
+> 部分缩写是有意保留的既有约定，例如 `g-g-*` 表示 `gap`。`fw`、`bs`、`br` 等历史缩写存在多种语义，应根据完整类名判断；本仓库会明确说明其匹配范围，但不会在本版改变已有输出。
+
+## 规则组成
+
+### 本仓库特有
+
+本仓库规则负责现有 `@deot/style` 语义和新增的属性缩写：
+
+- `g-g-*`：Gap。
+- `g-f-{part}/{total}`：固定 Flex 占比。
+- `g-pd-*`、`g-fs-*`、`g-lh-*`：Padding、字号和行高。
+- `g-ai-*`、`g-jc-*`、`g-col-*`：Flex 对齐及列伸缩。
+- `g-b`、`g-reset`、`g-scroller` 等高清边框和组合工具。
+- `g-c-*`、`g-bg-*`、`g-w-*`、`g-h-*`、`g-size-*` 等规则由本仓库定义最终语义。
+
+历史共用缩写需要结合完整 token 判断：
+
+| 缩写 | 语义 |
+| --- | --- |
+| `g-fw-w/wr/n` | `flex-wrap` |
+| `g-fw-1` 至 `g-fw-12` | 十二列宽度并左浮动 |
+| `g-fw-13` 至 `g-fw-1000`、`g-fw-bold` | `font-weight` |
+| `g-bs`、`g-bs-t` | `box-shadow` |
+| `g-bs-bb` | `box-sizing: border-box` |
+| `g-br` | 右侧高清边框 |
+| `g-br-{n}`、`g-br-circle/default` | `border-radius` |
+
+### Mini 特有
+
+`presetMini` 提供本仓库不重复实现的通用能力，例如：
+
+- `g-gap-*`。
+- `g-flex-1/2`。
+- Grid、transition、transform 等通用规则。
+- `hover:`、`focus:`、`dark:` 和响应式 variants。
+
+完整规则见 [UnoCSS Mini 官方文档](https://unocss.dev/presets/mini)。
+
+本 preset 还内置 Variant Group transformer：
+
+```html
+<button class="hover:(g-c-white g-bg-black)">Button</button>
+```
+
+只启用 `:` 分组，以免 CSS Variable 简写中的 `-(` 被转换；因此不支持 `g-(m-4 pd-8)`。
+
+### 本仓库覆盖 Mini
+
+同一个 token 同时被 Mini 和本仓库识别时，以本仓库语义为准：
+
+| Token | Mini 原语义 | 本仓库最终语义 |
+| --- | --- | --- |
+| `g-m-4` | `margin: 1rem` | `margin: 4px` |
+| `g-w-4` | `width: 1rem` | `width: 4px` |
+| `g-flex` | `display: flex` | 增加 `box-sizing: border-box` |
+| `g-bg-white` | Mini 颜色变量机制 | `background-color: #fff !important` |
+
+以下是并存规则，不属于覆盖关系：
+
+| 本仓库 | Mini | 区别 |
+| --- | --- | --- |
+| `g-g-4` → `gap: 4px` | `g-gap-4` → `gap: 1rem` | 不同命名、不同数值体系 |
+| `g-f-1/2` → `flex: 0 0 50%` | `g-flex-1/2` → `flex: 50%` | 固定占比与 Mini Flex 简写 |
+
+## 动态值
+
+本仓库的属性规则支持三种值形式：
+
+| 形式 | 含义 | 示例 |
+| --- | --- | --- |
+| `{n}` | 非负整数加配置单位 | `g-w-12` → `width: 12px` |
+| `[...]` | 任意 CSS 值 | `g-w-[50%]` → `width: 50%` |
+| `(--*)` | CSS Variable 简写 | `g-w-(--panel-width)` → `width: var(--panel-width)` |
+
+负数、小数和复杂表达式使用 `[]`：
+
+```html
+<div class="g-m-[-8px] g-w-[calc(100%_-_1rem)]" />
+```
+
+`[]` 使用 UnoCSS 的下划线空格约定；`()` 只接受以 `--` 开头的 CSS Variable 名。三种形式均不会被 `scale` 二次缩放。
+
+### 颜色
+
+```text
+g-c-[#123456]       -> color: #123456 !important
+g-c-(--brand)       -> color: var(--brand) !important
+g-bg-[rgb(0_0_0)]   -> background-color: rgb(0 0 0) !important
+g-bg-(--surface)    -> background-color: var(--surface) !important
+```
+
+固定色板中的 `g-c-white`、`g-bg-blue-mid`、`g-c-info` 等类保持原语义。
+
+### 尺寸
+
+```text
+g-w-* / g-w-[] / g-w-()             -> width
+g-h-* / g-h-[] / g-h-()             -> height
+g-size-* / g-size-[] / g-size-()    -> width + height
+```
+
+> `full` 表示填满当前包含块，使用 `100%`；`screen` 表示填满浏览器视口，按轴使用 `100vw` 或 `100vh`。宽度、高度和宽高组合规则会同时提供这两类语义，它们是有意并存的能力，不是互相替代的别名。
+>
+> - `g-w-full` / `g-h-full`：单轴填满包含块。
+> - `g-size-full`：宽高均填满包含块。
+> - `g-w-screen` / `g-h-screen`：单轴填满视口。
+> - `g-size-screen`：宽高分别使用 `100vw` 和 `100vh`。
+
+内容尺寸还支持 `min`、`max`、`fit`，分别映射到 `min-content`、`max-content`、`fit-content`。
+
+宽度分数使用：
+
+```text
+g-w-1/12  -> width: 8.3333333333%
+g-w-7/12  -> width: 58.3333333333%
+g-w-12/12 -> width: 100%
+```
+
+`part` 和 `total` 必须大于等于 `1`，且 `part` 不能大于 `total`。`g-w-{n}` 只表示带配置单位的尺寸，不再表示十二列比例。
+
+### 间距、字号与行高
+
+Margin 和 Padding 的所有方向都支持数值、`[]` 和 `()`：
+
+```text
+g-m-4              -> margin: 4px
+g-m-l-(--offset)   -> margin-left: var(--offset)
+g-pd-tb-[1rem]     -> padding-top/bottom: 1rem
+```
+
+字号使用 `g-fs-*`；行高使用 `g-lh-*`。`g-lh-0` 至 `g-lh-5` 为无单位行高，大于 `5` 的整数使用配置单位。
+
+### Gap
+
+```text
+g-g-* / g-g-[] / g-g-()             -> gap
+g-g-x-* / g-g-col-*                 -> column-gap
+g-g-y-* / g-g-row-*                 -> row-gap
+```
+
+### Flex 分数
+
+```text
+g-f-1/2 -> flex: 0 0 50%
+g-f-3/4 -> flex: 0 0 75%
+```
 
 ## 配置参数
 
-```ts
-presetStyle({
-	prefix: 'g-',
-	unit: 'px',
-	scale: 1,
-	reset: true
-});
-```
-
-以上参数也可以由运行 UnoCSS 的 Node 进程通过 `UNOCSS_OPTIONS` 提供。它是包含 `prefix`、`unit`、`scale`、`reset` 的 JSON 字符串。显式参数的优先级高于环境变量，环境变量未设置时使用各参数的默认值。例如：
-
-```bash
-UNOCSS_OPTIONS='{"prefix":"x-","unit":"rem","scale":2}' npm run dev
-```
-
-Preset 在 `uno.config.ts` 执行时读取 `process.env`。这里不使用 `import.meta.env`，因为后者由 Vite 转换并主要提供给应用源码，不能作为 UnoCSS 配置加载阶段的通用输入。`UNOCSS_OPTIONS.scale` 必须是有限数值。
-
 ### `prefix`
 
-默认值为 `'g-'`，语义与 UnoCSS 的 `prefix` 一致，传入值会原样同时作用于 Mini 和兼容规则：
+默认值为 `'g-'`，语义与 UnoCSS `prefix` 一致，传入值原样作用于 Mini 和本仓库规则：
 
 ```ts
 presetStyle({ prefix: 'x-' });
-// x-flex、x-fs-14、x-m-l-4
+// x-flex、x-fs-14、x-g-4
 ```
 
 传入空字符串可生成无前缀类。
 
 ### `unit`
 
-默认值为 `'px'`。数值型规则直接把类名中的非负整数与单位组合：
+默认值为 `'px'`。数值 token 直接拼接配置单位：
 
 ```ts
 presetStyle({ unit: 'rem' });
-// g-fs-14  -> font-size: 14rem
-// g-pd-8   -> padding: 8rem
-// g-img-40 -> width/height: 40rem
+// g-fs-14 -> font-size: 14rem
+// g-pd-8  -> padding: 8rem
+// g-w-4   -> width: 4rem
 ```
-
-数值规则不限于 Sass 当前的预生成列表，但不接受负数或小数。
-
-Flex 与字重同样按需生成：
-
-- `g-col` 等价于 `flex: 1`，`g-col-{n}` 支持任意非负整数。
-- `g-{part}of{total}` 接受 `part >= 1`、`total >= 1` 且 `part <= total` 的有效分数。
-- `g-fw-1` 至 `g-fw-12` 保留既有 12 列浮动栅格语义；`g-fw-13` 至 `g-fw-1000` 生成对应数字字重，`g-fw-bold` 生成粗体。
-- `g-lh-0` 至 `g-lh-5` 生成无单位行高；大于 `5` 的 `g-lh-{n}` 使用配置的 `unit`。
 
 ### `scale`
 
-默认值为 `1`。UnoCSS 中类名数字已经表达最终尺寸，所以 `scale` 不改变数值类：
+默认值为 `1`。动态 token 已经表达最终值，因此不应用 `scale`：
 
 ```ts
 presetStyle({ unit: 'rem', scale: 2 });
 // g-fs-14 -> font-size: 14rem
+// g-w-4   -> width: 4rem
 ```
 
-`scale` 只应用于类名没有携带尺寸的固定语义类及主题变量，例如 `g-dot`、`g-divide`、`g-operable`、滚动条、默认圆角、阴影和高清边框。以上配置下，`g-dot` 的 5rem 内部尺寸会缩放为 10rem。
-
-这与 Sass `$scale` 会同时缩放数值后缀和属性值的行为不同；从 Sass CSS 迁移时不要假设两者的 `scale` 语义相同。
+`scale` 只应用于 `g-dot`、`g-divide`、滚动条、默认圆角、阴影、高清边框和主题变量等固定语义尺寸。这与 Sass `$scale` 会同时缩放类名后缀和属性值的行为不同。
 
 ### `reset`
 
-默认值为 `true`，输出与 Sass 默认入口一致的 `html`、`body` 和全局 `*` reset。只关闭这组全局样式时传入：
+默认值为 `true`，输出与 Sass 默认入口一致的 `html`、`body` 和全局 `*` reset：
 
 ```ts
 presetStyle({ reset: false });
 ```
 
-关闭后仍会保留主题变量、Mini preflight 和按需生成的 `g-reset`、`g-unset` 工具类。
+关闭后仍保留主题变量、Mini preflight 以及按需生成的 reset 工具。
 
-## 主题变量
+## `UNOCSS_OPTIONS`
 
-Preset 默认输出与 Sass 当前默认主题一致的 CSS Variables，例如：
+参数也可以由运行 UnoCSS 的 Node 进程通过 JSON 环境变量提供：
 
-```css
-:root {
-	--color-highlight: #5495f6;
-	--color-info: #0177de;
-	--border-radius-default: 8px;
-}
+```bash
+UNOCSS_OPTIONS='{"prefix":"g-","unit":"rem","scale":2,"reset":true}' npm run dev
 ```
 
-业务项目可在后加载的全局样式中覆盖这些变量。具体色值类如 `g-c-white` 仍直接输出确定色值。
+显式传给 `presetStyle()` 的参数优先。Preset 在加载 `uno.config.ts` 时读取 `process.env`；不使用主要面向应用源码的 `import.meta.env`。
 
-## 动态类名
+同一个 UnoCSS generator 不能让同名 token 同时使用两套单位或缩放。多入口项目应为 mobile、manage 等目标启动独立进程，并分别设置 `UNOCSS_OPTIONS`。
 
-UnoCSS 只能提取源码中静态出现的完整 token。以下动态拼接不会自动生成：
+## 动态类名与 safelist
+
+UnoCSS 只能提取源码中静态出现的完整 token。以下运行时拼接不会自动生成：
 
 ```vue
 <div :class="`g-fs-${size}`" />
 ```
 
-应改为静态映射，或在项目的 UnoCSS 配置中加入 safelist：
+应改为静态映射，或加入 safelist：
 
 ```ts
 export default defineConfig({
@@ -134,11 +246,11 @@ export default defineConfig({
 });
 ```
 
-## 与 Sass/CSS 入口的边界
+## 与 Sass/CSS 的边界
 
-- 需要按使用情况生成工具类时，使用 `@deot/style-unocss`，不要再引入完整 `dist/index.css`。
-- 需要 Sass 函数、mixin、主题 map 或既有 rem/rpx 静态产物时，继续使用 `@deot/style`。
-- Preset 默认输出 Sass 完整入口中的 `html`、`body` 与全局 `*` reset；不需要全局样式时设置 `reset: false`。
+- 按使用情况生成工具类时使用 `@deot/style-unocss`，不要同时引入完整的 `@deot/style` CSS。
+- 需要 Sass 函数、mixin、主题 map 或 rem/rpx 静态产物时继续使用 `@deot/style`。
+- 业务项目私有的 `g-*` 类不属于本 preset 的公共规则。
 
 ## 相关文档
 

@@ -2,10 +2,24 @@
 @use "../functions/helper" as fh;
 @use "../functions/theme" as ft;
 
+#{vd.$computed-prefix}h-full {
+	height: 100%;
+}
+
+#{vd.$computed-prefix}w-full {
+	width: 100%;
+}
+
+/**
+ * @deprecated 使用 g-h-full。
+ */
 #{vd.$computed-prefix}height-full {
 	height: 100%;
 }
 
+/**
+ * @deprecated 使用 g-w-full。
+ */
 #{vd.$computed-prefix}width-full {
 	width: 100%;
 }
@@ -103,7 +117,9 @@
 	overflow: hidden !important;
 }
 
+/*
+ * bs-bb 是历史 box-sizing 缩写，与 box-shadow 的 bs-* 共用前缀。
+ */
 #{vd.$computed-prefix}bs-bb {
 	box-sizing: border-box;
 }
-

@@ -73,12 +73,16 @@ export default defineConfig({
 
 UnoCSS 只提取静态出现的完整 token。运行时拼接的 `g-fs-${size}`、`g-pd-${space}` 等类名必须改成静态映射，或加入项目 safelist。规则范围和参数见 [`@deot/style-unocss` README](../packages/unocss/README.md)。
 
+本仓库的动态属性规则使用统一值语法：裸数字表示配置单位，`[]` 表示任意 CSS 值，`()` 表示 CSS Variable。例如 `g-w-12`、`g-w-[50%]`、`g-w-(--panel-width)`。
+
 从 Sass/CSS 迁移时注意：
 
 - 不再引入 `@deot/style/dist/index.css`，由 `virtual:uno.css` 承载生成结果。
 - Sass `$scale` 会缩放数值类名后缀和属性值；UnoCSS `scale` 只缩放类名没有数值的固定尺寸。
 - Sass 输出预定义数值集合；UnoCSS 数值规则按 token 动态生成。
-- UnoCSS preset 启用 Mini preflight，但不会复制 Sass 完整入口的 `html`、`body` 和全局 `*` reset。
+- UnoCSS preset 默认同时输出 Mini preflight、主题变量，以及与 Sass 完整入口一致的 `html`、`body` 和全局 `*` reset；可通过 `reset: false` 关闭最后一组。
+- `g-w-{n}` 在 UnoCSS 中表示带配置单位的宽度；十二列比例统一使用 `g-w-{part}/{total}`。
+- Preset 已内置 `hover:(...)` 等 Variant Group 写法，不需要在项目中重复添加 transformer。
 
 ## 移动端：REM
 
