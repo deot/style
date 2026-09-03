@@ -1,6 +1,6 @@
 {
   "name": "@deot/style-unocss",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "UnoCSS preset for @deot/style utilities",
   "type": "module",
   "main": "dist/index.js",
