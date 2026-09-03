@@ -1,8 +1,27 @@
-# 项目接入实践
+# 接入与迁移
 
-本页介绍 `@deot/style` 在 Web、移动端 REM 与小程序 RPX 场景中的常见接入方式，以及公共工具类与业务扩展的边界。
+本页说明 `@deot/style` 与 `@deot/style-unocss` 的选择边界，以及 Web、移动端 REM、小程序 RPX 和多入口项目的配置方式。
 
-## Web：Normalize 与 Sass 源码组合
+## 先确定交付方式
+
+- 现有项目直接消费完整 CSS，或需要 Sass 主题、函数和 mixin：使用 `@deot/style`。
+- 已有 UnoCSS 构建链，并希望只生成源码中实际使用的 token：使用 `@deot/style-unocss`。
+- 一个页面不要同时加载 `@deot/style` 完整工具类 CSS 与 UnoCSS preset 产物。
+- 从 Sass 迁移到 UnoCSS 时可以保留主要 `g-*` 类名，但必须重新确认 `scale`、动态类名和 preflight。
+
+## Web：预编译 CSS
+
+不需要定制主题时，直接选择一个完整入口：
+
+```ts
+import '@deot/style/dist/index.css';
+// 或同时包含 normalize.css：
+// import '@deot/style/dist/index.normalize.css';
+```
+
+不要同时引入两个完整入口。所有可选产物见[选择与安装](./getting-started.md)。
+
+## Web：Normalize 与 Sass 源码
 
 需要定制主题的 Web 项目会只预加载 normalize：
 
@@ -39,6 +58,27 @@ import '@deot/style/dist/index.normalize-only.css';
 `theme` 必须先于 `src/index` 加载，否则 Sass 模块已初始化，后续不能再通过 `with` 配置。这里的 `index.normalize-only.css` 只负责浏览器样式归一化，工具类由 `src/index` 生成，因此不要再同时引入 `dist/index.css`。
 
 需要完整维护主题表时可以直接配置 `$theme`；只改少量键时优先使用 `$theme-merge-data`，可保留其余默认值。两种变量都由当前源码支持。
+
+## Web：UnoCSS 按需生成
+
+```ts
+// uno.config.ts
+import { defineConfig } from 'unocss';
+import { presetStyle } from '@deot/style-unocss';
+
+export default defineConfig({
+	presets: [presetStyle()]
+});
+```
+
+UnoCSS 只提取静态出现的完整 token。运行时拼接的 `g-fs-${size}`、`g-pd-${space}` 等类名必须改成静态映射，或加入项目 safelist。规则范围和参数见 [`@deot/style-unocss` README](../packages/unocss/README.md)。
+
+从 Sass/CSS 迁移时注意：
+
+- 不再引入 `@deot/style/dist/index.css`，由 `virtual:uno.css` 承载生成结果。
+- Sass `$scale` 会缩放数值类名后缀和属性值；UnoCSS `scale` 只缩放类名没有数值的固定尺寸。
+- Sass 输出预定义数值集合；UnoCSS 数值规则按 token 动态生成。
+- UnoCSS preset 启用 Mini preflight，但不会复制 Sass 完整入口的 `html`、`body` 和全局 `*` reset。
 
 ## 移动端：REM
 
@@ -123,10 +163,30 @@ export default {
 };
 ```
 
+## 多入口项目与开发命令
+
+`presetStyle()` 在加载 `uno.config.ts` 时读取一次配置。可以由每个开发进程设置 `UNOCSS_OPTIONS`：
+
+```bash
+UNOCSS_OPTIONS='{"prefix":"g-","unit":"rem","scale":2}' npm run dev
+```
+
+显式传给 `presetStyle()` 的参数优先于 `UNOCSS_OPTIONS`，未设置时再使用默认值。
+
+同一个 UnoCSS generator 不能让相同的 `g-fs-14` 在不同页面同时解释为 `14px` 和 `14rem`。如果仓库中的 mobile、manage 等入口需要不同的 `unit` / `scale`，开发时应为每个目标启动独立进程并传入对应 `UNOCSS_OPTIONS`；构建时也应按目标分别执行。不要根据页面运行时状态切换 preset 参数。
+
+如果必须由同一个开发进程同时服务多个目标，应使用不同前缀或显式不同 token，避免同一个类名承担两套 CSS 语义。
+
 ## 区分库工具类与业务扩展
 
 业务项目会继续使用 `g-` 前缀补充 `.g-c-main`、`.g-btn-primary`、`.g-safe-area` 等项目专属规则，也会覆盖 `.g-bb` 的边框颜色。这些类不属于 `@deot/style` 的公共输出，不应依赖它们跨项目存在。
 
-- 公共类：以[工具类参考](./DOCUMENT.md)和当前 `src/outputs` 为准。
+- 公共类：以[工具类参考](./DOCUMENT.md)和当前 `packages/index/src/outputs` 为准。
 - 业务类：由各项目自己的 `global.scss` 维护。
 - 覆盖公共类时，应把业务样式放在 `@deot/style/src/index` 之后，确保样式顺序清晰。
+
+## 继续阅读
+
+- UnoCSS 参数、主题、动态 token 与 safelist：[`@deot/style-unocss` README](../packages/unocss/README.md)。
+- Sass 变量、主题、函数与 mixin：[`@deot/style` README](../packages/index/README.md)。
+- 完整公共类名：[工具类参考](./DOCUMENT.md)。

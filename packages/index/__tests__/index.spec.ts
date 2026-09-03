@@ -85,7 +85,7 @@ describe('index.scss', () => {
 		const source = sass.compileString(`@use './outputs/text.scss'`);
 		expect(source.css)
 			// eslint-disable-next-line @stylistic/max-len
-			.toMatch(`.g-line-two{display:-webkit-box;overflow:hidden;text-overflow:ellipsis;-webkit-box-orient:vertical;-webkit-line-clamp:2;word-break:break-all;text-wrap:wrap;overflow-wrap:break-word}`);
+			.toMatch(`.g-line-two{display:-webkit-box;overflow:hidden;text-overflow:ellipsis;-webkit-box-orient:vertical;-webkit-line-clamp:2;word-break:break-all;text-wrap:wrap;overflow-wrap:break-word;white-space:break-spaces}`);
 	});
 
 	it('border', () => {
@@ -125,6 +125,14 @@ describe('index.scss', () => {
 	it('prefix = ""', () => {
 		const source = sass.compileString(`@use './variables/default' with ($prefix: ''); @use './outputs/other.scss'`);
 		expect(source.css).toMatch(`.disabled{pointer-events:none}`);
+	});
+
+	it('prefix = "g-"', () => {
+		const source = sass.compileString(`@use './index.scss'`);
+		const sourceWithSeparator = sass.compileString(`@use './variables/default' with ($prefix: 'g-'); @use './index.scss'`);
+
+		expect(sourceWithSeparator.css).toBe(source.css);
+		expect(sourceWithSeparator.css).not.toContain('.g--');
 	});
 
 	it('unit = rem', () => {

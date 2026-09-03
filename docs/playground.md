@@ -1,6 +1,6 @@
-# 在线示例
+# Sass/CSS 示例
 
-以下示例直接运行在浏览器中，可以切换到 Files 查看和修改源码。
+以下示例由文档站加载 `@deot/style/dist/index.css` 后直接运行，可以切换到 Files 查看和修改源码。它们用于体验预编译 Sass/CSS 产物，不会在浏览器中启动 UnoCSS generator；UnoCSS 的按需规则与配置见 [`@deot/style-unocss` README](../packages/unocss/README.md)。
 
 ## Flex 布局实验
 

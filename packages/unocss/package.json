@@ -1,0 +1,39 @@
+{
+  "name": "@deot/style-unocss",
+  "version": "1.1.4",
+  "description": "UnoCSS preset for @deot/style utilities",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "unocss",
+    "unocss-preset"
+  ],
+  "sideEffects": false,
+  "author": "deot",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deot/style",
+    "directory": "packages/unocss"
+  },
+  "bugs": {
+    "url": "https://github.com/deot/style/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "unocss": "^66.9.1"
+  }
+}

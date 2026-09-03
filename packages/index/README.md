@@ -1,8 +1,39 @@
-# Sass API
+# @deot/style
 
-`@deot/style` 会随 npm 包发布 `src/**`，支持通过 Sass 模块系统配置后再生成样式。以下示例假设构建工具能够从 `node_modules` 解析 `@use`。
+`@deot/style` 是一套可配置的 Sass/CSS 基础样式与工具类，提供布局、间距、颜色、排版、边框、图片和辅助类，并产出 px、rem、rpx 与 normalize 等多种样式入口。
 
-## 完整入口
+## 安装
+
+```bash
+pnpm add @deot/style
+```
+
+## 预编译 CSS
+
+```ts
+import '@deot/style/dist/index.css';
+```
+
+```html
+<section class="g-flex g-ai-c g-jc-sb g-pd-16">
+	<strong class="g-c-info">@deot/style</strong>
+	<span class="g-bg-gray-mid g-br-8 g-pd-lr-8 g-pd-tb-4">ready</span>
+</section>
+```
+
+需要包含 normalize.css 时改为引入 `@deot/style/dist/index.normalize.css`。全部入口及适用场景见[选择与安装](../../docs/getting-started.md)。
+
+需要按视口设置 REM 时使用：
+
+```ts
+import { Style } from '@deot/style/dist';
+
+Style.useREM(750);
+```
+
+## Sass 配置
+
+包内发布 `src/**`，支持通过 Sass 模块系统配置后再生成样式。以下示例假设构建工具能够从 `node_modules` 解析 `@use`。
 
 配置模块必须在 `src/index` 首次加载前完成：
 
@@ -33,18 +64,18 @@
 | --- | --- | --- |
 | `$scale` | `1` | 数字值和数字类名后缀的缩放倍数 |
 | `$unit` | `px` | 无单位数字转换后的单位 |
-| `$prefix` | `g` | 工具类前缀；空字符串会移除前缀 |
+| `$prefix` | `g` | 工具类前缀；末尾连字符可省略，空字符串会移除前缀 |
 | `$allow-css-variables` | `true` | 使用 `var(--*)` 输出主题引用 |
 | `$allow-asterisk-wildcard` | `true` | 输出全局 `*` reset 规则 |
 
 ## 主题
 
-默认主题定义在 [`src/variables/theme.scss`](../src/variables/theme.scss)。主题支持两种配置方式：
+默认主题定义在 [`src/variables/theme.scss`](./src/variables/theme.scss)。主题支持两种配置方式：
 
 - `$theme-merge-data`：覆盖同名键并保留其他默认值，适合只调整部分主题。
 - `$theme`：替换完整主题 map，适合由项目统一维护全部主题键；缺少的键不会自动补回。
 
-两个 map 都可以加入 `color-primary` 等业务语义键，并通过 `themefix()` 使用。完整加载顺序见[项目接入实践](./integration.md)。
+两个 map 都可以加入 `color-primary` 等业务语义键，并通过 `themefix()` 使用。完整加载顺序见[接入与迁移](../../docs/integration.md)。
 
 | 键 | 默认值 |
 | --- | --- |
@@ -155,4 +186,11 @@
 @use '@deot/style/src/outputs/padding';
 ```
 
-可选输出模块与[工具类参考](./DOCUMENT.md)中的分类一一对应。
+可选输出模块与[工具类参考](../../docs/DOCUMENT.md)中的分类一一对应。
+
+## 相关文档
+
+- [选择与安装](../../docs/getting-started.md)
+- [接入与迁移](../../docs/integration.md)
+- [工具类参考](../../docs/DOCUMENT.md)
+- [Sass/CSS 示例](../../docs/playground.md)

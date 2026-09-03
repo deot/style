@@ -1,11 +1,13 @@
 # 工具类参考
 
-本文档以当前 `src/outputs` 源码为准。默认配置使用 `g-` 前缀、`px` 单位和 1 倍缩放；修改 Sass 配置后，类名前缀、数值后缀和属性值会相应变化。
+本文档以当前 `packages/index/src/outputs` 源码为准，列出 `@deot/style` 默认 Sass/CSS 产物中的公共工具类。默认配置使用 `g-` 前缀、`px` 单位和 1 倍缩放；修改 Sass 配置后，类名前缀、数值后缀和属性值会相应变化。
+
+`@deot/style-unocss` 覆盖这些公共语义，并对数值类提供动态 token。两种交付方式的 `scale` 和规则生成范围并不完全相同，迁移前请先阅读 [`@deot/style-unocss` README](../packages/unocss/README.md) 与[接入与迁移](./integration.md)。
 
 ## 目录结构
 
 ```text
-src/
+packages/index/src/
 ├── functions/       # 数值、选择器与主题函数
 ├── mixins/          # Common 与 BEM mixin
 ├── outputs/         # 工具类输出及生成器
@@ -19,7 +21,7 @@ src/
 └── index.rpx.scss
 ```
 
-主题、函数与 mixin 见 [Sass API](./sass.md)，构建产物见[快速开始](./getting-started.md)。
+主题、函数与 mixin 见 [`@deot/style` README](../packages/index/README.md)，构建产物见[选择与安装](./getting-started.md)。
 
 ## Reset
 

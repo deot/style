@@ -20,11 +20,12 @@
 			'en-US': { label: 'English' }
 		};
 		const documents = [
-			{ label: { zh: '简介', en: 'Introduction' }, value: 'introduction', source: 'README.md' },
-			{ label: { zh: '快速开始', en: 'Getting Started' }, value: 'getting-started', source: 'docs/getting-started.md' },
-			{ label: { zh: '项目接入实践', en: 'Integration Recipes' }, value: 'integration', source: 'docs/integration.md' },
-			{ label: { zh: 'Sass API', en: 'Sass API' }, value: 'sass', source: 'docs/sass.md' },
-			{ label: { zh: '在线示例', en: 'Playground' }, value: 'playground', source: 'docs/playground.md' },
+			{ label: { zh: '仓库概览', en: 'Overview' }, value: 'introduction', source: 'README.md' },
+			{ label: { zh: '选择与安装', en: 'Choose and Install' }, value: 'getting-started', source: 'docs/getting-started.md' },
+			{ label: { zh: '接入与迁移', en: 'Integration and Migration' }, value: 'integration', source: 'docs/integration.md' },
+			{ label: { zh: '@deot/style-unocss', en: '@deot/style-unocss' }, value: 'unocss', source: 'packages/unocss/README.md' },
+			{ label: { zh: '@deot/style Sass', en: '@deot/style Sass' }, value: 'sass', source: 'packages/index/README.md' },
+			{ label: { zh: 'Sass/CSS 示例', en: 'Sass/CSS Playground' }, value: 'playground', source: 'docs/playground.md' },
 			{ label: { zh: '工具类参考', en: 'Utilities' }, value: 'utilities', source: 'docs/DOCUMENT.md' }
 		];
 		const readmes = Object.fromEntries(documents.map(item => [item.value, item.source]));
@@ -45,18 +46,24 @@
 			[
 				documentItem('introduction', lang),
 				{
-					label: lang === 'zh-CN' ? '指南' : 'Guide',
+					label: lang === 'zh-CN' ? '开始使用' : 'Start',
 					children: [
 						documentItem('getting-started', lang),
-						documentItem('integration', lang),
-						documentItem('playground', lang)
+						documentItem('integration', lang)
 					]
 				},
 				{
-					label: lang === 'zh-CN' ? '参考' : 'Reference',
+					label: lang === 'zh-CN' ? '包与配置' : 'Packages and Configuration',
 					children: [
-						documentItem('sass', lang),
-						documentItem('utilities', lang)
+						documentItem('unocss', lang),
+						documentItem('sass', lang)
+					]
+				},
+				{
+					label: lang === 'zh-CN' ? '参考与示例' : 'Reference and Examples',
+					children: [
+						documentItem('utilities', lang),
+						documentItem('playground', lang)
 					]
 				}
 			]
@@ -103,11 +110,11 @@
 				},
 				blocks: [
 					block('home-hero', 'hero', {
-						eyebrow: '@deot/style',
-						title: t('为多端界面准备的 Sass/CSS 工具集', 'Sass and CSS utilities for every interface'),
+						eyebrow: '@deot/style workspace',
+						title: t('一套工具类，两种交付方式', 'One utility system, two delivery modes'),
 						description: t(
-							'组合布局、间距、颜色与排版工具类，并按需要输出 px、rem、rpx 或 normalize 样式。',
-							'Compose layout, spacing, color and typography utilities, then ship px, rem, rpx or normalized CSS.'
+							'使用 @deot/style 交付预编译 CSS 与可配置 Sass，或使用 @deot/style-unocss 按需生成同一套 g-* 语义。',
+							'Use @deot/style for prebuilt CSS and configurable Sass, or @deot/style-unocss to generate the same g-* semantics on demand.'
 						),
 						align: 'left',
 						accent,
@@ -116,64 +123,64 @@
 						showVisual: true,
 						minHeight: 500,
 						highlights: [
-							{ value: 'g-*', label: t('可组合工具类', 'Composable utilities') },
-							{ value: 'Sass', label: t('配置与按需生成', 'Configurable source') },
-							{ value: 'px / rem / rpx', label: t('多端产物', 'Multiple outputs') }
+							{ value: '2', label: t('独立发布包', 'Published packages') },
+							{ value: 'g-*', label: t('共享工具类语义', 'Shared utility semantics') },
+							{ value: 'Sass / UnoCSS', label: t('静态与按需', 'Static and on-demand') }
 						],
 						actions: [
-							action(t('快速开始', 'Get Started'), '/guide/getting-started'),
-							action(t('在线体验', 'Open Playground'), '/guide/playground', 'outline')
+							action(t('选择接入方式', 'Choose an Integration'), '/guide/getting-started'),
+							action(t('查看 UnoCSS Preset', 'Open UnoCSS Preset'), '/guide/unocss', 'outline')
 						]
 					}, { ...stack, marginBottom: 64, fullWidth: true }),
 					block('home-features', 'features', {
-						eyebrow: t('核心能力', 'Capabilities'),
-						title: t('从设计约束到最终样式', 'From design constraints to shipped CSS'),
+						eyebrow: t('选择交付方式', 'Delivery modes'),
+						title: t('按项目构建方式接入', 'Integrate for the way your project builds'),
 						description: t(
-							'使用预编译文件快速开始，或从 Sass 源码配置前缀、单位、缩放和主题。',
-							'Start with prebuilt files or configure prefixes, units, scale and theme from Sass source.'
+							'两个包共享核心工具类，但配置时机、scale 语义和输出方式不同。',
+							'The packages share core utilities while differing in configuration timing, scale semantics and output.'
 						),
 						columns: 3,
 						gap: 24,
 						items: cards([
 							{
-								title: t('组合式工具类', 'Composable utilities'),
-								description: t('Flex、间距、颜色、排版、边框与辅助类各司其职。', 'Focused utilities cover flex, spacing, color, typography, borders and more.'),
-								badge: 'g-*',
+								title: '@deot/style',
+								description: t('直接引入 px、rem、rpx、normalize 产物，或由 Sass 源码生成项目样式。', 'Import px, rem, rpx and normalize outputs, or generate project CSS from Sass source.'),
+								badge: 'CSS / Sass',
 								icon: 'grid'
 							},
 							{
-								title: t('Sass 可配置', 'Configurable Sass'),
-								description: t('按项目调整类名前缀、单位、缩放、主题和 reset。', 'Tune prefixes, units, scale, theme and reset behavior per project.'),
-								badge: 'Sass',
+								title: '@deot/style-unocss',
+								description: t('组合 presetMini 与 @deot/style 兼容规则，只生成源码实际使用的 token。', 'Combine presetMini with @deot/style-compatible rules and generate only tokens found in source.'),
+								badge: 'UnoCSS',
 								icon: 'filter'
 							},
 							{
-								title: t('多端输出', 'Multiple targets'),
-								description: t('直接选择 px、rem、rpx、normalize 或局部 rem 产物。', 'Choose px, rem, rpx, normalized or partial-rem output directly.'),
-								badge: 'CSS',
+								title: t('共享 g-* 语义', 'Shared g-* semantics'),
+								description: t('布局、间距、颜色、排版与辅助类可以在迁移时保持主要类名。', 'Keep core layout, spacing, color, typography and helper class names while migrating.'),
+								badge: 'Utilities',
 								icon: 'link'
 							}
 						])
 					}),
 					block('home-steps', 'steps', {
-						eyebrow: t('开始使用', 'Start'),
-						title: t('三步组成页面样式', 'Build a styled page in three steps'),
+						eyebrow: t('接入路径', 'Integration path'),
+						title: t('先选择，再配置，最后验证', 'Choose, configure, then verify'),
 						columns: 3,
 						items: cards([
-							{ title: t('安装', 'Install'), description: 'pnpm add @deot/style', icon: '01' },
-							{ title: t('选择产物', 'Pick an output'), description: t('引入默认 CSS，或选择 rem、rpx 与 normalize。', 'Import the default CSS or choose rem, rpx and normalize.'), icon: '02' },
-							{ title: t('组合类名', 'Compose classes'), description: t('用 g-* 工具类表达布局、间距和视觉状态。', 'Use g-* utilities for layout, spacing and visual state.'), icon: '03' }
+							{ title: t('选择', 'Choose'), description: t('预编译 CSS、可配置 Sass 或 UnoCSS 按需生成。', 'Pick prebuilt CSS, configurable Sass or on-demand UnoCSS.'), icon: '01' },
+							{ title: t('配置', 'Configure'), description: t('确定 prefix、unit、scale、主题与构建目标。', 'Set prefix, unit, scale, theme and build target.'), icon: '02' },
+							{ title: t('验证', 'Verify'), description: t('检查静态 token、动态 safelist，并避免重复引入完整样式。', 'Check static tokens and dynamic safelists, and avoid duplicate full style sources.'), icon: '03' }
 						])
 					}),
 					block('home-cta', 'cta', {
-						eyebrow: 'Playground',
-						title: t('在浏览器中调整工具类', 'Tune utilities in the browser'),
-						description: t('切换布局、卡片预设和视口，直接查看源码与结果。', 'Change layouts, card presets and viewport sizes while viewing source and output.'),
+						eyebrow: t('接入指南', 'Integration guide'),
+						title: t('按目标环境完成配置', 'Configure for each target environment'),
+						description: t('查看 Web、REM、RPX、UnoCSS 与多入口开发场景的边界和迁移建议。', 'Review boundaries and migration guidance for Web, REM, RPX, UnoCSS and multi-entry development.'),
 						align: 'center',
 						accent,
 						accentSecondary,
 						background: '',
-						actions: [action(t('打开在线示例', 'Open Playground'), '/guide/playground')]
+						actions: [action(t('查看接入与迁移', 'Open Integration Guide'), '/guide/integration')]
 					}, { ...stack, marginBottom: 0, fullWidth: true })
 				]
 			};
@@ -215,7 +222,7 @@
 					localeReadmes[lang] || localeReadmes['zh-CN']
 				)[value],
 				resource: ({ source, runtime }) => {
-					if (source === 'README.md' || /^docs\/[^/]+\.md$/.test(source)) {
+					if (source === 'README.md' || /^(docs\/[^/]+\.md|packages\/[^/]+\/README\.md)$/.test(source)) {
 						return runtime.mode === 'development'
 							? `/${source}`
 							: new URL(source, repositoryRaw).href;

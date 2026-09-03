@@ -27,7 +27,11 @@ $direction-map: ('l': left, 'r': right, 't': top, 'b': bottom);
 	$prefix: map.get($options, 'prefix');
 	$name: map.get($options, 'name');
 
-	@return #{'.'}#{if(sass($prefix and $prefix != ""): #{$prefix}-; else: "")}#{if(sass($name and $name != ""): #{$name}-; else: "")};
+	@return #{'.'}#{if(
+		sass($prefix and $prefix != ""):
+		#{$prefix}#{if(sass(string.slice(#{$prefix}, -1) == '-'): ''; else: '-')};
+		else: ""
+	)}#{if(sass($name and $name != ""): #{$name}-; else: "")};
 }
 
 // 10/10px是number类型, 后者带单位; "10px"是string类型

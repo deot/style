@@ -2,6 +2,9 @@ shamefullyHoist: true
 
 linkWorkspacePackages: true
 
+packages:
+  - 'packages/*'
+
 allowBuilds:
   '@parcel/watcher': true
   '@swc/core': true

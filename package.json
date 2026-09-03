@@ -1,33 +1,32 @@
 {
-  "name": "@deot/style",
+  "name": "@deot/style-workspace",
   "version": "1.1.4",
+  "private": true,
   "description": "Public CSS to HTML5",
-  "main": "./dist/index.css",
   "type": "module",
-  "files": [
-    "src/**",
-    "dist/**",
-    "examples/**"
-  ],
   "packageManager": "pnpm@latest",
   "scripts": {
     "prepare": "husky",
     "init": "npx pnpm install",
-    "init:force": "rm -rf ./node_modules pnpm-lock.yaml && npm run init",
+    "init:force": "rm -rf ./node_modules pnpm-lock.yaml ./packages/*/node_modules && npm run init",
     "docs:dev": "doc dev --workspace .",
-    "dev": "npm run test -- --watch",
+    "dev": "npm run test -- --package-name '*' --watch",
     "build": "ddc build",
+    "link": "ddc link",
+    "add": "ddc add",
     "release": "ddc release",
     "update": "ddc update",
     "test": "ddc test",
     "lint": "npm run lint:es && npm run lint:style",
     "lint:fix": "npm run lint:es -- --fix && npm run lint:style -- --fix",
     "lint:es": "eslint . --color",
-    "lint:style": "stylelint --fix 'src/**/*.{css,scss}' --cache --cache-location node_modules/.cache/stylelint/",
+    "lint:style": "stylelint --fix 'packages/index/src/**/*.{css,scss}' --cache --cache-location node_modules/.cache/stylelint/",
     "typecheck": "tsc --noEmit --skipLibCheck"
   },
   "scripts-info": {
     "init": "首次安装",
+    "link": "依赖包关联",
+    "add": "创建新包或者给包添加依赖",
     "dev": "开发模式",
     "build": "打包模式",
     "test": "执行测试",
@@ -37,14 +36,15 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/deot/sass"
+    "url": "https://github.com/deot/style"
   },
   "bugs": {
-    "url": "https://github.com/deot/sass/issues"
+    "url": "https://github.com/deot/style/issues"
   },
   "devDependencies": {
     "@deot/dev": "^2.9.15",
     "@deot/docs": "^1.0.9",
-    "normalize.css": "^8.0.1"
+    "normalize.css": "^8.0.1",
+    "unocss": "^66.9.1"
   }
 }

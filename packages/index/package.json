@@ -1,0 +1,25 @@
+{
+  "name": "@deot/style",
+  "version": "1.1.4",
+  "description": "Public CSS to HTML5",
+  "main": "./dist/index.css",
+  "type": "module",
+  "files": [
+    "src/**",
+    "dist/**",
+    "examples/**"
+  ],
+  "author": "deot",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deot/style",
+    "directory": "packages/index"
+  },
+  "bugs": {
+    "url": "https://github.com/deot/style/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

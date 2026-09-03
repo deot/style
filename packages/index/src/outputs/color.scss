@@ -58,10 +58,15 @@ $options: (unit: vd.$unit, prefix: vd.$prefix);
 @include gm.background-color($color-list, map.merge($options, (name: bg))); // g-bg-*
 @include gm.line-gradient($line-gradient-list, map.merge($options, (name: bg-lg))); // g-bg-lg-*
 
-[class*="#{vd.$computed-prefix}bg-white"], [class*="#{vd.$computed-prefix}bg-gray-"] {
-	color: inherit;
-}
-
-[class*="#{vd.$computed-prefix}bg-"] input {
-	color: vc.$black;
-}
+/*
+ * computed-prefix 包含类选择器的点号，以下属性选择器会被编译为
+ * [class*=".g-bg-*"], 无法匹配正常的 class="g-bg-*"，暂时保留代码但不再输出。
+ *
+ * [class*="#{vd.$computed-prefix}bg-white"], [class*="#{vd.$computed-prefix}bg-gray-"] {
+ * 	color: inherit;
+ * }
+ *
+ * [class*="#{vd.$computed-prefix}bg-"] input {
+ * 	color: vc.$black;
+ * }
+ */

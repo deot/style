@@ -33,16 +33,6 @@ on:
         required: true
         type: boolean
 
-      forceUpdatePackage:
-        description: 'Force Update Package'
-        default: false
-        type: boolean
-
-      skipUpdatePackage:
-        description: 'Skip Update Package'
-        default: false
-        type: boolean
-
       keepLastTag: 
         description: 'Clean Tags & Keep Last'
         default: false
@@ -59,6 +49,16 @@ on:
           - minor
           - patch
 
+      forceUpdatePackage:
+        description: 'Force Update Package (input all -> *)'
+        default: ''
+        type: string
+
+      skipUpdatePackage:
+        description: 'Skip Update Package (input all -> *)'
+        default: ''
+        type: string
+
       customVersion:
         description: 'Custom Version(x.x.x)'
         default: ''
@@ -71,6 +71,12 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
+      - name: Setup cache for Chromium binary
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/puppeteer
+          key: chromium-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@v6
@@ -103,7 +109,9 @@ jobs:
         run: npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
 
       - name: Run init
-        run: npm run init
+        run: |
+          npm run init
+          node node_modules/puppeteer/install.mjs
 
       - name: Run release
         run: >-
@@ -115,7 +123,8 @@ jobs:
           ${{ !inputs.tag && '--no-tag' || '' }}
           ${{ !inputs.commit && '--no-commit' || '' }}
           ${{ inputs.keepLastTag && '--keep-last-tag' || '' }}
-          ${{ inputs.forceUpdatePackage && '--force-update-package' || '' }}
-          ${{ inputs.skipUpdatePackage && '--skip-update-package' || '' }}
+          ${{ inputs.forceUpdatePackage && format('--force-update-package "{0}"', inputs.forceUpdatePackage) || ''}}
+          ${{ inputs.skipUpdatePackage && format('--skip-update-package "{0}"', inputs.skipUpdatePackage) || ''}}
           ${{ inputs.customVersion && format('--custom-version "{0}"', inputs.customVersion) || ''}}
+
 

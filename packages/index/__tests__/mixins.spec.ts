@@ -3,7 +3,7 @@ import * as sass from './fixtures/sass';
 
 describe('mixins/', () => {
 	it('index.scss', () => {
-		const source1 = sass.compile(path.resolve(process.cwd(), `./src/mixins/index.scss`));
+		const source1 = sass.compile(path.resolve(process.cwd(), `./packages/index/src/mixins/index.scss`));
 		const source2 = sass.compileString(`@use './mixins/index.scss'`);
 
 		// mixins转css后不存在了

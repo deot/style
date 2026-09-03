@@ -1,3 +1,5 @@
+@use 'sass:string';
+
 // 定义默认属性
 
 // 缩放
@@ -11,7 +13,11 @@ $prefix: g !default;
 $computed-prefix: 'any with computed' !default;
 
 @if $prefix {
-	$computed-prefix: #{'.'}#{if(sass($prefix and $prefix != ""): #{$prefix}-; else: "")};
+	$computed-prefix: #{'.'}#{if(
+		sass($prefix and $prefix != ""):
+		#{$prefix}#{if(sass(string.slice(#{$prefix}, -1) == '-'): ''; else: '-')};
+		else: ""
+	)};
 }
 
 // 允许css-variables
