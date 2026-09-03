@@ -1,22 +1,23 @@
 import type { Preset } from 'unocss';
 import { presetMini } from 'unocss';
+import { createPreflights } from './preflights';
 import { createRules } from './rules';
-import { createThemePreflight } from './theme';
 import type { PresetStyleOptions } from './types';
 
 export type { PresetStyleOptions } from './types';
 
 export const presetStyle = (options: PresetStyleOptions = {}): Preset => {
-	const envOptions = process.env.UNOCSS_OPTIONS === undefined
+	const envOptions = process.env.UNOCSS_OPTIONS === void 0
 		? {}
 		: JSON.parse(process.env.UNOCSS_OPTIONS) as PresetStyleOptions;
-	if (options.scale === undefined && envOptions.scale !== undefined && !Number.isFinite(envOptions.scale)) {
+	if (options.scale === void 0 && envOptions.scale !== void 0 && !Number.isFinite(envOptions.scale)) {
 		throw new TypeError('UNOCSS_OPTIONS.scale must be a finite number');
 	}
 	const resolved = {
 		prefix: options.prefix ?? envOptions.prefix ?? 'g-',
 		unit: options.unit ?? envOptions.unit ?? 'px',
-		scale: options.scale ?? envOptions.scale ?? 1
+		scale: options.scale ?? envOptions.scale ?? 1,
+		reset: options.reset ?? envOptions.reset ?? true
 	};
 
 	return {
@@ -27,7 +28,7 @@ export const presetStyle = (options: PresetStyleOptions = {}): Preset => {
 		 */
 		enforce: 'post',
 		presets: [presetMini({ prefix: resolved.prefix })],
-		preflights: [createThemePreflight(resolved)],
+		preflights: createPreflights(resolved),
 		rules: createRules(resolved),
 		options: resolved
 	};

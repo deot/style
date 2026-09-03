@@ -168,7 +168,7 @@ export default {
 `presetStyle()` 在加载 `uno.config.ts` 时读取一次配置。可以由每个开发进程设置 `UNOCSS_OPTIONS`：
 
 ```bash
-UNOCSS_OPTIONS='{"prefix":"g-","unit":"rem","scale":2}' npm run dev
+UNOCSS_OPTIONS='{"prefix":"g-","unit":"rem","scale":2,"reset":true}' npm run dev
 ```
 
 显式传给 `presetStyle()` 的参数优先于 `UNOCSS_OPTIONS`，未设置时再使用默认值。

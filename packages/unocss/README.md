@@ -36,11 +36,12 @@ Vite 项目仍按 UnoCSS 官方接入方式安装插件并在入口引入 `virtu
 presetStyle({
 	prefix: 'g-',
 	unit: 'px',
-	scale: 1
+	scale: 1,
+	reset: true
 });
 ```
 
-以上参数也可以由运行 UnoCSS 的 Node 进程通过 `UNOCSS_OPTIONS` 提供。它是包含 `prefix`、`unit`、`scale` 的 JSON 字符串。显式参数的优先级高于环境变量，环境变量未设置时使用各参数的默认值。例如：
+以上参数也可以由运行 UnoCSS 的 Node 进程通过 `UNOCSS_OPTIONS` 提供。它是包含 `prefix`、`unit`、`scale`、`reset` 的 JSON 字符串。显式参数的优先级高于环境变量，环境变量未设置时使用各参数的默认值。例如：
 
 ```bash
 UNOCSS_OPTIONS='{"prefix":"x-","unit":"rem","scale":2}' npm run dev
@@ -92,6 +93,16 @@ presetStyle({ unit: 'rem', scale: 2 });
 
 这与 Sass `$scale` 会同时缩放数值后缀和属性值的行为不同；从 Sass CSS 迁移时不要假设两者的 `scale` 语义相同。
 
+### `reset`
+
+默认值为 `true`，输出与 Sass 默认入口一致的 `html`、`body` 和全局 `*` reset。只关闭这组全局样式时传入：
+
+```ts
+presetStyle({ reset: false });
+```
+
+关闭后仍会保留主题变量、Mini preflight 和按需生成的 `g-reset`、`g-unset` 工具类。
+
 ## 主题变量
 
 Preset 默认输出与 Sass 当前默认主题一致的 CSS Variables，例如：
@@ -127,7 +138,7 @@ export default defineConfig({
 
 - 需要按使用情况生成工具类时，使用 `@deot/style-unocss`，不要再引入完整 `dist/index.css`。
 - 需要 Sass 函数、mixin、主题 map 或既有 rem/rpx 静态产物时，继续使用 `@deot/style`。
-- Mini preflight 作为 UnoCSS 基础样式；Preset 不重复输出 Sass 完整入口中的 `html`、`body` 与全局 `*` reset。
+- Preset 默认输出 Sass 完整入口中的 `html`、`body` 与全局 `*` reset；不需要全局样式时设置 `reset: false`。
 
 ## 相关文档
 

@@ -63,6 +63,34 @@ const numericUtilities = [
 ];
 
 describe('presetStyle', () => {
+	it('enables the Sass-compatible global reset by default and supports disabling it', async () => {
+		const { css: defaultSource } = await generate('');
+		const defaultCSS = compact(defaultSource);
+		const expectedBody = [
+			'body{width:100%;',
+			'font-family:"MicrosoftYaHei","微软雅黑","HelveticaNeue",Helvetica,',
+			'"PingFangSC","HiraginoSansGB",Arial,sans-serif;',
+			'font-size:var(--font-size-default);',
+			'-webkit-font-smoothing:antialiased;',
+			'-moz-osx-font-smoothing:grayscale;',
+			'line-height:var(--line-height-default);',
+			'color:var(--color-default);',
+			'background-color:var(--background-color-default)}'
+		].join('');
+
+		expect(defaultCSS).toContain('html{width:100%;height:100%}');
+		expect(defaultCSS).toContain(expectedBody);
+		expect(defaultCSS).toContain('*,*::before,*::after{padding:0;margin:0;border:none;box-sizing:border-box}');
+
+		const { css: disabledSource } = await generate('', { reset: false });
+		const disabledCSS = compact(disabledSource);
+
+		expect(disabledCSS).not.toContain('html{width:100%;height:100%}');
+		expect(disabledCSS).not.toContain('body{width:100%;font-family:');
+		expect(disabledCSS).not.toContain('padding:0;margin:0;border:none;box-sizing:border-box');
+		expect(disabledCSS).toContain('--font-size-default:14px;');
+	});
+
 	it('combines presetMini with d-style overrides', async () => {
 		const { css: source, matched } = await generate('flex g-flex g-min-h-screen g-m-4 hover:g-m-l-8');
 		const css = compact(source);
@@ -154,7 +182,8 @@ describe('presetStyle', () => {
 		vi.stubEnv('UNOCSS_OPTIONS', JSON.stringify({
 			prefix: 'env-',
 			unit: 'rem',
-			scale: 2
+			scale: 2,
+			reset: false
 		}));
 
 		try {
@@ -164,15 +193,18 @@ describe('presetStyle', () => {
 			expect(matched).not.toContain('g-fs-14');
 			expect(css).toContain('.env-fs-14{font-size:14rem}');
 			expect(css).toContain('.env-dot{display:block;width:10rem;height:10rem;border-radius:50%}');
+			expect(css).not.toContain('html{width:100%;height:100%}');
 
 			const { css: overrideSource } = await generate('x-fs-14 x-dot', {
 				prefix: 'x-',
 				unit: 'px',
-				scale: 1
+				scale: 1,
+				reset: true
 			});
 			const overrideCSS = compact(overrideSource);
 			expect(overrideCSS).toContain('.x-fs-14{font-size:14px}');
 			expect(overrideCSS).toContain('.x-dot{display:block;width:5px;height:5px;border-radius:50%}');
+			expect(overrideCSS).toContain('html{width:100%;height:100%}');
 		} finally {
 			vi.unstubAllEnvs();
 		}

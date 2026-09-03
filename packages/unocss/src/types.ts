@@ -14,6 +14,11 @@ export interface PresetStyleOptions {
 	 * @default 1
 	 */
 	scale?: number;
+	/**
+	 * 是否输出与 Sass 默认入口一致的 html、body 和全局通配符 reset；未传时读取 UNOCSS_OPTIONS.reset。
+	 * @default true
+	 */
+	reset?: boolean;
 }
 
 export type ResolvedPresetStyleOptions = Required<PresetStyleOptions>;
