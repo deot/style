@@ -52,7 +52,7 @@ import '@deot/style/dist/index.normalize.css';
 默认前缀是 `g-`。工具类只负责单一或相近能力，可以按需组合：
 
 ```html
-<article class="g-flex g-ai-c g-jc-sb g-pd-16 g-br-8 g-bs">
+<article class="g-flex g-ai-c g-jc-sb g-pd-16 g-br-8 g-bsh">
 	<div>
 		<h2 class="g-fs-20 g-lh-default">标题</h2>
 		<p class="g-c-666 g-m-t-8">说明文字</p>

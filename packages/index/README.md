@@ -62,9 +62,10 @@ Style.useREM(750);
 
 - `g-w-full`、`g-h-full`、`g-size-full` 分别填满包含块的宽度、高度或宽高。
 - 十二列百分比宽度使用 `g-w-1/12` 至 `g-w-12/12`。
-- `g-fw-1` 至 `g-fw-12` 保留十二列宽度并增加 `float: left`。
+- `g-fl-1/12` 至 `g-fl-12/12` 提供十二列宽度并增加 `float: left`，容器使用 `g-fl-row`。
 - Flex 简写值使用 `g-f-0`、`g-f-1`、`g-f-2`。
 - Flex 固定占比使用 `g-f-1/2`、`g-f-1/3` 等分数写法。
+- Flex Wrap 使用 `g-fwr-w/wr/n`，`g-fw-*` 只表示 Font Weight。
 
 Grid 使用属性首字母缩写：
 
@@ -74,6 +75,15 @@ Grid 使用属性首字母缩写：
 - `g-gaf-r/c/d/rd/cd` 设置自动布局方向和 dense 模式。
 
 UnoCSS 还提供 `g-w-{n}` 数值尺寸、`screen`、内容尺寸、任意值和 CSS Variable 等按需规则，详见 [`@deot/style-unocss` README](../unocss/README.md)。
+
+## 文本与边框
+
+- Text Align 使用 `g-ta-l/r/c/j/s/e/ja/mp`，并保持 `!important` 输出。
+- Text Decoration Line 使用 `g-tdl-lt/ul/ol/n`；多行截断使用 `g-line-1/2`。
+- 高清边框使用 `g-bd/g-bdt/g-bdr/g-bdb/g-bdl`。
+- `g-br-{n}`、`g-br-circle/default` 继续表示 Border Radius。
+- 默认阴影使用 `g-bsh/g-bsh-t`，Box Sizing 使用 `g-bsz-bb`。
+- 标准 Border 的动态 width/style/color 与 `[]/()` 语法仅由 UnoCSS 提供。
 
 ## 默认配置
 

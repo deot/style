@@ -21,7 +21,7 @@ $line-height-options: (unit: vd.$unit, scale: vd.$scale, prefix: vd.$prefix, nam
 @include gm.line-height($line-height-list, $line-height-options);
 
 /**
- * 两行文字 限高
+ * @deprecated 整组废弃，无替代规则。
  */
 #{vd.$computed-prefix}lh-two {
 	height: calc(ft.themefix(line-height-limit) * 2);
@@ -29,7 +29,7 @@ $line-height-options: (unit: vd.$unit, scale: vd.$scale, prefix: vd.$prefix, nam
 }
 
 /**
- * 一行文字 限高
+ * @deprecated 整组废弃，无替代规则。
  */
 #{vd.$computed-prefix}lh-one {
 	height: ft.themefix(line-height-limit);

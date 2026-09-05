@@ -15,6 +15,9 @@
 	<script>
 		const repositoryRaw = 'https://raw.githubusercontent.com/deot/style/refs/heads/main/';
 		const repositoryBlob = 'https://github.com/deot/style/blob/main/';
+		const styleDist = window.__DOCS_RUNTIME__?.mode === 'development'
+			? '/packages/index/dist/'
+			: 'https://cdn.jsdelivr.net/npm/@deot/style@2.0.0/dist/';
 		const locales = {
 			'zh-CN': { label: '简体中文' },
 			'en-US': { label: 'English' }
@@ -24,6 +27,7 @@
 			{ label: { zh: '选择与安装', en: 'Choose and Install' }, value: 'getting-started', source: 'docs/getting-started.md' },
 			{ label: { zh: '接入与迁移', en: 'Integration and Migration' }, value: 'integration', source: 'docs/integration.md' },
 			{ label: { zh: '@deot/style-unocss', en: '@deot/style-unocss' }, value: 'unocss', source: 'packages/unocss/README.md' },
+			{ label: { zh: '与 UnoCSS Mini 组合', en: 'Use with UnoCSS Mini' }, value: 'unocss-mini', source: 'docs/unocss-mini.md' },
 			{ label: { zh: '@deot/style Sass', en: '@deot/style Sass' }, value: 'sass', source: 'packages/index/README.md' },
 			{ label: { zh: 'Sass/CSS 示例', en: 'Sass/CSS Playground' }, value: 'playground', source: 'docs/playground.md' },
 			{ label: { zh: '工具类参考', en: 'Utilities' }, value: 'utilities', source: 'docs/DOCUMENT.md' }
@@ -56,6 +60,7 @@
 					label: lang === 'zh-CN' ? '包与配置' : 'Packages and Configuration',
 					children: [
 						documentItem('unocss', lang),
+						documentItem('unocss-mini', lang),
 						documentItem('sass', lang)
 					]
 				},
@@ -150,7 +155,7 @@
 							},
 							{
 								title: '@deot/style-unocss',
-								description: t('组合 presetMini 与 @deot/style 兼容规则，只生成源码实际使用的 token。', 'Combine presetMini with @deot/style-compatible rules and generate only tokens found in source.'),
+								description: t('提供 @deot/style 兼容规则并复用 Mini 官方 variants，只生成源码实际使用的 token。', 'Provide @deot/style-compatible rules with official Mini variants and generate only tokens found in source.'),
 								badge: 'UnoCSS',
 								icon: 'filter'
 							},
@@ -249,8 +254,8 @@
 				'@deot/style/dist': 'https://cdn.jsdelivr.net/npm/@deot/style@1.1.4/dist/index.js'
 			},
 			styles: {
-				'@deot/style/dist/index.normalize-only.css': 'https://cdn.jsdelivr.net/npm/@deot/style@1.1.4/dist/index.normalize-only.css',
-				'@deot/style/dist/index.css': 'https://cdn.jsdelivr.net/npm/@deot/style@1.1.4/dist/index.css'
+				'@deot/style/dist/index.normalize-only.css': `${styleDist}index.normalize-only.css`,
+				'@deot/style/dist/index.css': `${styleDist}index.css`
 			}
 		};
 	</script>

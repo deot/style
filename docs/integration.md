@@ -71,7 +71,7 @@ export default defineConfig({
 });
 ```
 
-UnoCSS 只提取静态出现的完整 token。运行时拼接的 `g-fs-${size}`、`g-pd-${space}` 等类名必须改成静态映射，或加入项目 safelist。规则范围和参数见 [`@deot/style-unocss` README](../packages/unocss/README.md)。
+UnoCSS 只提取静态出现的完整 token。运行时拼接的 `g-fs-${size}`、`g-pd-${space}` 等类名必须改成静态映射，或加入项目 safelist。规则范围和参数见 [`@deot/style-unocss` README](../packages/unocss/README.md)；需要 Mini rules 时参见[与 UnoCSS Mini 组合](./unocss-mini.md)。
 
 本仓库的动态属性规则使用统一值语法：裸数字表示规则自身的数值语义，`[]` 表示任意 CSS 值，`()` 表示 CSS Variable。例如 `g-w-12`、`g-w-[50%]`、`g-w-(--panel-width)`；Flex 中的 `g-f-2` 表示 `flex: 2`，Grid 中的 `g-gtc-12` 表示 12 列，均不会拼接单位。
 
@@ -80,12 +80,13 @@ UnoCSS 只提取静态出现的完整 token。运行时拼接的 `g-fs-${size}`�
 - 不再引入 `@deot/style/dist/index.css`，由 `virtual:uno.css` 承载生成结果。
 - Sass `$scale` 会缩放数值类名后缀和属性值；UnoCSS `scale` 只缩放类名没有数值的固定尺寸。
 - Sass 输出预定义数值集合；UnoCSS 数值规则按 token 动态生成。
-- UnoCSS preset 默认同时输出 Mini preflight、主题变量，以及与 Sass 完整入口一致的 `html`、`body` 和全局 `*` reset；可通过 `reset: false` 关闭最后一组。
+- UnoCSS preset 默认输出本仓库主题变量，以及与 Sass 完整入口一致的 `html`、`body` 和全局 `*` reset；可通过 `reset: false` 关闭最后一组。Mini preflight 只在项目显式组合 `presetMini()` 时输出。
 - `g-w-{n}` 在 UnoCSS 中表示带配置单位的宽度；十二列比例统一使用 `g-w-{part}/{total}`。
-- Flex 简写值使用 `g-f-{n}`，固定占比使用 `g-f-{part}/{total}`；Grid 列定位使用 `g-gc-{n}`，Mini 的 `g-col-span-*`、`g-col-start-*` 等明确 Grid 类仍可使用。
-- Grid 缩写与 Mini 全名可以并存，例如 `g-gtc-3` 与 `g-grid-cols-3`、`g-gaf-rd` 与 `g-grid-flow-row-dense`。
-- 本仓库把 `g-b-{n}` 定义为 Bottom，覆盖 Mini 的 border-width；`g-b-[...]` 含独立 Border Style 关键字时输出普通 `border`。需要 Mini 定位全名时可继续使用 `g-bottom-*`。
-- Preset 已内置 `hover:(...)` 等 Variant Group 写法，不需要在项目中重复添加 transformer。
+- Flex 简写值使用 `g-f-{n}`，固定占比使用 `g-f-{part}/{total}`；Grid 列定位使用 `g-gc-{n}`。Mini 的 `g-flex-*`、`g-col-span-*`、`g-col-start-*` 等全名规则默认不生成。
+- Flex Wrap 使用 `g-fwr-*`；浮动栅格使用 `g-fl-{part}/12` 和 `g-fl-row`；`g-fw-*` 只作为 Font Weight 的最新命名。
+- Gap 使用 `g-g-*`，方向属性分别使用 `g-cg-*` 和 `g-rg-*`。
+- 本仓库把 `g-b-{n}` 定义为 Bottom；`g-b-[...]` 含独立 Border Style 关键字时输出普通 `border`。Mini 的 `g-bottom-*` 只有显式组合 Mini 后才可使用。
+- Preset 复用 Mini 官方完整 variants，并内置 `hover:(...)` 等 Variant Group 写法；默认不需要额外的 variants 或 transformer 配置。
 
 ## 移动端：REM
 
@@ -186,7 +187,7 @@ UNOCSS_OPTIONS='{"prefix":"g-","unit":"rem","scale":2,"reset":true}' npm run dev
 
 ## 区分库工具类与业务扩展
 
-业务项目会继续使用 `g-` 前缀补充 `.g-c-main`、`.g-btn-primary`、`.g-safe-area` 等项目专属规则，也会覆盖 `.g-bb` 的边框颜色。这些类不属于 `@deot/style` 的公共输出，不应依赖它们跨项目存在。
+业务项目会继续使用 `g-` 前缀补充 `.g-c-main`、`.g-btn-primary`、`.g-safe-area` 等项目专属规则，也会覆盖 `.g-bdb` 的边框颜色。这些类不属于 `@deot/style` 的公共输出，不应依赖它们跨项目存在。
 
 - 公共类：以[工具类参考](./DOCUMENT.md)和当前 `packages/index/src/outputs` 为准。
 - 业务类：由各项目自己的 `global.scss` 维护。
@@ -195,5 +196,6 @@ UNOCSS_OPTIONS='{"prefix":"g-","unit":"rem","scale":2,"reset":true}' npm run dev
 ## 继续阅读
 
 - UnoCSS 参数、主题、动态 token 与 safelist：[`@deot/style-unocss` README](../packages/unocss/README.md)。
+- Mini rules、覆盖关系与迁移方式：[与 UnoCSS Mini 组合](./unocss-mini.md)。
 - Sass 变量、主题、函数与 mixin：[`@deot/style` README](../packages/index/README.md)。
 - 完整公共类名：[工具类参考](./DOCUMENT.md)。

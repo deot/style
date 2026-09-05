@@ -52,7 +52,7 @@ const align = ref('g-ai-c');
 		</div>
 
 		<code>{{ ['g-flex', direction, justify, align].join(' ') }}</code>
-		<section :class="['g-flex', direction, justify, align]" class="stage g-br-8 g-b g-pd-16">
+		<section :class="['g-flex', direction, justify, align]" class="stage g-br-8 g-bd g-pd-16">
 			<div class="item g-flex-cc g-c-white g-br-8 g-bg-blue-mid">A</div>
 			<div class="item g-flex-cc g-c-white g-br-8 g-bg-purple-mid">B</div>
 			<div class="item g-flex-cc g-c-white g-br-8 g-bg-orange-mid">C</div>
@@ -92,7 +92,7 @@ import { ref } from 'vue';
 
 const presets = [
 	{ name: 'Info', classes: ['g-bg-blue-mid', 'g-c-white', 'g-br-8', 'g-pd-24'] },
-	{ name: 'Soft', classes: ['g-bg-gray-mid', 'g-c-333', 'g-br-16', 'g-pd-16', 'g-bs'] },
+	{ name: 'Soft', classes: ['g-bg-gray-mid', 'g-c-333', 'g-br-16', 'g-pd-16', 'g-bsh'] },
 	{ name: 'Warning', classes: ['g-bg-warning', 'g-c-333', 'g-br-4', 'g-pd-12'] }
 ];
 const selected = ref(presets[0]);
@@ -100,7 +100,7 @@ const selected = ref(presets[0]);
 
 <template>
 	<main class="demo g-pd-16">
-		<div class="g-flex g-fw-w controls">
+		<div class="g-flex g-fwr-w controls">
 			<button
 				v-for="preset in presets"
 				:key="preset.name"
@@ -111,7 +111,7 @@ const selected = ref(presets[0]);
 
 		<article :class="selected.classes">
 			<strong class="g-fs-20">组合优于覆盖</strong>
-			<p class="g-line-two g-lh-default g-m-t-8">
+			<p class="g-line-2 g-lh-default g-m-t-8">
 				每个工具类只负责一项清晰能力，页面可以根据状态切换整组类名。
 			</p>
 		</article>

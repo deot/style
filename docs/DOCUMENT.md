@@ -2,13 +2,13 @@
 
 本文档以当前 `packages/index/src/outputs` 源码为准，列出 `@deot/style` 默认 Sass/CSS 产物中的公共工具类。默认配置使用 `g-` 前缀、`px` 单位和 1 倍缩放；修改 Sass 配置后，类名前缀、数值后缀和属性值会相应变化。
 
-`@deot/style-unocss` 覆盖这些公共语义，并对数值类提供动态 token。两种交付方式的 `scale` 和规则生成范围并不完全相同，迁移前请先阅读 [`@deot/style-unocss` README](../packages/unocss/README.md) 与[接入与迁移](./integration.md)。
+`@deot/style-unocss` 覆盖这些公共语义，并对数值类提供动态 token。两种交付方式的 `scale` 和规则生成范围并不完全相同，迁移前请先阅读 [`@deot/style-unocss` README](../packages/unocss/README.md) 与[接入与迁移](./integration.md)。本 preset 默认不包含 Mini rules；需要 Mini 全名规则时参见[与 UnoCSS Mini 组合](./unocss-mini.md)。
 
 ## 命名约定
 
 > 本仓库的工具类以 CSS 原生语义为基础：直接映射单一 CSS 属性或属性值时，优先使用简短且可识别的缩写，例如 `w`、`h`、`f`、`fs`、`lh`、`ai`、`gtc`；同时设置多个属性或表达完整布局、状态和行为时，优先使用含义清晰的完整名称，例如 `size`、`reset`、`clearfix`。
 >
-> 部分缩写是有意保留的既有约定，例如 `g-g-*` 表示 `gap`。`fw`、`bs`、`br` 等历史缩写存在多种语义，应根据完整类名判断；本仓库会明确说明其匹配范围，但不会在本版改变已有输出。
+> 一个缩写在最新规则中只归属一个属性，例如 `fw` 只表示 `font-weight`、`fwr` 表示 `flex-wrap`、`bsh` 表示 `box-shadow`。部分无歧义短写会有意保留，例如 `g-g-*` 表示 Gap、Padding Safe Area 中的 `s` 表示 `safe-area`。
 
 ### `full` 与 `screen`
 
@@ -69,13 +69,24 @@ UnoCSS 还支持任意非负安全整数、任意值和 CSS Variable，例如 `g
 | 前缀 | 属性 | 后缀 |
 | --- | --- | --- |
 | `g-fd-` | `flex-direction` | `r`、`c`、`rr`、`cr` |
-| `g-fw-` | `flex-wrap` | `w`、`wr`、`n` |
+| `g-fwr-` | `flex-wrap` | `w`、`wr`、`n` |
 | `g-jc-` | `justify-content` | `fs`、`fe`、`c`、`sb`、`sa` |
 | `g-ai-` | `align-items` | `fs`、`fe`、`c`、`b`、`s` |
 | `g-ac-` | `align-content` | `fs`、`fe`、`c`、`sb`、`sa`、`s` |
 | `g-as-` | `align-self` | `a`、`fs`、`fe`、`c`、`b`、`s` |
 
 后缀取属性值中每个单词的首字母，例如 `.g-jc-sb` 表示 `justify-content: space-between`。
+
+### Flex 子项
+
+| 前缀 | 属性 | 说明 |
+| --- | --- | --- |
+| `g-fb-*` | `flex-basis` | 数字使用配置单位；支持 `auto/full`、比例和 `[]/()` |
+| `g-fg-*` | `flex-grow` | 无单位数字或 `[]/()` |
+| `g-fsh-*` | `flex-shrink` | 无单位数字或 `[]/()` |
+| `g-od-*` | `order` | 数字或 `[]/()`；`first/last/default` 表示 `-9999/9999/0` |
+
+`g-fsh-*` 有意避开已经表示 `font-size` 的 `g-fs-*`。
 
 ## Grid
 
@@ -84,6 +95,7 @@ UnoCSS 还支持任意非负安全整数、任意值和 CSS Variable，例如 `g
 | 类 | 说明 |
 | --- | --- |
 | `.g-grid` | `display: grid` 与 `box-sizing: border-box` |
+| `.g-inline-grid` | `display: inline-grid` 与 `box-sizing: border-box` |
 | `.g-gtc-1` … `.g-gtc-12` | 生成 1 至 12 列 `repeat(n, minmax(0, 1fr))` 等分轨道 |
 | `.g-gtr-1` … `.g-gtr-12` | 生成 1 至 12 行 `repeat(n, minmax(0, 1fr))` 等分轨道 |
 | `.g-gtc-none` / `.g-gtc-subgrid` | 列模板使用 `none` / `subgrid` |
@@ -117,10 +129,14 @@ Sass 为定位数字预生成 `1` 至 `12`。UnoCSS 支持任意正整数；除 
 | `.g-gaf-r` / `.g-gaf-c` | `row` / `column` |
 | `.g-gaf-d` | `dense` |
 | `.g-gaf-rd` / `.g-gaf-cd` | `row dense` / `column dense` |
+| `.g-gac-*` / `.g-gar-*` | `grid-auto-columns` / `grid-auto-rows` |
+| `.g-ji-*` / `.g-js-*` | `justify-items` / `justify-self` |
+| `.g-pc-*` / `.g-pi-*` / `.g-ps-*` | `place-content` / `place-items` / `place-self` |
+| `.g-ga-[]/()` / `.g-gta-[]/()` | `grid-area` / `grid-template-areas` |
 
-Flex 章节中的 `g-jc-*`、`g-ai-*`、`g-ac-*`、`g-as-*` 对 Grid 同样有效；Grid 间距使用本仓库 `g-g-*` 或 Mini `g-gap-*`。Flex 简写值使用 `g-f-{n}`，Grid 列定位使用 `g-gc-{n}`。
+Flex 章节中的 `g-jc-*`、`g-ai-*`、`g-ac-*`、`g-as-*` 对 Grid 同样有效；Grid 间距使用本仓库 `g-g-*`。Flex 简写值使用 `g-f-{n}`，Grid 列定位使用 `g-gc-{n}`。
 
-Mini 的 `g-grid-cols-*`、`g-col-span-*`、`g-grid-flow-*` 等全名规则继续并存。主要对应关系为：
+显式组合 Mini 后，可以同时使用 `g-grid-cols-*`、`g-col-span-*`、`g-grid-flow-*` 等全名规则。主要对应关系为：
 
 | 本仓库缩写 | Mini | 关系 |
 | --- | --- | --- |
@@ -128,7 +144,7 @@ Mini 的 `g-grid-cols-*`、`g-col-span-*`、`g-grid-flow-*` 等全名规则继�
 | `g-gc-span-2` | `g-col-span-2` | 均跨越 2 列 |
 | `g-gaf-rd` | `g-grid-flow-row-dense` | 均使用 `row dense` |
 
-本仓库会把 `g-grid` 额外设置为 `box-sizing: border-box`；`g-inline-grid`、auto tracks、areas、place 和 justify-items/self 等能力继续使用 Mini。
+本仓库的 `g-grid`、`g-inline-grid` 都会设置 `box-sizing: border-box`。高级属性后缀使用 `s/e/c/st/b` 表示 start/end/center/stretch/baseline，内容分布增加 `sb/sa/se`；safe 等复杂值写入 `[]`。Mini 全名仍可通过显式组合使用。
 
 ## 浮动栅格
 
@@ -136,10 +152,10 @@ Mini 的 `g-grid-cols-*`、`g-col-span-*`、`g-grid-flow-*` 等全名规则继�
 
 | 类 | 说明 |
 | --- | --- |
-| `.g-row` | 行容器并清除浮动 |
+| `.g-fl-row` | 行容器并清除浮动 |
 | `.g-clearfix` | 清除浮动 |
 | `.g-w-1/12` … `.g-w-12/12` | 设置 1/12 至 12/12 宽度 |
-| `.g-fw-1` … `.g-fw-12` | 设置宽度并左浮动 |
+| `.g-fl-1/12` … `.g-fl-12/12` | 设置宽度并左浮动 |
 | `.g-fl` / `.g-fr` | 左浮动 / 右浮动 |
 
 ## 尺寸
@@ -153,6 +169,20 @@ UnoCSS 属性规则支持裸数字、`[]` 任意值和 `()` CSS Variable：
 | `g-size-*` / `g-size-[]` / `g-size-()` | 同时设置宽高 |
 
 `full`、`screen` 的区别见前文；`min`、`max`、`fit` 分别表示 `min-content`、`max-content`、`fit-content`。宽度比例使用 `g-w-{part}/{total}`，裸数字只表示配置单位尺寸。
+
+最小和最大尺寸使用 `g-min-w-*`、`g-max-w-*`、`g-min-h-*`、`g-max-h-*`，支持同样的数字、内容关键字、`full/screen`、`[]` 和 `()`。
+
+## 基础布局属性
+
+| 缩写 | CSS 属性 | 静态值 |
+| --- | --- | --- |
+| `g-op-*` | `opacity` | `0～100` 映射到 `0～1` |
+| `g-z-*` | `z-index` | 非负整数 |
+| `g-of-*` | `overflow` | `a/h/c/v/s` |
+| `g-ofx-*` / `g-ofy-*` | `overflow-x` / `overflow-y` | `a/h/c/v/s` |
+| `g-ar-*` | `aspect-ratio` | `square/rectangle` 或正数比例 |
+
+上述规则支持各自适用的 `[]` 和 `()`。`g-ar-square`、`g-ar-rectangle` 分别输出 `1/1`、`16/9`；现有 `g-of-h` 继续包含 `!important`。
 
 ## 间距
 
@@ -169,6 +199,8 @@ UnoCSS 不限于以上预生成数值，并为所有方向支持 `[]` 和 `()`�
 | `.g-m-t-{n}`、`l`、`r`、`b` | 单方向 margin |
 
 ### 安全区
+
+这里的 `s` 固定表示 `safe-area`，方向后的最后一个 `s` 不是尺寸值。
 
 | 类 | 说明 |
 | --- | --- |
@@ -187,18 +219,30 @@ UnoCSS 不限于以上预生成数值，并为所有方向支持 `[]` 和 `()`�
 | 类 | 说明 |
 | --- | --- |
 | `.g-lh-default` | 使用主题的 `line-height-default`，默认 `1.5` |
-| `.g-lh-one` / `.g-lh-two` | 使用主题限高生成一行 / 两行高度 |
 | `.g-lh-0` … `.g-lh-5` | UnoCSS 无单位行高 |
 
 ### 文本
 
 | 类 | 说明 |
 | --- | --- |
-| `.g-tl` / `.g-tc` / `.g-tr` | 左 / 中 / 右对齐 |
-| `.g-td-lh` / `.g-td-ul` | 删除线 / 下划线 |
-| `.g-line-nowrap` / `.g-nowrap` | 不换行 |
-| `.g-line-wrap` / `.g-break` | 使用 `word-break`、`overflow-wrap` 与 `text-wrap` 处理长文本和连续字符 |
-| `.g-line-one` / `.g-line-two` | 一行 / 两行截断，并通过 `white-space: break-spaces` 保留空白换行 |
+| `.g-ta-l/r/c` | 左 / 右 / 中对齐 |
+| `.g-ta-j/s/e` | justify / start / end |
+| `.g-ta-ja/mp` | justify-all / match-parent |
+| `.g-tdl-lt/ul/ol/n` | 删除线 / 下划线 / 上划线 / 无文本装饰线 |
+| `.g-line-nowrap` | 带 `!important` 的不换行语义 |
+| `.g-line-wrap` | 使用 `word-break`、`overflow-wrap` 与 `text-wrap` 处理长文本和连续字符 |
+| `.g-line-{n}` | 多行截断；Sass 预生成 `1/2`，UnoCSS 支持任意正整数 |
+| `.g-tds-*` / `.g-tdc-*` | `text-decoration-style/color` |
+| `.g-tdt-*` / `.g-tuo-*` | `text-decoration-thickness` / `text-underline-offset` |
+| `.g-va-*` | `vertical-align` |
+| `.g-ls-*` / `.g-wsp-*` | `letter-spacing` / `word-spacing` |
+| `.g-ws-*` | `white-space` |
+| `.g-to-e` / `.g-to-c` | `text-overflow: ellipsis/clip` |
+| `.g-truncate` | 单行截断组合 |
+| `.g-tt-u/l/c/n` | 大写 / 小写 / 首字母大写 / 不转换 |
+| `.g-italic` / `.g-oblique` | 字体 italic / oblique |
+
+UnoCSS 的 Text Align 还支持 `g-ta-[]/()`；所有 Text Align 输出包含 `!important`。`g-ws-nw` 是原子 White Space 规则，`g-line-nowrap` 保留既有强制不换行语义，`g-line-wrap` 和 `g-line-{n}` 是复合文本规则。
 
 ## 颜色与渐变
 
@@ -229,9 +273,21 @@ UnoCSS 还支持 `g-c-[<color>]`、`g-bg-[<color>]` 任意颜色，以及 `g-c-(
 
 | 类 | 说明 |
 | --- | --- |
-| `.g-img-{n}` | 固定 width、height、min/max-width 与 line-height |
-| `.g-imgc-{n}` | 固定尺寸并使用 50% 圆角 |
-| `.g-imgr-{n}` | 固定尺寸并使用 4px 圆角 |
+| `.g-image-{n}` | 固定 width、height、min/max-width 与 line-height |
+| `.g-image-circle-{n}` | 固定尺寸并使用 50% 圆角 |
+| `.g-image-radius-{n}` | 固定尺寸并使用 4px 圆角 |
+
+### SVG
+
+| 类 | 说明 |
+| --- | --- |
+| `.g-fill-*` | fill 使用本仓库色板、`none`、任意值或 CSS Variable |
+| `.g-stroke-*` | stroke 使用本仓库色板、`none`、任意值或 CSS Variable |
+| `.g-stroke-w-*` | `stroke-width` |
+| `.g-stroke-dasharray-[]/()` | `stroke-dasharray` |
+| `.g-stroke-dashoffset-*` | `stroke-dashoffset` |
+| `.g-stroke-cap-s/r/b` | square / round / butt |
+| `.g-stroke-join-a/b/c/r/m` | arcs / bevel / miter-clip / round / miter |
 
 ## 定位
 
@@ -251,32 +307,71 @@ UnoCSS 额外提供动态边偏移：`g-t-*`、`g-l-*`、`g-b-*`、`g-r-*` 分�
 
 | 类 | 说明 |
 | --- | --- |
-| `.g-b`、`.g-bt`、`.g-br`、`.g-bb`、`.g-bl` | 适配高分屏的全边或单边 1px 边框 |
+| `.g-bd`、`.g-bdt`、`.g-bdr`、`.g-bdb`、`.g-bdl` | 适配高分屏的全边或单边 1px 边框 |
 | `.g-br-circle` | 100% 圆角 |
 | `.g-br-default` | 使用主题默认圆角 |
 | `.g-br-{n}` | `n` 为 `2, 4, 6, 8, 10, 12, 14, 16, 18, 20` |
-| `.g-bs` / `.g-bs-t` | 默认阴影 / 顶部阴影 |
+| `.g-bsh` / `.g-bsh-t` | 默认阴影 / 顶部阴影 |
 
-> 裸 `.g-b` 使用伪元素实现高清全边框；带后缀的 `g-b-*` 是 UnoCSS 动态规则，表示 Bottom 或上面说明的普通 Border，二者不是同一类边框能力。
+> `.g-bd` 使用伪元素实现高清全边框；带后缀的 `g-b-*` 是 UnoCSS 动态规则，表示 Bottom 或上面说明的普通 Border，二者不是同一类边框能力。
+
+### 标准 Border
+
+标准 CSS Border 由 UnoCSS 按需生成，Sass/CSS 预编译包不批量输出以下宽度、样式和颜色规则：
+
+| 模式 | CSS 属性 |
+| --- | --- |
+| `g-bd-[]/()` | `border` |
+| `g-bdt-[]/()` / `g-bdr-[]/()` / `g-bdb-[]/()` / `g-bdl-[]/()` | `border-top/right/bottom/left` |
+| `g-bdw/bdtw/bdrw/bdbw/bdlw-*` | 整体或方向 Border Width |
+| `g-bds/bdts/bdrs/bdbs/bdls-*` | 整体或方向 Border Style |
+| `g-bdc/bdtc/bdrc/bdbc/bdlc-*` | 整体或方向 Border Color |
+
+Width 数字拼接 `unit`，`tn/md/tk` 表示 `thin/medium/thick`；Style 使用 `n/h/dot/dash/s/db/g/r/i/o`；Color 复用本仓库色板。相关规则支持 `[]/()` 且不添加 `!important`。裸 `g-bdr` 表示高清右边框，带动态后缀时表示普通 CSS Border Right。
+
+### Outline
+
+| 缩写 | 属性 |
+| --- | --- |
+| `g-ol-[]/()` | `outline` 简写 |
+| `g-olw-*` | `outline-width` |
+| `g-ols-*` | `outline-style` |
+| `g-olc-*` | `outline-color` |
+| `g-olo-*` | `outline-offset` |
+
+Outline Style 使用 `n/h/dot/dash/s/db/g/r/i/o` 表示 none/hidden/dotted/dashed/solid/double/groove/ridge/inset/outset。颜色复用本仓库色板但不添加 `!important`。
 
 ## 显示与辅助类
 
 | 类 | 说明 |
 | --- | --- |
 | `.g-h-full` / `.g-w-full` / `.g-size-full` | 高度 / 宽度 / 两者为 100% |
-| `.g-none` / `.g-dp-n` / `.g-hide` | `display: none` |
-| `.g-show` / `.g-dp-b` / `.g-block` | `display: block` |
-| `.g-dp-i` / `.g-inline` | `display: inline` |
-| `.g-dp-ib` / `.g-inline-block` | `display: inline-block` |
+| `.g-d-n` / `.g-none` / `.g-hide` | `display: none` |
+| `.g-d-b` / `.g-show` / `.g-block` | `display: block` |
+| `.g-d-i` / `.g-inline` | `display: inline` |
+| `.g-d-ib` / `.g-inline-block` | `display: inline-block` |
 | `.g-operable` | 高亮色、14px 字号和 pointer 光标 |
 | `.g-pointer` | pointer 光标 |
 | `.g-disabled` | 禁用 pointer events |
 | `.g-unanimated` | 禁用动画 |
 | `.g-scroller` | WebKit 滚动条样式 |
-| `.g-divide` | 1px × 12px 的行内分隔线 |
+| `.g-divider` | 1px × 12px 的行内分隔线 |
 | `.g-dot` | 5px 圆点 |
 | `.g-of-h` | `overflow: hidden` |
-| `.g-bs-bb` | `box-sizing: border-box` |
+| `.g-bsz-bb` | `box-sizing: border-box` |
+
+交互属性缩写：
+
+| 缩写 | 属性 | 静态后缀 |
+| --- | --- | --- |
+| `g-vi-*` | `visibility` | `v/h/c` |
+| `g-cu-*` | `cursor` | `a/d/n/p/prog/w/cell/ch/t/m/na/g/gg/zi/zo` |
+| `g-pe-*` | `pointer-events` | `a/n` |
+| `g-us-*` | `user-select` | `a/all/t/n` |
+| `g-re-*` | `resize` | `x/y/b/n` |
+| `g-ap-*` | `appearance` | `a/n` |
+
+这些属性均支持 `[]`；适合 CSS Variable 的属性同时支持 `()`。`.g-pointer`、`.g-disabled` 继续作为便捷语义类使用。
 
 ## Gap
 
@@ -285,21 +380,7 @@ UnoCSS 额外提供动态边偏移：`g-t-*`、`g-l-*`、`g-b-*`、`g-r-*` 分�
 | 模式 | 属性 |
 | --- | --- |
 | `g-g-*` / `g-g-[]` / `g-g-()` | `gap` |
-| `g-g-x-*` / `g-g-col-*` | `column-gap` |
-| `g-g-y-*` / `g-g-row-*` | `row-gap` |
+| `g-cg-*` / `g-cg-[]` / `g-cg-()` | `column-gap` |
+| `g-rg-*` / `g-rg-[]` / `g-rg-()` | `row-gap` |
 
-Mini 的 `g-gap-*` 同时可用，但采用 Mini 自身的数值刻度。例如默认配置下，`g-g-4` 为 `4px`，`g-gap-4` 为 `1rem`。
-
-## 历史共用缩写
-
-以下缩写存在多种现行语义，不属于废弃规则：
-
-| 缩写 | 语义 |
-| --- | --- |
-| `g-fw-w/wr/n` | `flex-wrap` |
-| `g-fw-1` 至 `g-fw-12` | 十二列宽度并左浮动 |
-| `g-fw-13` 至 `g-fw-1000`、`g-fw-bold` | `font-weight` |
-| `g-bs`、`g-bs-t` | `box-shadow` |
-| `g-bs-bb` | `box-sizing: border-box` |
-| `g-br` | 右侧高清边框 |
-| `g-br-{n}`、`g-br-circle/default` | `border-radius` |
+显式组合 Mini 后也可以使用 `g-gap-*`，但它采用 Mini 自身的数值刻度。例如默认配置下，`g-g-4` 为 `4px`，`g-gap-4` 为 `1rem`。

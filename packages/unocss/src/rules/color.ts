@@ -5,7 +5,7 @@ import { createPatternPrefix, createStaticRule, resolveDynamicValue } from './ut
 /*
  * 与 Sass 默认色板保持一致，语义色通过 CSS Variables 允许业务侧覆盖。
  */
-const colors = {
+export const colors = {
 	'red-mid': '#ca1622',
 	'pink-mid': '#fa5a6e',
 	'pink-light': '#fff2ea',
@@ -52,6 +52,11 @@ const colors = {
 	'error': 'var(--color-error)',
 	'warning': 'var(--color-warning)'
 } as const;
+
+export const resolveColorValue = (value: string, options: ResolvedPresetStyleOptions) => {
+	if (Object.prototype.hasOwnProperty.call(colors, value)) return colors[value as keyof typeof colors];
+	if (value.startsWith('[') || value.startsWith('(')) return resolveDynamicValue(value, options);
+};
 
 export const createColorRules = (options: ResolvedPresetStyleOptions): Rule[] => {
 	const rules: Rule[] = [];

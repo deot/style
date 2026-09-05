@@ -10,14 +10,19 @@ import { createFontWeightRules } from './font-weight';
 import { createGapRules } from './gap';
 import { createGridRules } from './grid';
 import { createImageRules } from './image';
+import { createInteractionRules } from './interaction';
+import { createLayoutRules } from './layout';
 import { createLineHeightRules } from './line-height';
 import { createMarginRules } from './margin';
 import { createOtherRules } from './other';
+import { createOutlineRules } from './outline';
 import { createPaddingRules } from './padding';
 import { createPositionRules } from './position';
 import { createResetRules } from './reset';
 import { createSizeRules } from './size';
+import { createSvgRules } from './svg';
 import { createTextRules } from './text';
+import { createTypographyRules } from './typography';
 
 export const createRules = (options: ResolvedPresetStyleOptions): Rule[] => [
 	...createFontSizeRules(options),
@@ -25,6 +30,7 @@ export const createRules = (options: ResolvedPresetStyleOptions): Rule[] => [
 	...createMarginRules(options),
 	...createPaddingRules(options),
 	...createSizeRules(options),
+	...createLayoutRules(options),
 	...createGapRules(options),
 	...createGridRules(options),
 	...createImageRules(options),
@@ -36,12 +42,16 @@ export const createRules = (options: ResolvedPresetStyleOptions): Rule[] => [
 	...createFloatRules(options),
 	...createFontWeightRules(options),
 	...createTextRules(options),
+	...createTypographyRules(options),
 	...createColorRules(options),
+	...createInteractionRules(options),
 	...createPositionRules(options),
+	...createOutlineRules(options),
 	...createBorderRules(options),
+	...createSvgRules(options),
 	/*
-	 * bs 表示 box-shadow；历史类 g-bs-bb 则表示 box-sizing。
-	 * br 表示右侧高清边框；带后缀的 br-* 表示 border-radius。
+	 * 历史 bs 同时表示 box-shadow 和 box-sizing，新规则分别使用 bsh 与 bsz。
+	 * bdr 表示右侧高清边框；br-* 表示 border-radius。
 	 */
 	...createBoxShadowRules(options),
 	...createResetRules(options),

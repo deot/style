@@ -52,13 +52,15 @@
 	flex: 2;
 }
 
+/**
+ * @deprecated 使用 g-f-1/1。
+ */
 #{vd.$computed-prefix}1of1 {
 	flex: 0 0 100%;
 }
 
 $flex-attrs-map: (
 	"flex-direction": (row, column, row-reverse, column-reverse),
-	"flex-wrap": (wrap, wrap-reverse, nowrap),
 	"justify-content": (flex-start, flex-end, center, space-between, space-around),
 	"align-items": (flex-start, flex-end, center, baseline, stretch),
 	"align-content": (flex-start, flex-end, center, space-between, space-around, stretch),
@@ -66,8 +68,20 @@ $flex-attrs-map: (
 );
 $flex-options: (prefix: vd.$prefix);
 
-/*
- * fw-w/wr/n 表示 flex-wrap；fw 的数字后缀还被浮动宽度和字重共用。
- */
 @include gm.flex-arrts($flex-attrs-map, $flex-options);
 @include gm.flex-size(5, $flex-options);
+
+@each $suffix, $value in (w: wrap, wr: wrap-reverse, n: nowrap) {
+	#{vd.$computed-prefix}fwr-#{$suffix} {
+		flex-wrap: $value;
+	}
+}
+
+/*
+ * @deprecated 使用 g-fwr-w、g-fwr-wr、g-fwr-n。
+ */
+@each $suffix, $value in (w: wrap, wr: wrap-reverse, n: nowrap) {
+	#{vd.$computed-prefix}fw-#{$suffix} {
+		flex-wrap: $value;
+	}
+}

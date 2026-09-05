@@ -1,4 +1,9 @@
-export interface PresetStyleOptions {
+import type { PresetMiniOptions } from '@unocss/preset-mini';
+
+export interface PresetStyleOptions extends Pick<
+	PresetMiniOptions,
+	'dark' | 'attributifyPseudo' | 'arbitraryVariants'
+> {
 	/**
 	 * 工具类完整前缀，语义与 UnoCSS 的 prefix 一致；未传时读取 UNOCSS_OPTIONS.prefix。
 	 * @default 'g-'
@@ -19,6 +24,12 @@ export interface PresetStyleOptions {
 	 * @default true
 	 */
 	reset?: boolean;
+	/**
+	 * 是否启用 Mini 官方 variants、breakpoints 与任意 Variant 提取器。
+	 * 与 presetMini 组合时应设为 false，避免重复注册同名 variants。
+	 * @default true
+	 */
+	variants?: boolean;
 }
 
 export type ResolvedPresetStyleOptions = Required<PresetStyleOptions>;

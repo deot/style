@@ -17,7 +17,7 @@
 - 两个包默认使用 `g-` 前缀，并覆盖相同的公共工具类语义。
 - `@deot/style` 支持配置单位、缩放、前缀、CSS Variables、主题与全局 reset。
 - `@deot/style` 提供完整 CSS、normalize、rem、rpx 和局部 rem 构建产物。
-- `@deot/style-unocss` 组合 `presetMini` 与本仓库规则，支持动态值、CSS Variables、Variant Group 与 variants。
+- `@deot/style-unocss` 提供本仓库按需规则，并复用 Mini 官方 variants，支持布局、Flex/Grid 子项、交互、排版、标准 Border、Outline、SVG、动态值、CSS Variables 与 Variant Group；Mini rules 由项目按需显式组合。
 - 内置 Flex、Grid、浮动栅格、主题变量、BEM mixin 与常用 Sass 函数。
 - JavaScript 入口提供 `Style.useREM()`，用于按视口宽度设置根字号。
 
@@ -72,6 +72,7 @@ export default defineConfig({
 - [选择与安装](./docs/getting-started.md)：先确定 CSS、Sass 或 UnoCSS 接入方式。
 - [接入与迁移](./docs/integration.md)：Web、REM、RPX、UnoCSS 和多入口开发场景。
 - [`@deot/style-unocss`](./packages/unocss/README.md)：按需规则、配置语义与动态类名。
+- [与 UnoCSS Mini 组合](./docs/unocss-mini.md)：规则来源、覆盖结果和 Mini-only token 迁移。
 - [`@deot/style` Sass](./packages/index/README.md)：配置、主题、函数和 mixin。
 - [工具类参考](./docs/DOCUMENT.md)：完整的 `g-*` 类说明。
 - [Sass/CSS 示例](./docs/playground.md)：交互式体验布局、工具类和 REM。

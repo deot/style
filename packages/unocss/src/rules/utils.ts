@@ -27,7 +27,7 @@ export const numericValue = (value: string, options: ResolvedPresetStyleOptions)
  * 方括号语法与 UnoCSS 的任意值保持一致：未转义的下划线表示空格，
  * 反斜杠转义的下划线保留为普通字符。
  */
-const arbitraryValue = (value: string) => {
+export const arbitraryValue = (value: string) => {
 	if (!value.startsWith('[') || !value.endsWith(']')) return;
 	const body = value.slice(1, -1);
 	if (!body) return;
@@ -57,6 +57,30 @@ const arbitraryValue = (value: string) => {
 			.replace(/(-?\d*\.?\d(?!-\d.+[,)](?![^+\-/*])\D)(?:%|[a-z]+)?|\))([+\-/*])/g, '$1 $2 ')
 			.replace(/--un-calc/g, () => variables.shift() ?? '');
 	});
+};
+
+/*
+ * 无单位属性只接受非负安全整数、任意值和 CSS Variable。
+ * 负数、小数与全局关键字应显式放入 []，避免与尺寸规则混淆。
+ */
+export const resolveUnitlessValue = (value: string) => {
+	if (/^\d+$/.test(value)) {
+		const result = Number(value);
+		if (Number.isSafeInteger(result)) return `${result}`;
+		return;
+	}
+	const variable = value.match(/^\((--[\w-]+)\)$/)?.[1];
+	if (variable) return `var(${variable})`;
+	return arbitraryValue(value);
+};
+
+/*
+ * 枚举属性不接受裸数字，只允许 [] 任意值与 () CSS Variable。
+ */
+export const resolveKeywordValue = (value: string) => {
+	const variable = value.match(/^\((--[\w-]+)\)$/)?.[1];
+	if (variable) return `var(${variable})`;
+	return arbitraryValue(value);
 };
 
 /*

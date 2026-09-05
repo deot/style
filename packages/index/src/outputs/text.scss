@@ -1,6 +1,24 @@
 @use "../variables/default" as vd;
 @use "../mixins/common" as mc;
 
+@each $suffix, $value in (
+	l: left,
+	r: right,
+	c: center,
+	j: justify,
+	s: start,
+	e: end,
+	ja: justify-all,
+	mp: match-parent
+) {
+	#{vd.$computed-prefix}ta-#{$suffix} {
+		text-align: $value !important;
+	}
+}
+
+/*
+ * @deprecated 使用 g-ta-c、g-ta-l、g-ta-r；旧类只保留源码兼容。
+ */
 #{vd.$computed-prefix}tc {
 	text-align: center !important;
 }
@@ -13,6 +31,25 @@
 	text-align: right !important;
 }
 
+#{vd.$computed-prefix}tdl-lt {
+	text-decoration-line: line-through;
+}
+
+#{vd.$computed-prefix}tdl-ul {
+	text-decoration-line: underline;
+}
+
+#{vd.$computed-prefix}tdl-ol {
+	text-decoration-line: overline;
+}
+
+#{vd.$computed-prefix}tdl-n {
+	text-decoration-line: none;
+}
+
+/*
+ * @deprecated 使用 g-tdl-lt、g-tdl-ul。
+ */
 #{vd.$computed-prefix}td-lh {
 	text-decoration: line-through !important;
 }
@@ -21,25 +58,49 @@
 	text-decoration: underline !important;
 }
 
-#{vd.$computed-prefix}line-nowrap, #{vd.$computed-prefix}nowrap {
+#{vd.$computed-prefix}line-nowrap {
 	white-space: nowrap !important;
 }
 
-#{vd.$computed-prefix}line-wrap, #{vd.$computed-prefix}break {
+/*
+ * @deprecated 使用 g-ws-nw；g-line-nowrap 继续公开使用。
+ */
+#{vd.$computed-prefix}nowrap {
+	white-space: nowrap !important;
+}
+
+#{vd.$computed-prefix}line-wrap {
 	word-break: break-all;
 	overflow-wrap: break-word;
 	text-wrap: wrap;
 }
 
+/*
+ * @deprecated 使用 g-line-wrap。
+ */
+#{vd.$computed-prefix}break {
+	word-break: break-all;
+	overflow-wrap: break-word;
+	text-wrap: wrap;
+}
+
+#{vd.$computed-prefix}line-1 {
+	@include mc.common-text-line(1);
+}
+
+#{vd.$computed-prefix}line-2 {
+	@include mc.common-text-line(2);
+}
+
 /**
- * 一行文字
+ * @deprecated 使用 g-line-1。
  */
 #{vd.$computed-prefix}line-one {
 	@include mc.common-text-line(1);
 }
 
 /**
- * 两行文字
+ * @deprecated 使用 g-line-2。
  */
 #{vd.$computed-prefix}line-two {
 	@include mc.common-text-line(2);

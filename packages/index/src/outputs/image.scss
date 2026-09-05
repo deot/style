@@ -10,7 +10,14 @@ $image-size-list-join-data: false !default;
 	$image-size-list: list.join($image-size-list, $image-size-list-join-data);
 }
 
-// 输出全局g-#{名称}-#{值}
+// 输出最新的图片复合语义类
+@include gm.image-size($image-size-list, map.merge($options, (name: image)));
+@include gm.image-size($image-size-list, map.merge($options, (name: image-circle, mode: 'circle')));
+@include gm.image-size($image-size-list, map.merge($options, (name: image-radius, mode: 'radius')));
+
+/*
+ * @deprecated 使用 g-image-*、g-image-circle-*、g-image-radius-*。
+ */
 @include gm.image-size($image-size-list, map.merge($options, (name: img)));
 @include gm.image-size($image-size-list, map.merge($options, (name: imgc, mode: 'circle')));
 @include gm.image-size($image-size-list, map.merge($options, (name: imgr, mode: 'radius')));

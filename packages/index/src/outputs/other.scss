@@ -75,16 +75,51 @@
 }
 
 // display
-#{vd.$computed-prefix}none, #{vd.$computed-prefix}dp-n, #{vd.$computed-prefix}hide {
+#{vd.$computed-prefix}none, #{vd.$computed-prefix}hide {
 	display: none !important;
 }
-#{vd.$computed-prefix}show, #{vd.$computed-prefix}dp-b, #{vd.$computed-prefix}block {
+#{vd.$computed-prefix}show, #{vd.$computed-prefix}block {
 	display: block !important;
 }
-#{vd.$computed-prefix}dp-i, #{vd.$computed-prefix}inline {
+#{vd.$computed-prefix}inline {
 	display: inline !important;
 }
-#{vd.$computed-prefix}dp-ib, #{vd.$computed-prefix}inline-block {
+#{vd.$computed-prefix}inline-block {
+	display: inline-block !important;
+}
+
+#{vd.$computed-prefix}d-n {
+	display: none !important;
+}
+
+#{vd.$computed-prefix}d-b {
+	display: block !important;
+}
+
+#{vd.$computed-prefix}d-i {
+	display: inline !important;
+}
+
+#{vd.$computed-prefix}d-ib {
+	display: inline-block !important;
+}
+
+/*
+ * @deprecated 使用 g-d-n、g-d-b、g-d-i、g-d-ib。
+ */
+#{vd.$computed-prefix}dp-n {
+	display: none !important;
+}
+
+#{vd.$computed-prefix}dp-b {
+	display: block !important;
+}
+
+#{vd.$computed-prefix}dp-i {
+	display: inline !important;
+}
+
+#{vd.$computed-prefix}dp-ib {
 	display: inline-block !important;
 }
 
@@ -93,7 +128,21 @@
 	cursor: pointer !important;
 }
 
-// divide 划分
+// divider 划分
+#{vd.$computed-prefix}divider {
+	position: relative;
+	display: inline-block;
+	width: fh.unitfix(1);
+	height: fh.unitfix(12);
+	margin: 0 fh.unitfix(8);
+	vertical-align: middle;
+	background: #ccc;
+	box-sizing: border-box;
+}
+
+/*
+ * @deprecated 使用 g-divider。
+ */
 #{vd.$computed-prefix}divide {
 	position: relative;
 	display: inline-block;
@@ -117,8 +166,12 @@
 	overflow: hidden !important;
 }
 
+#{vd.$computed-prefix}bsz-bb {
+	box-sizing: border-box;
+}
+
 /*
- * bs-bb 是历史 box-sizing 缩写，与 box-shadow 的 bs-* 共用前缀。
+ * @deprecated 使用 g-bsz-bb。
  */
 #{vd.$computed-prefix}bs-bb {
 	box-sizing: border-box;

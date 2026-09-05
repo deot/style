@@ -25,6 +25,12 @@ importers:
 
   packages/unocss:
     dependencies:
+      '@unocss/extractor-arbitrary-variants':
+        specifier: ^66.9.1
+        version: 66.9.1
+      '@unocss/preset-mini':
+        specifier: ^66.9.1
+        version: 66.9.1
       unocss:
         specifier: ^66.9.1
         version: 66.9.1(vite@8.2.2(@types/node@25.9.5)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.103.1)(tsx@4.23.12)(yaml@2.9.0))

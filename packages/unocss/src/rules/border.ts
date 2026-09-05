@@ -1,8 +1,45 @@
 import type { CSSObject, Rule } from 'unocss';
 import type { ResolvedPresetStyleOptions } from '../types';
-import { createPatternPrefix, createStaticRule, numericValue, unitValue, withParent, withSelector } from './utils';
+import { resolveColorValue } from './color';
+import {
+	createPatternPrefix,
+	createStaticRule,
+	numericValue,
+	resolveDynamicValue,
+	resolveKeywordValue,
+	unitValue,
+	withParent,
+	withSelector
+} from './utils';
 
 type BorderDirection = '' | 't' | 'r' | 'b' | 'l';
+
+const borderProperties = {
+	'': 'border',
+	't': 'border-top',
+	'r': 'border-right',
+	'b': 'border-bottom',
+	'l': 'border-left'
+} as const;
+
+const borderStyles = {
+	n: 'none',
+	h: 'hidden',
+	dot: 'dotted',
+	dash: 'dashed',
+	s: 'solid',
+	db: 'double',
+	g: 'groove',
+	r: 'ridge',
+	i: 'inset',
+	o: 'outset'
+} as const;
+
+const borderWidths = {
+	tn: 'thin',
+	md: 'medium',
+	tk: 'thick'
+} as const;
 
 const createBorderRule = (
 	direction: BorderDirection,
@@ -81,19 +118,71 @@ const createBorderRule = (
 	];
 };
 
-export const createBorderRules = (options: ResolvedPresetStyleOptions): Rule[] => [
-	/*
-	 * br-N 表示 border-radius；不带后缀的 g-br 表示右侧高清边框。
-	 */
-	[
-		new RegExp(`^${createPatternPrefix(options)}br-(\\d+)$`),
-		([, value]) => ({ 'border-radius': numericValue(value, options) })
-	],
-	createStaticRule(options, 'b', createBorderRule('', options)),
-	createStaticRule(options, 'bt', createBorderRule('t', options)),
-	createStaticRule(options, 'br', createBorderRule('r', options)),
-	createStaticRule(options, 'bb', createBorderRule('b', options)),
-	createStaticRule(options, 'bl', createBorderRule('l', options)),
-	createStaticRule(options, 'br-circle', { 'border-radius': '100% !important' }),
-	createStaticRule(options, 'br-default', { 'border-radius': 'var(--border-radius-default) !important' })
-];
+export const createBorderRules = (options: ResolvedPresetStyleOptions): Rule[] => {
+	const patternPrefix = createPatternPrefix(options);
+	const rules: Rule[] = [
+		/*
+		 * br-N 表示 border-radius；右侧高清边框使用 g-bdr。
+		 */
+		[
+			new RegExp(`^${patternPrefix}br-(\\d+)$`),
+			([, value]) => ({ 'border-radius': numericValue(value, options) })
+		],
+		/*
+		 * bd 后可直接拼接方向和子属性，例如 bdtc 表示 border-top-color。
+		 * 带连字符的 bd-[]、bdr-[] 则表示整体或单边 Border 简写。
+		 */
+		[
+			new RegExp(`^${patternPrefix}bd([trbl])?-(\\[.+\\]|\\(--[\\w-]+\\))$`),
+			([, direction = '', value]) => {
+				const result = resolveKeywordValue(value);
+				if (result !== void 0) return { [borderProperties[direction as BorderDirection]]: result };
+			}
+		],
+		[
+			new RegExp(`^${patternPrefix}bd([trbl])?w-(.+)$`),
+			([, direction = '', value]) => {
+				const result = borderWidths[value as keyof typeof borderWidths]
+					?? resolveDynamicValue(value, options);
+				if (result !== void 0) {
+					return { [`${borderProperties[direction as BorderDirection]}-width`]: result };
+				}
+			}
+		],
+		[
+			new RegExp(`^${patternPrefix}bd([trbl])?s-(.+)$`),
+			([, direction = '', value]) => {
+				const result = borderStyles[value as keyof typeof borderStyles] ?? resolveKeywordValue(value);
+				if (result !== void 0) {
+					return { [`${borderProperties[direction as BorderDirection]}-style`]: result };
+				}
+			}
+		],
+		[
+			new RegExp(`^${patternPrefix}bd([trbl])?c-(.+)$`),
+			([, direction = '', value]) => {
+				const result = resolveColorValue(value, options);
+				if (result !== void 0) {
+					return { [`${borderProperties[direction as BorderDirection]}-color`]: result };
+				}
+			}
+		],
+		createStaticRule(options, 'bd', createBorderRule('', options)),
+		createStaticRule(options, 'bdt', createBorderRule('t', options)),
+		createStaticRule(options, 'bdr', createBorderRule('r', options)),
+		createStaticRule(options, 'bdb', createBorderRule('b', options)),
+		createStaticRule(options, 'bdl', createBorderRule('l', options)),
+		createStaticRule(options, 'br-circle', { 'border-radius': '100% !important' }),
+		createStaticRule(options, 'br-default', { 'border-radius': 'var(--border-radius-default) !important' }),
+		/*
+		 * @deprecated 使用 g-bd、g-bdt、g-bdr、g-bdb、g-bdl；旧类只保留 @deot/style 兼容。
+		 */
+		createStaticRule(options, 'b', createBorderRule('', options)),
+		createStaticRule(options, 'bt', createBorderRule('t', options)),
+		createStaticRule(options, 'br', createBorderRule('r', options)),
+		createStaticRule(options, 'bb', createBorderRule('b', options)),
+		createStaticRule(options, 'bl', createBorderRule('l', options))
+	];
+
+	return rules;
+};

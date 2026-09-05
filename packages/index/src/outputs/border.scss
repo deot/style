@@ -7,8 +7,27 @@
 
 $color: ft.themefix(border-color-default);
 
+#{vd.$computed-prefix}bd {
+	@include mc.common-border-1px('', $color);
+}
+#{vd.$computed-prefix}bdb {
+	@include mc.common-border-1px(bottom, $color);
+}
+
+#{vd.$computed-prefix}bdr {
+	@include mc.common-border-1px(right, $color);
+}
+
+#{vd.$computed-prefix}bdl {
+	@include mc.common-border-1px(left, $color);
+}
+
+#{vd.$computed-prefix}bdt {
+	@include mc.common-border-1px(top, $color);
+}
+
 /*
- * br 表示右侧高清边框；带数值或语义后缀的 br-* 表示 border-radius。
+ * @deprecated 使用 g-bd、g-bdt、g-bdr、g-bdb、g-bdl。
  */
 #{vd.$computed-prefix}b {
 	@include mc.common-border-1px('', $color);
@@ -16,17 +35,14 @@ $color: ft.themefix(border-color-default);
 #{vd.$computed-prefix}bb {
 	@include mc.common-border-1px(bottom, $color);
 }
-
-#{vd.$computed-prefix}br {
-	@include mc.common-border-1px(right, $color);
-}
-
 #{vd.$computed-prefix}bl {
 	@include mc.common-border-1px(left, $color);
 }
-
 #{vd.$computed-prefix}bt {
 	@include mc.common-border-1px(top, $color);
+}
+#{vd.$computed-prefix}br {
+	@include mc.common-border-1px(right, $color);
 }
 
 #{vd.$computed-prefix}br-circle {

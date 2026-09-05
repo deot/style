@@ -30,9 +30,41 @@ const GRID_ADDITIONS = [
 	'g-gaf-r', 'g-gaf-c', 'g-gaf-d', 'g-gaf-rd', 'g-gaf-cd'
 ];
 
+const IMAGE_SIZES = [256, 150, 128, 100, 96, 64, 56, 40, 32, 24];
+
 const CURRENT_ADDITIONS = new Set([
 	'g-h-full',
 	'g-w-full',
+	'g-bd',
+	'g-bdt',
+	'g-bdr',
+	'g-bdb',
+	'g-bdl',
+	'g-bsh',
+	'g-bsh-t',
+	'g-bsz-bb',
+	'g-divider',
+	'g-d-n',
+	'g-d-b',
+	'g-d-i',
+	'g-d-ib',
+	'g-fwr-w',
+	'g-fwr-wr',
+	'g-fwr-n',
+	'g-fl-row',
+	...Array.from({ length: 12 }, (_, index) => `g-fl-${index + 1}/12`),
+	...IMAGE_SIZES.flatMap(value => [
+		`g-image-${value}`,
+		`g-image-circle-${value}`,
+		`g-image-radius-${value}`
+	]),
+	'g-tdl-lt',
+	'g-tdl-ul',
+	'g-tdl-ol',
+	'g-tdl-n',
+	'g-line-1',
+	'g-line-2',
+	...['l', 'r', 'c', 'j', 's', 'e', 'ja', 'mp'].map(value => `g-ta-${value}`),
 	'g-f-0',
 	'g-f-1',
 	'g-f-2',
@@ -139,7 +171,7 @@ describe('legacy utilities', () => {
 
 		expect(legacyUtilities).toHaveLength(600);
 		expect(GRID_ADDITIONS).toHaveLength(132);
-		expect(utilities).toHaveLength(748);
+		expect(utilities).toHaveLength(821);
 		expect([...matched].sort()).toEqual(utilities);
 		expect(collectUtilityDeclarations(css, utilities))
 			.toEqual(collectUtilityDeclarations(legacyCSS, utilities));

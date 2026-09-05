@@ -1,6 +1,12 @@
 import type { Rule } from 'unocss';
 import type { ResolvedPresetStyleOptions } from '../types';
-import { createPatternPrefix, createStaticRule, percent, resolveDynamicValue } from './utils';
+import {
+	createPatternPrefix,
+	createStaticRule,
+	percent,
+	resolveDynamicValue,
+	resolveUnitlessValue
+} from './utils';
 
 const nonNegativeInteger = (value: string) => {
 	if (!/^\d+$/.test(value)) return;
@@ -32,10 +38,8 @@ export const createFlexRules = (options: ResolvedPresetStyleOptions): Rule[] => 
 		/*
 		 * @deprecated 使用 g-f-{n}；g-col 等价于 g-f-1。
 		 */
-		[
-			new RegExp(`^${patternPrefix}col(?:-(\\d+))?$`),
-			([, value]) => ({ flex: `${Number(value ?? 1)}` })
-		],
+		createStaticRule(options, 'col', { flex: '1' }),
+		createStaticRule(options, 'col-2', { flex: '2' }),
 		/*
 		 * 分数表示固定 Flex 占比，与 Mini 的 g-flex-* 区分。
 		 */
@@ -62,6 +66,39 @@ export const createFlexRules = (options: ResolvedPresetStyleOptions): Rule[] => 
 				if (result !== void 0) return { flex: result };
 			}
 		],
+		[
+			new RegExp(`^${patternPrefix}fb-(\\d+)\\/(\\d+)$`),
+			([, value, total]) => {
+				const part = nonNegativeInteger(value);
+				const count = nonNegativeInteger(total);
+				if (part === void 0 || count === void 0 || part < 1 || count < 1 || part > count) return;
+				return { 'flex-basis': percent(part, count) };
+			}
+		],
+		[
+			new RegExp(`^${patternPrefix}fb-(.+)$`),
+			([, value]) => {
+				if (value === 'auto') return { 'flex-basis': 'auto' };
+				if (value === 'full') return { 'flex-basis': '100%' };
+				const result = resolveDynamicValue(value, options);
+				if (result !== void 0) return { 'flex-basis': result };
+			}
+		],
+		[
+			new RegExp(`^${patternPrefix}(fg|fsh|od)-(.+)$`),
+			([, mode, value]) => {
+				const property = {
+					fg: 'flex-grow',
+					fsh: 'flex-shrink',
+					od: 'order'
+				}[mode];
+				const result = resolveUnitlessValue(value);
+				if (property && result !== void 0) return { [property]: result };
+			}
+		],
+		createStaticRule(options, 'od-first', { order: '-9999' }),
+		createStaticRule(options, 'od-last', { order: '9999' }),
+		createStaticRule(options, 'od-default', { order: '0' }),
 		/*
 		 * @deprecated 使用 g-f-{part}/{total}。
 		 */
@@ -80,9 +117,9 @@ export const createFlexRules = (options: ResolvedPresetStyleOptions): Rule[] => 
 		'fd-c': ['flex-direction', 'column'],
 		'fd-rr': ['flex-direction', 'row-reverse'],
 		'fd-cr': ['flex-direction', 'column-reverse'],
-		'fw-w': ['flex-wrap', 'wrap'],
-		'fw-wr': ['flex-wrap', 'wrap-reverse'],
-		'fw-n': ['flex-wrap', 'nowrap'],
+		'fwr-w': ['flex-wrap', 'wrap'],
+		'fwr-wr': ['flex-wrap', 'wrap-reverse'],
+		'fwr-n': ['flex-wrap', 'nowrap'],
 		'jc-fs': ['justify-content', 'flex-start'],
 		'jc-fe': ['justify-content', 'flex-end'],
 		'jc-c': ['justify-content', 'center'],
@@ -109,6 +146,12 @@ export const createFlexRules = (options: ResolvedPresetStyleOptions): Rule[] => 
 	Object.entries(flexRules).forEach(([name, [property, value]]) => {
 		rules.push(createStaticRule(options, name, { [property]: value }));
 	});
+	/*
+	 * @deprecated 使用 g-fwr-w、g-fwr-wr、g-fwr-n；旧类只保留 @deot/style 兼容。
+	 */
+	for (const [name, value] of Object.entries({ w: 'wrap', wr: 'wrap-reverse', n: 'nowrap' })) {
+		rules.push(createStaticRule(options, `fw-${name}`, { 'flex-wrap': value }));
+	}
 
 	return rules;
 };

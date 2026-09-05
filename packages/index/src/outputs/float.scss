@@ -1,22 +1,56 @@
 @use "../variables/default" as vd;
+@use "../functions/index" as fi;
 @use "./gen-mixins/float" as gm;
 
 $float-options: (prefix: vd.$prefix);
 
 /*
- * fw-1～12 表示十二列宽度并左浮动；更大的数字后缀由字重规则处理。
+ * @deprecated 使用 g-fl-{part}/12。
+ * float mixin 同时输出仍公开的 g-w-{part}/12 与旧 g-fw-1～12。
  */
 @include gm.float(12, $float-options);
 
+@for $i from 1 through 12 {
+	#{vd.$computed-prefix}fl-#{$i}\/12 {
+		float: left;
+		width: fi.percentw($i, 12);
+	}
+}
+
 #{vd.$computed-prefix}clearfix::before,
-#{vd.$computed-prefix}clearfix::after,
+#{vd.$computed-prefix}clearfix::after {
+	display: table;
+	content: " ";
+}
+
+#{vd.$computed-prefix}clearfix::after {
+	clear: both;
+}
+
+#{vd.$computed-prefix}fl-row::before,
+#{vd.$computed-prefix}fl-row::after {
+	display: table;
+	content: " ";
+}
+
+#{vd.$computed-prefix}fl-row::after {
+	clear: both;
+}
+
+#{vd.$computed-prefix}fl-row {
+	padding: 0;
+	margin: 0;
+}
+
+/*
+ * @deprecated 使用 g-fl-row。
+ */
 #{vd.$computed-prefix}row::before,
 #{vd.$computed-prefix}row::after {
 	display: table;
 	content: " ";
 }
 
-#{vd.$computed-prefix}clearfix::after,
 #{vd.$computed-prefix}row::after {
 	clear: both;
 }

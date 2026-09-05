@@ -33,6 +33,10 @@
   "publishConfig": {
     "access": "public"
   },
+  "dependencies": {
+    "@unocss/extractor-arbitrary-variants": "^66.9.1",
+    "@unocss/preset-mini": "^66.9.1"
+  },
   "peerDependencies": {
     "unocss": "^66.9.1"
   }

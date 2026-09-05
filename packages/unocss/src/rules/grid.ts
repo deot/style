@@ -1,6 +1,6 @@
 import type { Rule } from 'unocss';
 import type { ResolvedPresetStyleOptions } from '../types';
-import { createPatternPrefix, createStaticRule, resolveDynamicValue } from './utils';
+import { createPatternPrefix, createStaticRule, resolveDynamicValue, resolveKeywordValue } from './utils';
 
 type GridAxis = 'c' | 'r';
 type GridLineMode = 'gcs' | 'gce' | 'grs' | 'gre';
@@ -16,6 +16,25 @@ const lineProperties = {
 	gce: 'grid-column-end',
 	grs: 'grid-row-start',
 	gre: 'grid-row-end'
+} as const;
+
+const alignmentProperties = {
+	ji: 'justify-items',
+	js: 'justify-self',
+	pc: 'place-content',
+	pi: 'place-items',
+	ps: 'place-self'
+} as const;
+
+const alignmentValues = {
+	ji: { s: 'start', e: 'end', c: 'center', st: 'stretch', b: 'baseline' },
+	js: { a: 'auto', s: 'start', e: 'end', c: 'center', st: 'stretch', b: 'baseline' },
+	pc: {
+		s: 'start', e: 'end', c: 'center', st: 'stretch', b: 'baseline',
+		sb: 'space-between', sa: 'space-around', se: 'space-evenly'
+	},
+	pi: { s: 'start', e: 'end', c: 'center', st: 'stretch', b: 'baseline' },
+	ps: { a: 'auto', s: 'start', e: 'end', c: 'center', st: 'stretch' }
 } as const;
 
 /*
@@ -39,6 +58,34 @@ export const createGridRules = (options: ResolvedPresetStyleOptions): Rule[] => 
 	const patternPrefix = createPatternPrefix(options);
 	const rules: Rule[] = [
 		createStaticRule(options, 'grid', { 'display': 'grid', 'box-sizing': 'border-box' }),
+		createStaticRule(options, 'inline-grid', { 'display': 'inline-grid', 'box-sizing': 'border-box' }),
+		[
+			new RegExp(`^${patternPrefix}g(a[cr])-(.+)$`),
+			([, mode, value]) => {
+				const property = mode === 'ac' ? 'grid-auto-columns' : 'grid-auto-rows';
+				const keyword = { min: 'min-content', max: 'max-content', fr: 'minmax(0,1fr)' }[value];
+				const result = keyword ?? resolveDynamicValue(value, options);
+				if (result !== void 0) return { [property]: result };
+			}
+		],
+		[
+			new RegExp(`^${patternPrefix}(ji|js|pc|pi|ps)-(.+)$`),
+			([, mode, value]) => {
+				const key = mode as keyof typeof alignmentProperties;
+				const values = alignmentValues[key] as Record<string, string>;
+				const result = values[value] ?? resolveKeywordValue(value);
+				if (result !== void 0) return { [alignmentProperties[key]]: result };
+			}
+		],
+		[
+			new RegExp(`^${patternPrefix}(ga|gta)-(\\[.+\\]|\\(--[\\w-]+\\))$`),
+			([, mode, value]) => {
+				const result = resolveKeywordValue(value);
+				if (result !== void 0) {
+					return { [mode === 'ga' ? 'grid-area' : 'grid-template-areas']: result };
+				}
+			}
+		],
 		[
 			new RegExp(`^${patternPrefix}gt(c|r)-(.+)$`),
 			([, axis, value]) => {

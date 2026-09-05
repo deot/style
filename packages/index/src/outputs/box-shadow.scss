@@ -1,8 +1,16 @@
 @use "../variables/default" as vd;
 @use "../functions/theme" as ft;
 
+#{vd.$computed-prefix}bsh {
+	box-shadow: ft.themefix(border-shadow-default) !important;
+}
+
+#{vd.$computed-prefix}bsh-t {
+	box-shadow: ft.themefix(border-shadow-default-top) !important;
+}
+
 /*
- * bs 在这里表示 box-shadow；历史类 bs-bb 表示 box-sizing。
+ * @deprecated 使用 g-bsh、g-bsh-t。
  */
 #{vd.$computed-prefix}bs {
 	box-shadow: ft.themefix(border-shadow-default) !important;

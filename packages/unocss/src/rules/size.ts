@@ -35,6 +35,7 @@ export const createSizeRules = (options: ResolvedPresetStyleOptions): Rule[] => 
 			([, value, total]) => {
 				const part = Number(value);
 				const count = Number(total);
+				if (!Number.isSafeInteger(part) || !Number.isSafeInteger(count)) return;
 				if (part < 1 || count < 1 || part > count) return;
 				return { width: percent(part, count) };
 			}

@@ -9,6 +9,7 @@
     "prepare": "husky",
     "init": "npx pnpm install",
     "init:force": "rm -rf ./node_modules pnpm-lock.yaml ./packages/*/node_modules && npm run init",
+    "predocs:dev": "ddc build --package-name index",
     "docs:dev": "doc dev --workspace .",
     "dev": "npm run test -- --package-name '*' --watch",
     "build": "ddc build",
