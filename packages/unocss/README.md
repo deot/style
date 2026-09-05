@@ -22,7 +22,7 @@ Vite 项目仍需按 UnoCSS 官方方式安装插件并引入 `virtual:uno.css`�
 
 ## 命名约定
 
-> 本仓库的工具类以 CSS 原生语义为基础：直接映射单一 CSS 属性或属性值时，优先使用简短且可识别的缩写，例如 `w`、`h`、`fs`、`lh`、`ai`；同时设置多个属性或表达完整布局、状态和行为时，优先使用含义清晰的完整名称，例如 `size`、`reset`、`clearfix`。
+> 本仓库的工具类以 CSS 原生语义为基础：直接映射单一 CSS 属性或属性值时，优先使用简短且可识别的缩写，例如 `w`、`h`、`f`、`fs`、`lh`、`ai`、`gtc`；同时设置多个属性或表达完整布局、状态和行为时，优先使用含义清晰的完整名称，例如 `size`、`reset`、`clearfix`。
 >
 > 部分缩写是有意保留的既有约定，例如 `g-g-*` 表示 `gap`。`fw`、`bs`、`br` 等历史缩写存在多种语义，应根据完整类名判断；本仓库会明确说明其匹配范围，但不会在本版改变已有输出。
 
@@ -33,9 +33,11 @@ Vite 项目仍需按 UnoCSS 官方方式安装插件并引入 `virtual:uno.css`�
 本仓库规则负责现有 `@deot/style` 语义和新增的属性缩写：
 
 - `g-g-*`：Gap。
-- `g-f-{part}/{total}`：固定 Flex 占比。
+- `g-f-{n}`、`g-f-{part}/{total}`：Flex 简写值与固定占比。
+- `g-grid`、`g-gtc-*`、`g-gtr-*`、`g-gc-*`：Grid 容器、轨道与定位。
+- `g-t-*`、`g-l-*`、`g-b-*`、`g-r-*`：定位边偏移。
 - `g-pd-*`、`g-fs-*`、`g-lh-*`：Padding、字号和行高。
-- `g-ai-*`、`g-jc-*`、`g-col-*`：Flex 对齐及列伸缩。
+- `g-ai-*`、`g-jc-*`：Flex 对齐。
 - `g-b`、`g-reset`、`g-scroller` 等高清边框和组合工具。
 - `g-c-*`、`g-bg-*`、`g-w-*`、`g-h-*`、`g-size-*` 等规则由本仓库定义最终语义。
 
@@ -48,6 +50,8 @@ Vite 项目仍需按 UnoCSS 官方方式安装插件并引入 `virtual:uno.css`�
 | `g-fw-13` 至 `g-fw-1000`、`g-fw-bold` | `font-weight` |
 | `g-bs`、`g-bs-t` | `box-shadow` |
 | `g-bs-bb` | `box-sizing: border-box` |
+| `g-b` | 高清全边框 |
+| `g-b-{n}`、`g-b-[]/()` | Bottom；`[]` 含 Border Style 时表示普通 Border |
 | `g-br` | 右侧高清边框 |
 | `g-br-{n}`、`g-br-circle/default` | `border-radius` |
 
@@ -56,8 +60,9 @@ Vite 项目仍需按 UnoCSS 官方方式安装插件并引入 `virtual:uno.css`�
 `presetMini` 提供本仓库不重复实现的通用能力，例如：
 
 - `g-gap-*`。
-- `g-flex-1/2`。
-- Grid、transition、transform 等通用规则。
+- `g-flex-1`、`g-flex-auto`、`g-flex-1/2`。
+- `g-inline-grid`、`g-grid-cols-*`、`g-col-span-*`、`g-grid-flow-*` 等 Grid 全名规则。
+- transition、transform 等通用规则。
 - `hover:`、`focus:`、`dark:` 和响应式 variants。
 
 完整规则见 [UnoCSS Mini 官方文档](https://unocss.dev/presets/mini)。
@@ -79,14 +84,22 @@ Vite 项目仍需按 UnoCSS 官方方式安装插件并引入 `virtual:uno.css`�
 | `g-m-4` | `margin: 1rem` | `margin: 4px` |
 | `g-w-4` | `width: 1rem` | `width: 4px` |
 | `g-flex` | `display: flex` | 增加 `box-sizing: border-box` |
+| `g-grid` | `display: grid` | 增加 `box-sizing: border-box` |
 | `g-bg-white` | Mini 颜色变量机制 | `background-color: #fff !important` |
+| `g-b-1` | `border-width: 1px` | `bottom: 1px` |
+| `g-b-[1px_solid_red]` | `border-color: 1px solid red` | `border: 1px solid red` |
 
 以下是并存规则，不属于覆盖关系：
 
 | 本仓库 | Mini | 区别 |
 | --- | --- | --- |
 | `g-g-4` → `gap: 4px` | `g-gap-4` → `gap: 1rem` | 不同命名、不同数值体系 |
+| `g-f-1` → `flex: 1` | `g-flex-1` → `flex: 1 1 0%` | 声明形式不同，通常具有相同计算结果 |
+| `g-f-[auto]` → `flex: auto` | `g-flex-auto` → `flex: 1 1 auto` | 简写与展开值 |
 | `g-f-1/2` → `flex: 0 0 50%` | `g-flex-1/2` → `flex: 50%` | 固定占比与 Mini Flex 简写 |
+| `g-gtc-3` | `g-grid-cols-3` | 均生成 3 列等分轨道 |
+| `g-gc-span-2` | `g-col-span-2` | 均跨越 2 列 |
+| `g-gaf-rd` | `g-grid-flow-row-dense` | 均使用 `row dense` 自动布局 |
 
 ## 动态值
 
@@ -94,7 +107,7 @@ Vite 项目仍需按 UnoCSS 官方方式安装插件并引入 `virtual:uno.css`�
 
 | 形式 | 含义 | 示例 |
 | --- | --- | --- |
-| `{n}` | 非负整数加配置单位 | `g-w-12` → `width: 12px` |
+| `{n}` | 非负整数；具体语义由规则决定 | `g-w-12` → `width: 12px` |
 | `[...]` | 任意 CSS 值 | `g-w-[50%]` → `width: 50%` |
 | `(--*)` | CSS Variable 简写 | `g-w-(--panel-width)` → `width: var(--panel-width)` |
 
@@ -104,7 +117,23 @@ Vite 项目仍需按 UnoCSS 官方方式安装插件并引入 `virtual:uno.css`�
 <div class="g-m-[-8px] g-w-[calc(100%_-_1rem)]" />
 ```
 
-`[]` 使用 UnoCSS 的下划线空格约定；`()` 只接受以 `--` 开头的 CSS Variable 名。三种形式均不会被 `scale` 二次缩放。
+`[]` 使用 UnoCSS 的下划线空格约定；`()` 只接受以 `--` 开头的 CSS Variable 名。尺寸和间距裸数字会拼接 `unit`；Flex 与 Grid 数字分别表示 `flex` 值和轨道、网格线或跨度，不拼接单位。三种形式均不会被 `scale` 二次缩放。
+
+### Position
+
+```text
+g-t-8                         -> top: 8px
+g-l-[auto]                    -> left: auto
+g-b-[-10px]                   -> bottom: -10px
+g-r-(--offset)                -> right: var(--offset)
+g-b-[calc(100%_-_10px)]       -> bottom: calc(100% - 10px)
+g-b-[1px_solid_red]           -> border: 1px solid red
+g-b-[1px_dashed_var(--color)] -> border: 1px dashed var(--color)
+```
+
+裸数字拼接 `unit`，不应用 `scale`；负数、小数、关键字和复杂表达式使用 `[]`。只有 `g-b-[...]` 会检查解析后的值：包含独立的 `none`、`hidden`、`dotted`、`dashed`、`solid`、`double`、`groove`、`ridge`、`inset` 或 `outset` 时输出普通 CSS `border`，否则输出 `bottom`。因此变量名中的 `solid` 不会误判；`g-b-[var(--solid-color)]` 仍表示 `bottom`。
+
+> 裸 `g-b` 始终是本仓库的高清伪元素边框，与 `g-b-*` 的动态规则不同。Mini 的 `g-bottom-*` 保持原语义；Mini 原有的 `g-b-{n}` 和 `g-b-[...]` 会被本仓库上述规则覆盖。
 
 ### 颜色
 
@@ -164,12 +193,44 @@ g-g-x-* / g-g-col-*                 -> column-gap
 g-g-y-* / g-g-row-*                 -> row-gap
 ```
 
-### Flex 分数
+### Grid
+
+`@deot/style` 与本 preset 使用同一套 Grid 缩写；Sass 预生成 `1` 至 `12`，UnoCSS 的正整数不限制到 `12`：
+
+| 模式 | CSS 属性或输出 |
+| --- | --- |
+| `g-grid` | `display: grid; box-sizing: border-box` |
+| `g-gtc-*` / `g-gtr-*` | `grid-template-columns/rows: repeat(*, minmax(0, 1fr))` |
+| `g-gtc-[]/()` / `g-gtr-[]/()` | 任意行列模板 / CSS Variable |
+| `g-gc-*` / `g-gr-*` | `grid-column` / `grid-row` |
+| `g-gc-span-*` / `g-gr-span-*` | 跨越指定列数 / 行数；`full` 为 `1 / -1` |
+| `g-gcs-*` / `g-gce-*` | `grid-column-start` / `grid-column-end` |
+| `g-grs-*` / `g-gre-*` | `grid-row-start` / `grid-row-end` |
+| `g-gaf-r/c/d/rd/cd` | `row` / `column` / `dense` / `row dense` / `column dense` |
+
+模板同时支持 `none` 与 `subgrid`。除 span 外，定位规则支持 `[]` 和 `()`，例如：
 
 ```text
-g-f-1/2 -> flex: 0 0 50%
-g-f-3/4 -> flex: 0 0 75%
+g-gtc-[72px_minmax(0,_1fr)] -> grid-template-columns: 72px minmax(0, 1fr)
+g-gtc-(--tracks)            -> grid-template-columns: var(--tracks)
+g-gc-[1/-1]                 -> grid-column: 1 / -1
+g-gce-[-1]                  -> grid-column-end: -1
 ```
+
+现有 `g-jc-*`、`g-ai-*`、`g-ac-*`、`g-as-*` 对 Grid 同样有效；间距继续使用本仓库 `g-g-*` 或 Mini `g-gap-*`。Grid 列定位使用 `g-gc-{n}`；Mini 的 `g-col-span-*`、`g-col-start-*` 等明确 Grid 类仍可使用。`g-inline-grid`、auto tracks、areas、place 和 justify-items/self 等高级能力继续使用 Mini 全名。
+
+### Flex 值与固定占比
+
+`g-f-*` 统一映射 CSS `flex` 属性。裸值只接受非负安全整数；关键字或多段简写使用 `[]`，CSS Variable 使用 `()`：
+
+```text
+g-f-1                -> flex: 1
+g-f-1/2              -> flex: 0 0 50%
+g-f-[1_0_auto]       -> flex: 1 0 auto
+g-f-(--layout-flex)  -> flex: var(--layout-flex)
+```
+
+Sass 预生成 `g-f-0`、`g-f-1`、`g-f-2`，UnoCSS 支持任意非负安全整数。`g-f-{part}/{total}` 要求 `total > 0` 且 `0 < part <= total`。`flex: 1` 通常按 `flex: 1 1 0%` 计算，并不等于 `flex: 1 0 auto`；需要后者时应使用 `g-f-[1_0_auto]`。
 
 ## 配置参数
 

@@ -24,9 +24,27 @@ const colorNames = [
 	'info', 'success', 'error', 'warning'
 ];
 
+const gridUtilities = [
+	'g-grid',
+	...['gtc', 'gtr'].flatMap(name => [
+		...Array.from({ length: 12 }, (_, index) => `g-${name}-${index + 1}`),
+		`g-${name}-none`,
+		`g-${name}-subgrid`
+	]),
+	...['gc', 'gr'].flatMap(name => [
+		...Array.from({ length: 12 }, (_, index) => `g-${name}-${index + 1}`),
+		...Array.from({ length: 12 }, (_, index) => `g-${name}-span-${index + 1}`),
+		`g-${name}-span-full`
+	]),
+	...['gcs', 'gce', 'grs', 'gre'].flatMap(name => (
+		Array.from({ length: 12 }, (_, index) => `g-${name}-${index + 1}`)
+	)),
+	'g-gaf-r', 'g-gaf-c', 'g-gaf-d', 'g-gaf-rd', 'g-gaf-cd'
+];
+
 const staticUtilities = [
 	'g-reset', 'g-unset',
-	'g-flex', 'g-flex-holy', 'g-flex-cc', 'g-flex-ac', 'g-col', 'g-col-2', 'g-f-1/1',
+	'g-flex', 'g-flex-holy', 'g-flex-cc', 'g-flex-ac', 'g-f-0', 'g-f-1', 'g-f-2', 'g-f-1/1',
 	...Array.from({ length: 4 }, (_, index) => index + 2).flatMap(total => (
 		Array.from({ length: total - 1 }, (_, index) => `g-f-${index + 1}/${total}`)
 	)),
@@ -36,6 +54,7 @@ const staticUtilities = [
 	'g-ai-fs', 'g-ai-fe', 'g-ai-c', 'g-ai-b', 'g-ai-s',
 	'g-ac-fs', 'g-ac-fe', 'g-ac-c', 'g-ac-sb', 'g-ac-sa', 'g-ac-s',
 	'g-as-a', 'g-as-fs', 'g-as-fe', 'g-as-c', 'g-as-b', 'g-as-s',
+	...gridUtilities,
 	'g-row', 'g-clearfix', 'g-fl', 'g-fr',
 	...Array.from({ length: 12 }, (_, index) => [`g-w-${index + 1}`, `g-fw-${index + 1}`]).flat(),
 	'g-pd-s', 'g-pd-tb-s', 'g-pd-lr-s', 'g-pd-t-s', 'g-pd-r-s', 'g-pd-b-s', 'g-pd-l-s',
@@ -56,7 +75,7 @@ const staticUtilities = [
 
 const numericUtilities = [
 	'g-fs-37', 'g-lh-43', 'g-br-19', 'g-img-41', 'g-imgc-41', 'g-imgr-41',
-	'g-col-7', 'g-f-3/7', 'g-fw-350',
+	'g-f-7', 'g-f-3/7', 'g-fw-350', 'g-t-7', 'g-l-7', 'g-b-7', 'g-r-7',
 	...['m', 'pd'].flatMap(name => [
 		`g-${name}-7`,
 		...['tb', 'lr', 't', 'r', 'b', 'l'].map(direction => `g-${name}-${direction}-7`)
@@ -222,39 +241,164 @@ describe('presetStyle', () => {
 		expect(css).toContain('.g-g-row-12{row-gap:12px}');
 	});
 
-	it('generates flex columns, fractions, and numeric font weights dynamically', async () => {
+	it('generates repository Grid abbreviations and keeps Mini Grid rules', async () => {
+		const { css: source, matched } = await generate([
+			'g-grid', 'g-inline-grid',
+			'g-gtc-3', 'g-grid-cols-3',
+			'g-gc-span-2', 'g-col-span-2',
+			'g-gaf-rd', 'g-grid-flow-row-dense',
+			'g-col-2'
+		].join(' '));
+		const css = compact(source);
+
+		expect(matched).toEqual(new Set([
+			'g-grid', 'g-inline-grid',
+			'g-gtc-3', 'g-grid-cols-3',
+			'g-gc-span-2', 'g-col-span-2',
+			'g-gaf-rd', 'g-grid-flow-row-dense',
+			'g-col-2'
+		]));
+		expect(css).toMatch(/\.g-grid\{[^}]*display:grid[^}]*box-sizing:border-box/);
+		expect(css).toContain('.g-inline-grid{display:inline-grid}');
+		expect(source).toMatch(/\.g-grid-cols-3,\n\.g-gtc-3\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\);}/);
+		expect(source).toMatch(/\.g-col-span-2,\n\.g-gc-span-2\{grid-column:span 2\/span 2;}/);
+		expect(source).toMatch(/\.g-gaf-rd,\n\.g-grid-flow-row-dense\{grid-auto-flow:row dense;}/);
+		expect(css).toContain('.g-col-2{flex:2}');
+		expect(css).not.toContain('.g-col-2{grid-column:2}');
+	});
+
+	it('supports dynamic Grid values and rejects invalid bare numbers', async () => {
+		const { css: source } = await generateStyleOnly([
+			'g-gtc-13', 'g-gtr-[auto_1fr]', 'g-gtc-(--tracks)',
+			'g-gc-13', 'g-gr-[2/4]', 'g-gcs-(--start)', 'g-gce-[-1]',
+			'g-grs-4', 'g-gre-(--end)', 'g-gc-span-13', 'g-gr-span-full'
+		].join(' '));
+		const css = compact(source);
+
+		expect(css).toContain('.g-gtc-13{grid-template-columns:repeat(13,minmax(0,1fr))}');
+		expect(css).toContain('grid-template-rows:auto1fr');
+		expect(css).toContain('.g-gtc-\\(--tracks\\){grid-template-columns:var(--tracks)}');
+		expect(css).toContain('.g-gc-13{grid-column:13}');
+		expect(css).toContain('grid-row:2/4');
+		expect(css).toContain('.g-gcs-\\(--start\\){grid-column-start:var(--start)}');
+		expect(css).toContain('grid-column-end:-1');
+		expect(css).toContain('.g-grs-4{grid-row-start:4}');
+		expect(css).toContain('.g-gre-\\(--end\\){grid-row-end:var(--end)}');
+		expect(css).toContain('.g-gc-span-13{grid-column:span13/span13}');
+		expect(css).toContain('.g-gr-span-full{grid-row:1/-1}');
+
+		const { matched } = await generateStyleOnly([
+			'g-gtc-0', 'g-gtr-0', 'g-gc-0', 'g-gr-0',
+			'g-gcs-0', 'g-gce-0', 'g-grs-0', 'g-gre-0',
+			'g-gc-span-0', 'g-gr-span-0', 'g-gaf-x'
+		].join(' '));
+		expect(matched).toEqual(new Set());
+	});
+
+	it('generates flex values, fractions, and dynamic values', async () => {
 		const { css: source } = await generate([
-			'g-col', 'g-col-0', 'g-col-7',
-			'g-f-3/7', 'g-f-7/7', 'g-3of7', 'g-7of7', 'g-flex-1/2',
+			'g-f-0', 'g-f-1', 'g-f-7',
+			'g-f-3/7', 'g-f-7/7', 'g-f-[1_0_auto]', 'g-f-[auto]', 'g-f-(--item-flex)',
+			'hover:g-f-2', 'g-flex-1', 'g-flex-1/2',
 			'g-fw-4', 'g-fw-350', 'g-fw-950'
 		].join(' '));
 		const css = compact(source);
 
-		expect(css).toContain('.g-col{flex:1}');
-		expect(css).toContain('.g-col-0{flex:0}');
-		expect(css).toContain('.g-col-7{flex:7}');
-		expect(source).toMatch(/\.g-3of7,\n\.g-f-3\\\/7\{flex:0 0 42\.8571428571%;}/);
-		expect(source).toMatch(/\.g-7of7,\n\.g-f-7\\\/7\{flex:0 0 100%;}/);
+		expect(css).toContain('.g-f-0{flex:0}');
+		expect(css).toContain('.g-f-1{flex:1}');
+		expect(css).toContain('.g-f-7{flex:7}');
+		expect(source).toContain('.g-f-3\\/7{flex:0 0 42.8571428571%;}');
+		expect(source).toContain('.g-f-7\\/7{flex:0 0 100%;}');
+		expect(source).toContain('.g-f-\\[1_0_auto\\]{flex:1 0 auto;}');
+		expect(css).toContain('.g-f-\\[auto\\]{flex:auto}');
+		expect(css).toContain('.g-f-\\(--item-flex\\){flex:var(--item-flex)}');
+		expect(css).toContain('.hover\\:g-f-2:hover{flex:2}');
+		expect(source).toContain('.g-flex-1{flex:1 1 0%;}');
 		expect(source).toContain('.g-flex-1\\/2{flex:50%;}');
 		expect(css).toContain('.g-fw-4{width:33.3333333333%;float:left}');
 		expect(css).toContain('.g-fw-350{font-weight:350}');
 		expect(css).toContain('.g-fw-950{font-weight:950}');
 
 		const { matched } = await generateStyleOnly([
-			'g-f-0/7', 'g-f-8/7', 'g-0of7', 'g-8of7',
+			'g-f--1', 'g-f-9007199254740992', 'g-f-auto',
+			'g-f-0/7', 'g-f-8/7', 'g-f-9007199254740992/9007199254740992',
+			'g-0of7', 'g-8of7',
 			'g-w-0/7', 'g-w-8/7', 'g-w-1/0',
+			'g-f-()', 'g-f-[]', 'g-f-(invalid)',
 			'g-w-()', 'g-w-[]', 'g-w-(invalid)', 'g-s-4', 'g-fw-0', 'g-fw-1001'
 		].join(' '));
 		expect(matched).toEqual(new Set());
 	});
 
 	it('keeps source-only deprecated utilities compatible', async () => {
-		const { css: source } = await generateStyleOnly('g-3of7 g-height-full g-width-full');
+		const { css: source } = await generateStyleOnly('g-col g-col-2 g-col-7 g-3of7 g-height-full g-width-full');
 		const css = compact(source);
 
+		expect(css).toContain('.g-col{flex:1}');
+		expect(css).toContain('.g-col-2{flex:2}');
+		expect(css).toContain('.g-col-7{flex:7}');
 		expect(source).toContain('.g-3of7{flex:0 0 42.8571428571%;}');
 		expect(css).toContain('.g-height-full{height:100%}');
 		expect(css).toContain('.g-width-full{width:100%}');
+	});
+
+	it('generates position edges and overrides Mini g-b-* by value semantics', async () => {
+		const { css: source } = await generate([
+			'g-b', 'g-t-8', 'g-l-[auto]', 'g-b-12', 'g-b-[-10px]', 'g-r-(--offset)',
+			'g-b-1', 'g-b-[2px]', 'g-b-[calc(100%_-_10px)]', 'g-b-[var(--solid-color)]',
+			'g-b-[1px_solid_red]', 'hover:g-l-4', 'g-bottom-1'
+		].join(' '));
+		const css = compact(source);
+
+		expect(source).toContain('.g-b::before,.g-b::after');
+		expect(css).toContain('.g-t-8{top:8px}');
+		expect(css).toContain('.g-l-\\[auto\\]{left:auto}');
+		expect(css).toContain('.g-b-12{bottom:12px}');
+		expect(css).toContain('bottom:-10px');
+		expect(css).toContain('.g-r-\\(--offset\\){right:var(--offset)}');
+		expect(css).toContain('.g-b-1{bottom:1px}');
+		expect(css).toContain('.g-b-\\[2px\\]{bottom:2px}');
+		expect(source).toContain('bottom:calc(100% - 10px);');
+		expect(css).toContain('bottom:var(--solid-color)');
+		expect(source).toContain('border:1px solid red;');
+		expect(css).toContain('.hover\\:g-l-4:hover{left:4px}');
+		expect(css).toContain('.g-bottom-1{bottom:0.25rem}');
+		expect(css).not.toContain('.g-b-1{border-width:1px}');
+		expect(source).not.toContain('border-width:2px;');
+	});
+
+	it('recognizes every CSS border style in g-b-[...]', async () => {
+		const styles = [
+			'none', 'hidden', 'dotted', 'dashed', 'solid',
+			'double', 'groove', 'ridge', 'inset', 'outset'
+		];
+		const utilities = styles.map(style => `g-b-[1px_${style}_red]`);
+		const { css, matched } = await generateStyleOnly([
+			...utilities,
+			'g-b-[solid]', 'g-b-[red_solid_1px]', 'g-b-[1px_dashed_var(--color)]',
+			'g-b-[1px_solid_color]', 'g-b-[1px_SOLID_red]'
+		].join(' '));
+
+		expect([...matched]).toEqual([
+			...utilities,
+			'g-b-[solid]', 'g-b-[red_solid_1px]', 'g-b-[1px_dashed_var(--color)]',
+			'g-b-[1px_solid_color]', 'g-b-[1px_SOLID_red]'
+		]);
+		for (const style of styles) expect(css).toContain(`border:1px ${style} red;`);
+		expect(css).toContain('border:solid;');
+		expect(css).toContain('border:red solid 1px;');
+		expect(css).toContain('border:1px dashed var(--color);');
+		expect(css).toContain('border:1px solid color;');
+		expect(css).toContain('border:1px SOLID red;');
+	});
+
+	it('rejects invalid position edge values', async () => {
+		const { matched } = await generateStyleOnly([
+			'g-t--1', 'g-l-1.5', 'g-b-auto', 'g-r-inherit',
+			'g-t-[]', 'g-l-()', 'g-b-(invalid)', 'g-r-[]'
+		].join(' '));
+
+		expect(matched).toEqual(new Set());
 	});
 
 	it('keeps @deot/style semantics for utilities that collide with presetMini', async () => {
@@ -287,12 +431,22 @@ describe('presetStyle', () => {
 
 	it('applies unit to numeric rules and scale only to fixed dimensions', async () => {
 		const { css: source, matched } = await generate(
-			'x-fs-14 x-lh-1 x-lh-2 x-lh-3 x-lh-5 x-lh-6 x-m-l-4 x-w-4 x-size-8 x-g-6 x-dot x-divide x-br-default g-fs-14',
+			[
+				'x-f-2', 'x-f-[1_0_auto]', 'x-f-(--item-flex)',
+				'x-fs-14', 'x-lh-1', 'x-lh-2', 'x-lh-3', 'x-lh-5', 'x-lh-6',
+				'x-m-l-4', 'x-w-4', 'x-size-8', 'x-g-6',
+				'x-t-4', 'x-b-6',
+				'x-grid', 'x-gtc-13', 'x-gcs-13',
+				'x-dot', 'x-divide', 'x-br-default', 'g-fs-14'
+			].join(' '),
 			{ prefix: 'x-', unit: 'rem', scale: 2 }
 		);
 		const css = compact(source);
 
 		expect(matched).not.toContain('g-fs-14');
+		expect(css).toContain('.x-f-2{flex:2}');
+		expect(source).toContain('.x-f-\\[1_0_auto\\]{flex:1 0 auto;}');
+		expect(css).toContain('.x-f-\\(--item-flex\\){flex:var(--item-flex)}');
 		expect(css).toContain('.x-fs-14{font-size:14rem}');
 		expect(css).toContain('.x-lh-1{line-height:1}');
 		expect(css).toContain('.x-lh-2{line-height:2}');
@@ -303,6 +457,11 @@ describe('presetStyle', () => {
 		expect(css).toContain('.x-w-4{width:4rem}');
 		expect(css).toContain('.x-size-8{width:8rem;height:8rem}');
 		expect(css).toContain('.x-g-6{gap:6rem}');
+		expect(css).toContain('.x-t-4{top:4rem}');
+		expect(css).toContain('.x-b-6{bottom:6rem}');
+		expect(css).toMatch(/\.x-grid\{[^}]*display:grid[^}]*box-sizing:border-box/);
+		expect(css).toContain('.x-gtc-13{grid-template-columns:repeat(13,minmax(0,1fr))}');
+		expect(css).toContain('.x-gcs-13{grid-column-start:13}');
 		expect(css).toContain('.x-dot{display:block;width:10rem;height:10rem;border-radius:50%}');
 		expect(css).toMatch(/\.x-divide\{[^}]*width:2rem[^}]*height:24rem/);
 		expect(css).toContain('--border-radius-default:16rem;');
@@ -351,12 +510,13 @@ describe('presetStyle', () => {
 	});
 
 	it('uses prefix exactly as provided', async () => {
-		const { css: source, matched } = await generate('xfs-14 xflex x-fs-14', { prefix: 'x' });
+		const { css: source, matched } = await generate('xfs-14 xflex xt-4 x-fs-14', { prefix: 'x' });
 		const css = compact(source);
 
 		expect(matched).not.toContain('x-fs-14');
 		expect(css).toContain('.xfs-14{font-size:14px}');
 		expect(css).toMatch(/\.xflex\{[^}]*display:flex[^}]*box-sizing:border-box|\.xflex\{[^}]*box-sizing:border-box[^}]*display:flex/);
+		expect(css).toContain('.xt-4{top:4px}');
 	});
 
 	it('supports an empty prefix', async () => {

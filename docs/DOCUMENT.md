@@ -6,7 +6,7 @@
 
 ## 命名约定
 
-> 本仓库的工具类以 CSS 原生语义为基础：直接映射单一 CSS 属性或属性值时，优先使用简短且可识别的缩写，例如 `w`、`h`、`fs`、`lh`、`ai`；同时设置多个属性或表达完整布局、状态和行为时，优先使用含义清晰的完整名称，例如 `size`、`reset`、`clearfix`。
+> 本仓库的工具类以 CSS 原生语义为基础：直接映射单一 CSS 属性或属性值时，优先使用简短且可识别的缩写，例如 `w`、`h`、`f`、`fs`、`lh`、`ai`、`gtc`；同时设置多个属性或表达完整布局、状态和行为时，优先使用含义清晰的完整名称，例如 `size`、`reset`、`clearfix`。
 >
 > 部分缩写是有意保留的既有约定，例如 `g-g-*` 表示 `gap`。`fw`、`bs`、`br` 等历史缩写存在多种语义，应根据完整类名判断；本仓库会明确说明其匹配范围，但不会在本版改变已有输出。
 
@@ -59,8 +59,10 @@ packages/index/src/
 | `.g-flex-holy` | 纵向、最小高度为视口的 Flex 容器 |
 | `.g-flex-cc` | 水平垂直居中 |
 | `.g-flex-ac` | 交叉轴居中 |
-| `.g-col` / `.g-col-2` | `flex: 1` / `flex: 2` |
+| `.g-f-0` / `.g-f-1` / `.g-f-2` | `flex: 0` / `flex: 1` / `flex: 2` |
 | `.g-f-{part}/{total}` | 固定 Flex 占比，例如 `g-f-1/2` 为 `flex: 0 0 50%` |
+
+UnoCSS 还支持任意非负安全整数、任意值和 CSS Variable，例如 `g-f-7`、`g-f-[1_0_auto]`、`g-f-(--layout-flex)`。裸关键字不匹配本仓库规则，应写成 `g-f-[auto]`。`flex: 1` 通常按 `flex: 1 1 0%` 计算，并不等于 `flex: 1 0 auto`。
 
 ### 单属性类
 
@@ -75,9 +77,62 @@ packages/index/src/
 
 后缀取属性值中每个单词的首字母，例如 `.g-jc-sb` 表示 `justify-content: space-between`。
 
+## Grid
+
+### 容器与轨道
+
+| 类 | 说明 |
+| --- | --- |
+| `.g-grid` | `display: grid` 与 `box-sizing: border-box` |
+| `.g-gtc-1` … `.g-gtc-12` | 生成 1 至 12 列 `repeat(n, minmax(0, 1fr))` 等分轨道 |
+| `.g-gtr-1` … `.g-gtr-12` | 生成 1 至 12 行 `repeat(n, minmax(0, 1fr))` 等分轨道 |
+| `.g-gtc-none` / `.g-gtc-subgrid` | 列模板使用 `none` / `subgrid` |
+| `.g-gtr-none` / `.g-gtr-subgrid` | 行模板使用 `none` / `subgrid` |
+
+UnoCSS 的模板数字不限于 `12`，并支持任意值和 CSS Variable：
+
+```text
+g-gtc-[72px_minmax(0,_1fr)] -> grid-template-columns: 72px minmax(0, 1fr)
+g-gtr-(--rows)               -> grid-template-rows: var(--rows)
+```
+
+### 网格定位
+
+| 类 | 说明 |
+| --- | --- |
+| `.g-gc-1` … `.g-gc-12` | `grid-column` 网格线 |
+| `.g-gr-1` … `.g-gr-12` | `grid-row` 网格线 |
+| `.g-gc-span-1` … `.g-gc-span-12` | 跨越指定列数 |
+| `.g-gr-span-1` … `.g-gr-span-12` | 跨越指定行数 |
+| `.g-gc-span-full` / `.g-gr-span-full` | 从首条网格线跨越到末条网格线，即 `1 / -1` |
+| `.g-gcs-*` / `.g-gce-*` | `grid-column-start` / `grid-column-end` |
+| `.g-grs-*` / `.g-gre-*` | `grid-row-start` / `grid-row-end` |
+
+Sass 为定位数字预生成 `1` 至 `12`。UnoCSS 支持任意正整数；除 span 外还支持 `[]` 与 `()`，例如 `g-gc-[1/-1]`、`g-gce-[-1]`、`g-gr-(--row)`。
+
+### 自动流与协作规则
+
+| 类 | `grid-auto-flow` |
+| --- | --- |
+| `.g-gaf-r` / `.g-gaf-c` | `row` / `column` |
+| `.g-gaf-d` | `dense` |
+| `.g-gaf-rd` / `.g-gaf-cd` | `row dense` / `column dense` |
+
+Flex 章节中的 `g-jc-*`、`g-ai-*`、`g-ac-*`、`g-as-*` 对 Grid 同样有效；Grid 间距使用本仓库 `g-g-*` 或 Mini `g-gap-*`。Flex 简写值使用 `g-f-{n}`，Grid 列定位使用 `g-gc-{n}`。
+
+Mini 的 `g-grid-cols-*`、`g-col-span-*`、`g-grid-flow-*` 等全名规则继续并存。主要对应关系为：
+
+| 本仓库缩写 | Mini | 关系 |
+| --- | --- | --- |
+| `g-gtc-3` | `g-grid-cols-3` | 均生成 3 列等分轨道 |
+| `g-gc-span-2` | `g-col-span-2` | 均跨越 2 列 |
+| `g-gaf-rd` | `g-grid-flow-row-dense` | 均使用 `row dense` |
+
+本仓库会把 `g-grid` 额外设置为 `box-sizing: border-box`；`g-inline-grid`、auto tracks、areas、place 和 justify-items/self 等能力继续使用 Mini。
+
 ## 浮动栅格
 
-项目未提供 CSS Grid 工具类；现有栅格使用 12 列浮动布局。
+浮动栅格与上面的 CSS Grid 工具类相互独立，继续保留 12 列历史布局。
 
 | 类 | 说明 |
 | --- | --- |
@@ -188,6 +243,10 @@ UnoCSS 还支持 `g-c-[<color>]`、`g-bg-[<color>]` 任意颜色，以及 `g-c-(
 | `.g-fixed-full` | fixed 并设置 `inset: 0` |
 | `.g-absolute-full` | absolute 并设置 `inset: 0` |
 
+UnoCSS 额外提供动态边偏移：`g-t-*`、`g-l-*`、`g-b-*`、`g-r-*` 分别对应 `top`、`left`、`bottom`、`right`，支持数字、`[]` 任意值和 `()` CSS Variable。例如 `g-t-8` 为 `top: 8px`，`g-r-(--offset)` 为 `right: var(--offset)`。
+
+`g-b-[...]` 是一个有意保留的特殊分流：值中包含独立 Border Style 关键字时输出普通 `border`，例如 `g-b-[1px_solid_red]` 为 `border: 1px solid red`；否则仍输出 `bottom`。变量名中的 `solid` 不参与匹配。
+
 ## 边框、圆角与阴影
 
 | 类 | 说明 |
@@ -197,6 +256,8 @@ UnoCSS 还支持 `g-c-[<color>]`、`g-bg-[<color>]` 任意颜色，以及 `g-c-(
 | `.g-br-default` | 使用主题默认圆角 |
 | `.g-br-{n}` | `n` 为 `2, 4, 6, 8, 10, 12, 14, 16, 18, 20` |
 | `.g-bs` / `.g-bs-t` | 默认阴影 / 顶部阴影 |
+
+> 裸 `.g-b` 使用伪元素实现高清全边框；带后缀的 `g-b-*` 是 UnoCSS 动态规则，表示 Bottom 或上面说明的普通 Border，二者不是同一类边框能力。
 
 ## 显示与辅助类
 

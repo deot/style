@@ -1,0 +1,25 @@
+@use "../variables/default" as vd;
+@use "./gen-mixins/grid" as gm;
+
+#{vd.$computed-prefix}grid {
+	display: grid;
+	box-sizing: border-box;
+}
+
+$grid-auto-flow-map: (
+	"r": row,
+	"c": column,
+	"d": dense,
+	"rd": row dense,
+	"cd": column dense
+);
+
+@each $name, $value in $grid-auto-flow-map {
+	#{vd.$computed-prefix}gaf-#{$name} {
+		grid-auto-flow: $value;
+	}
+}
+
+$grid-options: (prefix: vd.$prefix);
+
+@include gm.grid-size(12, $grid-options);

@@ -1,6 +1,12 @@
 import type { Rule } from 'unocss';
 import type { ResolvedPresetStyleOptions } from '../types';
-import { createPatternPrefix, createStaticRule, percent } from './utils';
+import { createPatternPrefix, createStaticRule, percent, resolveDynamicValue } from './utils';
+
+const nonNegativeInteger = (value: string) => {
+	if (!/^\d+$/.test(value)) return;
+	const result = Number(value);
+	if (Number.isSafeInteger(result) && result >= 0) return result;
+};
 
 export const createFlexRules = (options: ResolvedPresetStyleOptions): Rule[] => {
 	const patternPrefix = createPatternPrefix(options);
@@ -24,22 +30,36 @@ export const createFlexRules = (options: ResolvedPresetStyleOptions): Rule[] => 
 			'align-items': 'center'
 		}),
 		/*
-		 * g-col 等价于 g-col-1，数字后缀直接作为 flex-grow。
+		 * @deprecated 使用 g-f-{n}；g-col 等价于 g-f-1。
 		 */
 		[
 			new RegExp(`^${patternPrefix}col(?:-(\\d+))?$`),
 			([, value]) => ({ flex: `${Number(value ?? 1)}` })
 		],
 		/*
-		 * 推荐的 Flex 分数使用 g-f-{part}/{total}，与 Mini 的 g-flex-* 区分。
+		 * 分数表示固定 Flex 占比，与 Mini 的 g-flex-* 区分。
 		 */
 		[
 			new RegExp(`^${patternPrefix}f-(\\d+)\\/(\\d+)$`),
 			([, value, total]) => {
-				const part = Number(value);
-				const count = Number(total);
-				if (part < 1 || count < 1 || part > count) return;
+				const part = nonNegativeInteger(value);
+				const count = nonNegativeInteger(total);
+				if (part === void 0 || count === void 0 || part < 1 || count < 1 || part > count) return;
 				return { flex: `0 0 ${percent(part, count)}` };
+			}
+		],
+		/*
+		 * 裸数字直接作为 flex 简写；[] 表示完整 CSS 值，() 表示 CSS Variable。
+		 * 这些值不参与 unit、scale 计算。
+		 */
+		[
+			new RegExp(`^${patternPrefix}f-(.+)$`),
+			([, value]) => {
+				const number = nonNegativeInteger(value);
+				if (number !== void 0) return { flex: `${number}` };
+				if (/^\d+$/.test(value)) return;
+				const result = resolveDynamicValue(value, options);
+				if (result !== void 0) return { flex: result };
 			}
 		],
 		/*
@@ -48,9 +68,9 @@ export const createFlexRules = (options: ResolvedPresetStyleOptions): Rule[] => 
 		[
 			new RegExp(`^${patternPrefix}(\\d+)of(\\d+)$`),
 			([, value, total]) => {
-				const part = Number(value);
-				const count = Number(total);
-				if (part < 1 || count < 1 || part > count) return;
+				const part = nonNegativeInteger(value);
+				const count = nonNegativeInteger(total);
+				if (part === void 0 || count === void 0 || part < 1 || count < 1 || part > count) return;
 				return { flex: `0 0 ${percent(part, count)}` };
 			}
 		]

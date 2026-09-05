@@ -73,7 +73,7 @@ export default defineConfig({
 
 UnoCSS 只提取静态出现的完整 token。运行时拼接的 `g-fs-${size}`、`g-pd-${space}` 等类名必须改成静态映射，或加入项目 safelist。规则范围和参数见 [`@deot/style-unocss` README](../packages/unocss/README.md)。
 
-本仓库的动态属性规则使用统一值语法：裸数字表示配置单位，`[]` 表示任意 CSS 值，`()` 表示 CSS Variable。例如 `g-w-12`、`g-w-[50%]`、`g-w-(--panel-width)`。
+本仓库的动态属性规则使用统一值语法：裸数字表示规则自身的数值语义，`[]` 表示任意 CSS 值，`()` 表示 CSS Variable。例如 `g-w-12`、`g-w-[50%]`、`g-w-(--panel-width)`；Flex 中的 `g-f-2` 表示 `flex: 2`，Grid 中的 `g-gtc-12` 表示 12 列，均不会拼接单位。
 
 从 Sass/CSS 迁移时注意：
 
@@ -82,6 +82,9 @@ UnoCSS 只提取静态出现的完整 token。运行时拼接的 `g-fs-${size}`�
 - Sass 输出预定义数值集合；UnoCSS 数值规则按 token 动态生成。
 - UnoCSS preset 默认同时输出 Mini preflight、主题变量，以及与 Sass 完整入口一致的 `html`、`body` 和全局 `*` reset；可通过 `reset: false` 关闭最后一组。
 - `g-w-{n}` 在 UnoCSS 中表示带配置单位的宽度；十二列比例统一使用 `g-w-{part}/{total}`。
+- Flex 简写值使用 `g-f-{n}`，固定占比使用 `g-f-{part}/{total}`；Grid 列定位使用 `g-gc-{n}`，Mini 的 `g-col-span-*`、`g-col-start-*` 等明确 Grid 类仍可使用。
+- Grid 缩写与 Mini 全名可以并存，例如 `g-gtc-3` 与 `g-grid-cols-3`、`g-gaf-rd` 与 `g-grid-flow-row-dense`。
+- 本仓库把 `g-b-{n}` 定义为 Bottom，覆盖 Mini 的 border-width；`g-b-[...]` 含独立 Border Style 关键字时输出普通 `border`。需要 Mini 定位全名时可继续使用 `g-bottom-*`。
 - Preset 已内置 `hover:(...)` 等 Variant Group 写法，不需要在项目中重复添加 transformer。
 
 ## 移动端：REM

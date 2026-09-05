@@ -12,13 +12,35 @@ const LEGACY_EXCLUDED_UTILITIES = new Set([
 	'g-0of1'
 ]);
 
+const GRID_ADDITIONS = [
+	'g-grid',
+	...['gtc', 'gtr'].flatMap(name => [
+		...Array.from({ length: 12 }, (_, index) => `g-${name}-${index + 1}`),
+		`g-${name}-none`,
+		`g-${name}-subgrid`
+	]),
+	...['gc', 'gr'].flatMap(name => [
+		...Array.from({ length: 12 }, (_, index) => `g-${name}-${index + 1}`),
+		...Array.from({ length: 12 }, (_, index) => `g-${name}-span-${index + 1}`),
+		`g-${name}-span-full`
+	]),
+	...['gcs', 'gce', 'grs', 'gre'].flatMap(name => (
+		Array.from({ length: 12 }, (_, index) => `g-${name}-${index + 1}`)
+	)),
+	'g-gaf-r', 'g-gaf-c', 'g-gaf-d', 'g-gaf-rd', 'g-gaf-cd'
+];
+
 const CURRENT_ADDITIONS = new Set([
 	'g-h-full',
 	'g-w-full',
+	'g-f-0',
+	'g-f-1',
+	'g-f-2',
 	'g-f-1/1',
 	...Array.from({ length: 4 }, (_, index) => index + 2).flatMap(total => (
 		Array.from({ length: total - 1 }, (_, index) => `g-f-${index + 1}/${total}`)
-	))
+	)),
+	...GRID_ADDITIONS
 ]);
 
 const generateStyleOnly = async (tokens: string) => {
@@ -116,7 +138,8 @@ describe('legacy utilities', () => {
 		const legacyUtilities = utilities.filter(utility => !CURRENT_ADDITIONS.has(utility));
 
 		expect(legacyUtilities).toHaveLength(600);
-		expect(utilities).toHaveLength(613);
+		expect(GRID_ADDITIONS).toHaveLength(132);
+		expect(utilities).toHaveLength(748);
 		expect([...matched].sort()).toEqual(utilities);
 		expect(collectUtilityDeclarations(css, utilities))
 			.toEqual(collectUtilityDeclarations(legacyCSS, utilities));

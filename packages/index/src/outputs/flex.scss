@@ -32,10 +32,22 @@
 	align-items: center;
 }
 
+@for $i from 0 through 2 {
+	#{vd.$computed-prefix}f-#{$i} {
+		flex: $i;
+	}
+}
+
+/**
+ * @deprecated 使用 g-f-1。
+ */
 #{vd.$computed-prefix}col {
 	flex: 1;
 }
 
+/**
+ * @deprecated 使用 g-f-2。
+ */
 #{vd.$computed-prefix}col-2 {
 	flex: 2;
 }

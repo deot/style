@@ -1,0 +1,76 @@
+@use "../../functions/index" as fi;
+
+$base-options: null;
+
+/*
+ * Grid 数字表示轨道数量、网格线或跨度，不参与 unit、scale 计算。
+ */
+@mixin grid-size($total, $options: ()) {
+	$prefix: fi.prefix($base-options, $options);
+
+	@for $i from 1 through $total {
+		#{$prefix}gtc-#{$i} {
+			grid-template-columns: repeat($i, minmax(0, 1fr));
+		}
+
+		#{$prefix}gtr-#{$i} {
+			grid-template-rows: repeat($i, minmax(0, 1fr));
+		}
+
+		#{$prefix}gc-#{$i} {
+			grid-column: $i;
+		}
+
+		#{$prefix}gr-#{$i} {
+			grid-row: $i;
+		}
+
+		#{$prefix}gc-span-#{$i} {
+			grid-column: span $i / span $i;
+		}
+
+		#{$prefix}gr-span-#{$i} {
+			grid-row: span $i / span $i;
+		}
+
+		#{$prefix}gcs-#{$i} {
+			grid-column-start: $i;
+		}
+
+		#{$prefix}gce-#{$i} {
+			grid-column-end: $i;
+		}
+
+		#{$prefix}grs-#{$i} {
+			grid-row-start: $i;
+		}
+
+		#{$prefix}gre-#{$i} {
+			grid-row-end: $i;
+		}
+	}
+
+	#{$prefix}gtc-none {
+		grid-template-columns: none;
+	}
+
+	#{$prefix}gtr-none {
+		grid-template-rows: none;
+	}
+
+	#{$prefix}gtc-subgrid {
+		grid-template-columns: subgrid;
+	}
+
+	#{$prefix}gtr-subgrid {
+		grid-template-rows: subgrid;
+	}
+
+	#{$prefix}gc-span-full {
+		grid-column: 1 / -1;
+	}
+
+	#{$prefix}gr-span-full {
+		grid-row: 1 / -1;
+	}
+}

@@ -68,8 +68,35 @@ describe('index.scss', () => {
 	it('flex', () => {
 		const source = sass.compileString(`@use './outputs/flex.scss'`);
 		expect(source.css).toMatch(`.g-ai-c{align-items:center}`);
+		expect(source.css).toMatch(`.g-f-0{flex:0}`);
+		expect(source.css).toMatch(`.g-f-1{flex:1}`);
+		expect(source.css).toMatch(`.g-f-2{flex:2}`);
 		expect(source.css).toMatch(`.g-f-1\\/5{flex:0 0 20%}`);
 		expect(source.css).toMatch(`.g-1of5{flex:0 0 20%}`);
+		expect(source.css).toMatch(`.g-col{flex:1}`);
+		expect(source.css).toMatch(`.g-col-2{flex:2}`);
+
+		const custom = sass.compileString(`@use './variables/default' with ($prefix: 'app-'); @use './outputs/flex.scss'`);
+		expect(custom.css).toMatch(`.app-f-2{flex:2}`);
+	});
+
+	it('grid', () => {
+		const source = sass.compileString(`@use './outputs/grid.scss'`);
+		expect(source.css).toMatch(`.g-grid{display:grid;box-sizing:border-box}`);
+		expect(source.css).toMatch(`.g-gtc-12{grid-template-columns:repeat(12, minmax(0, 1fr))}`);
+		expect(source.css).toMatch(`.g-gtr-subgrid{grid-template-rows:subgrid}`);
+		expect(source.css).toMatch(`.g-gc-12{grid-column:12}`);
+		expect(source.css).toMatch(`.g-gr-span-12{grid-row:span 12/span 12}`);
+		expect(source.css).toMatch(`.g-gc-span-full{grid-column:1/-1}`);
+		expect(source.css).toMatch(`.g-gcs-1{grid-column-start:1}`);
+		expect(source.css).toMatch(`.g-gce-12{grid-column-end:12}`);
+		expect(source.css).toMatch(`.g-grs-1{grid-row-start:1}`);
+		expect(source.css).toMatch(`.g-gre-12{grid-row-end:12}`);
+		expect(source.css).toMatch(`.g-gaf-rd{grid-auto-flow:row dense}`);
+
+		const custom = sass.compileString(`@use './variables/default' with ($prefix: 'app-'); @use './outputs/grid.scss'`);
+		expect(custom.css).toMatch(`.app-grid{display:grid;box-sizing:border-box}`);
+		expect(custom.css).toMatch(`.app-gtc-12{grid-template-columns:repeat(12, minmax(0, 1fr))}`);
 	});
 
 	it('image', () => {
@@ -147,9 +174,10 @@ describe('index.scss', () => {
 
 	it('scale = 2 & unit = rpx', () => {
 		// eslint-disable-next-line @stylistic/max-len
-		const source = sass.compileString(`@use './variables/default' as vd; vd.$scale: 2; vd.$unit: rpx; @use './outputs/other.scss'; @use './outputs/font-size.scss'`);
+		const source = sass.compileString(`@use './variables/default' as vd; vd.$scale: 2; vd.$unit: rpx; @use './outputs/other.scss'; @use './outputs/font-size.scss'; @use './outputs/flex.scss'`);
 		expect(source.css).toMatch(`.g-operable{font-size:28rpx;color:var(--color-highlight) !important;cursor:pointer}`);
 		expect(source.css).toMatch(`.g-fs-16{font-size:16rpx}`);
+		expect(source.css).toMatch(`.g-f-2{flex:2}`);
 	});
 
 	it('allow-css-variables = false', () => {

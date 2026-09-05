@@ -8,6 +8,7 @@ import { createFloatRules } from './float';
 import { createFontSizeRules } from './font-size';
 import { createFontWeightRules } from './font-weight';
 import { createGapRules } from './gap';
+import { createGridRules } from './grid';
 import { createImageRules } from './image';
 import { createLineHeightRules } from './line-height';
 import { createMarginRules } from './margin';
@@ -25,6 +26,7 @@ export const createRules = (options: ResolvedPresetStyleOptions): Rule[] => [
 	...createPaddingRules(options),
 	...createSizeRules(options),
 	...createGapRules(options),
+	...createGridRules(options),
 	...createImageRules(options),
 	...createFlexRules(options),
 	/*

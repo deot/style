@@ -58,12 +58,20 @@ Style.useREM(750);
 
 上述配置会把默认 `.g-*` 类改为 `.app-*`，并覆盖两项主题值。
 
-## 尺寸与浮动栅格
+## 布局与尺寸
 
 - `g-w-full`、`g-h-full`、`g-size-full` 分别填满包含块的宽度、高度或宽高。
 - 十二列百分比宽度使用 `g-w-1/12` 至 `g-w-12/12`。
 - `g-fw-1` 至 `g-fw-12` 保留十二列宽度并增加 `float: left`。
+- Flex 简写值使用 `g-f-0`、`g-f-1`、`g-f-2`。
 - Flex 固定占比使用 `g-f-1/2`、`g-f-1/3` 等分数写法。
+
+Grid 使用属性首字母缩写：
+
+- `g-grid` 创建 Grid 容器并设置 `box-sizing: border-box`。
+- `g-gtc-1` 至 `g-gtc-12`、`g-gtr-1` 至 `g-gtr-12` 生成等分列和行。
+- `g-gc-*`、`g-gr-*` 负责网格定位与 span；`g-gcs/gce/grs/gre-*` 设置起止网格线。
+- `g-gaf-r/c/d/rd/cd` 设置自动布局方向和 dense 模式。
 
 UnoCSS 还提供 `g-w-{n}` 数值尺寸、`screen`、内容尺寸、任意值和 CSS Variable 等按需规则，详见 [`@deot/style-unocss` README](../unocss/README.md)。
 
