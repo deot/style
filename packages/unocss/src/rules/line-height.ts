@@ -18,16 +18,5 @@ export const createLineHeightRules = (options: ResolvedPresetStyleOptions): Rule
 			if (result !== void 0) return { 'line-height': result };
 		}
 	],
-	createStaticRule(options, 'lh-default', { 'line-height': 'var(--line-height-default)' }),
-	/*
-	 * @deprecated 整组废弃，无替代规则；旧类只保留 @deot/style 兼容。
-	 */
-	createStaticRule(options, 'lh-one', {
-		'height': 'var(--line-height-limit)',
-		'line-height': 'var(--line-height-limit)'
-	}),
-	createStaticRule(options, 'lh-two', {
-		'height': 'calc(var(--line-height-limit) * 2)',
-		'line-height': 'var(--line-height-limit)'
-	})
+	createStaticRule(options, 'lh-default', { 'line-height': 'var(--line-height-default)' })
 ];

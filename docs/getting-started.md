@@ -8,7 +8,7 @@
 | 自定义主题、单位、缩放或 Sass mixin | `@deot/style` Sass 源码 | [`@deot/style` README](../packages/index/README.md) |
 | 项目已使用 UnoCSS，希望按需生成 | `@deot/style-unocss` | [`@deot/style-unocss` README](../packages/unocss/README.md) |
 
-不要同时引入 `@deot/style` 完整 CSS 和 `@deot/style-unocss`，否则同名工具类会被生成两次。Normalize-only、Sass 函数和 mixin 不属于这项限制。
+不要同时引入 `@deot/style` 完整 CSS 和 `@deot/style-unocss`，否则同名工具类会被生成两次。Normalize-only、独立 deprecated 兼容 CSS、Sass 函数和 mixin 不属于这项限制。
 
 ## 预编译 CSS
 
@@ -36,6 +36,9 @@ npm install @deot/style
 | `dist/index.rem.css` | 完整 rem 工具类，数值按 2 倍缩放 | 移动端 REM 方案 |
 | `dist/index.rpx.css` | 完整 rpx 工具类，数值按 2 倍缩放 | 微信小程序等 rpx 环境 |
 | `dist/index.rem-part.css` | 仅字号、行高、间距，使用 `rg-` 前缀 | 在 px 项目中局部混入 REM |
+| `dist/index.deprecated.css` | 仅旧类，无 theme、reset 或当前类 | UnoCSS 项目的临时兼容 |
+
+完整入口仍含 deprecated 类；REM-part 和分类 Sass 输出只保留当前类。旧类映射、自定义兼容配置及变化见 [Deprecated 迁移](./deprecated.md)。
 
 每个页面只应选择一个完整入口，避免相同选择器互相覆盖。
 

@@ -1,6 +1,6 @@
 import type { Rule } from 'unocss';
 import type { ResolvedPresetStyleOptions } from '../types';
-import { createPatternPrefix, createStaticRule, percent, resolveDynamicValue } from './utils';
+import { createPatternPrefix, percent, resolveDynamicValue } from './utils';
 
 type SizeMode = 'w' | 'h' | 'size';
 
@@ -53,14 +53,6 @@ export const createSizeRules = (options: ResolvedPresetStyleOptions): Rule[] => 
 				const result = resolveDynamicValue(value, options);
 				if (result !== void 0) return sizeValue(currentMode, result);
 			}
-		],
-		/**
-		 * @deprecated 使用 g-h-full。
-		 */
-		createStaticRule(options, 'height-full', { height: '100%' }),
-		/**
-		 * @deprecated 使用 g-w-full。
-		 */
-		createStaticRule(options, 'width-full', { width: '100%' })
+		]
 	];
 };

@@ -45,15 +45,4 @@ $base-options: null;
 			}
 		}
 	}
-
-	/**
-	 * @deprecated 使用 g-f-{part}/{total}。
-	 */
-	@for $i from 1 through $total {
-		@for $j from 1 through $i - 1 {
-			#{$prefix}#{$j}of#{$i} {
-				flex: 0 0 fi.percentw($j, $i);
-			}
-		}
-	}
 }

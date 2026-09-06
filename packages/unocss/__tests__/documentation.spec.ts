@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { extractLegacyUtilities } from '../../index/__tests__/fixtures/utilities';
 
 const documents = [
 	'../../../README.md',
@@ -36,6 +37,21 @@ const removedPrefixes = [
 const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 describe('public documentation', () => {
+	it('documents every shipped deprecated utility in the dedicated migration table', () => {
+		const migration = readFileSync(`${process.cwd()}/docs/deprecated.md`, 'utf8');
+		const baseline = readFileSync(`${process.cwd()}/packages/index/__tests__/fixtures/deprecated.css`, 'utf8');
+		const patterns = migration.split('\n')
+			.filter(line => line.startsWith('| `g-'))
+			.flatMap(line => [...line.split('|')[1].matchAll(/`(g-[^`]+)`/g)].map(match => match[1]))
+			.map(token => new RegExp(`^${escapeRegExp(token).replace(/\\\{(?:part|total|n)\\\}/g, '\\d+')}$`));
+		for (const token of extractLegacyUtilities(baseline)) {
+			expect(patterns.some(pattern => pattern.test(token)), token).toBe(true);
+		}
+		expect(migration).toContain('无直接替代');
+		expect(migration).toContain('!important');
+		expect(migration).toContain('index.deprecated.css');
+	});
+
 	it('only presents current utility names', () => {
 		for (const document of documents) {
 			for (const token of removedTokens) {

@@ -4,6 +4,8 @@
 
 > 下一主版本不再内置 `presetMini()` 的 rules 与 preflight。原先使用 Mini-only token 的项目请阅读[与 UnoCSS Mini 组合](../../docs/unocss-mini.md)。
 
+> 下一主版本同时移除本 preset 中的全部 deprecated 规则。旧类临时兼容需显式安装 `@deot/style` 并加载 `@deot/style/dist/index.deprecated.css`；该 CSS 仅覆盖 Sass 已生成的普通旧类，不恢复旧 variants 或任意动态范围。映射与配置见 [Deprecated 迁移](../../docs/deprecated.md)。
+
 ## 安装与配置
 
 ```bash

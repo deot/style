@@ -8,14 +8,3 @@
 #{vd.$computed-prefix}bsh-t {
 	box-shadow: ft.themefix(border-shadow-default-top) !important;
 }
-
-/*
- * @deprecated 使用 g-bsh、g-bsh-t。
- */
-#{vd.$computed-prefix}bs {
-	box-shadow: ft.themefix(border-shadow-default) !important;
-}
-
-#{vd.$computed-prefix}bs-t {
-	box-shadow: ft.themefix(border-shadow-default-top) !important;
-}

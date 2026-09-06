@@ -7,17 +7,8 @@ $base-options: null;
 @mixin float($total, $options: ()) {
 	$prefix: fi.prefix($base-options, $options);
 
-	%float {
-		float: left;
-	}
-
 	@for $i from 1 through $total {
 		#{$prefix}w-#{$i}\/#{$total} {
-			width: fi.percentw($i, $total);
-		}
-		#{$prefix}fw-#{$i} {
-			@extend %float;
-
 			width: fi.percentw($i, $total);
 		}
 	}

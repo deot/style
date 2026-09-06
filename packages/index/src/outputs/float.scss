@@ -4,10 +4,6 @@
 
 $float-options: (prefix: vd.$prefix);
 
-/*
- * @deprecated 使用 g-fl-{part}/12。
- * float mixin 同时输出仍公开的 g-w-{part}/12 与旧 g-fw-1～12。
- */
 @include gm.float(12, $float-options);
 
 @for $i from 1 through 12 {
@@ -38,24 +34,6 @@ $float-options: (prefix: vd.$prefix);
 }
 
 #{vd.$computed-prefix}fl-row {
-	padding: 0;
-	margin: 0;
-}
-
-/*
- * @deprecated 使用 g-fl-row。
- */
-#{vd.$computed-prefix}row::before,
-#{vd.$computed-prefix}row::after {
-	display: table;
-	content: " ";
-}
-
-#{vd.$computed-prefix}row::after {
-	clear: both;
-}
-
-#{vd.$computed-prefix}row {
 	padding: 0;
 	margin: 0;
 }

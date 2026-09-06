@@ -36,22 +36,7 @@ export const createTextRules = (options: ResolvedPresetStyleOptions): Rule[] => 
 				if (result !== void 0) return { 'text-align': `${result} !important` };
 			}
 		],
-		/*
-		 * @deprecated 使用 g-ta-c、g-ta-l、g-ta-r；旧类只保留源码兼容。
-		 */
-		createStaticRule(options, 'tc', { 'text-align': 'center !important' }),
-		createStaticRule(options, 'tl', { 'text-align': 'left !important' }),
-		createStaticRule(options, 'tr', { 'text-align': 'right !important' }),
-		/*
-		 * @deprecated 使用 g-tdl-lt、g-tdl-ul；旧类只保留 @deot/style 兼容。
-		 */
-		createStaticRule(options, 'td-lh', { 'text-decoration': 'line-through !important' }),
-		createStaticRule(options, 'td-ul', { 'text-decoration': 'underline !important' }),
-		createStaticRule(options, 'line-nowrap', { 'white-space': 'nowrap !important' }),
-		/*
-		 * @deprecated 使用 g-ws-nw；旧类只保留 @deot/style 兼容。
-		 */
-		createStaticRule(options, 'nowrap', { 'white-space': 'nowrap !important' })
+		createStaticRule(options, 'line-nowrap', { 'white-space': 'nowrap !important' })
 	];
 	/*
 	 * line-wrap 用于处理长单词和连续字符。
@@ -63,10 +48,6 @@ export const createTextRules = (options: ResolvedPresetStyleOptions): Rule[] => 
 	};
 	rules.push(createStaticRule(options, 'line-wrap', lineWrap));
 	/*
-	 * @deprecated 使用 g-line-wrap；旧类只保留 @deot/style 兼容。
-	 */
-	rules.push(createStaticRule(options, 'break', lineWrap));
-	/*
 	 * 多行截断依赖 WebKit box 模型；break-spaces 保留调用方传入的空白和换行。
 	 */
 	rules.push([
@@ -76,12 +57,6 @@ export const createTextRules = (options: ResolvedPresetStyleOptions): Rule[] => 
 			if (Number.isSafeInteger(lines)) return lineClamp(lines);
 		}
 	]);
-	/*
-	 * @deprecated 使用 g-line-1、g-line-2；旧类只保留 @deot/style 兼容。
-	 */
-	for (const [name, lines] of [['line-one', 1], ['line-two', 2]] as const) {
-		rules.push(createStaticRule(options, name, lineClamp(lines)));
-	}
 
 	return rules;
 };

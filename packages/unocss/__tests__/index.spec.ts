@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { extractLegacyUtilities } from '../../index/__tests__/fixtures/utilities';
 import type { PresetMiniOptions } from '@unocss/preset-mini';
 import { createGenerator, presetMini } from 'unocss';
 import MagicString from 'magic-string';
@@ -65,40 +67,39 @@ const staticUtilities = [
 		Array.from({ length: total - 1 }, (_, index) => `g-f-${index + 1}/${total}`)
 	)),
 	'g-fd-r', 'g-fd-c', 'g-fd-rr', 'g-fd-cr',
-	'g-fwr-w', 'g-fwr-wr', 'g-fwr-n', 'g-fw-w', 'g-fw-wr', 'g-fw-n',
+	'g-fwr-w', 'g-fwr-wr', 'g-fwr-n',
 	'g-jc-fs', 'g-jc-fe', 'g-jc-c', 'g-jc-sb', 'g-jc-sa',
 	'g-ai-fs', 'g-ai-fe', 'g-ai-c', 'g-ai-b', 'g-ai-s',
 	'g-ac-fs', 'g-ac-fe', 'g-ac-c', 'g-ac-sb', 'g-ac-sa', 'g-ac-s',
 	'g-as-a', 'g-as-fs', 'g-as-fe', 'g-as-c', 'g-as-b', 'g-as-s',
 	...gridUtilities,
-	'g-fl-row', 'g-row', 'g-clearfix', 'g-fl', 'g-fr',
+	'g-fl-row', 'g-clearfix', 'g-fl', 'g-fr',
 	...Array.from({ length: 12 }, (_, index) => [
 		`g-w-${index + 1}`,
-		`g-fl-${index + 1}/12`,
-		`g-fw-${index + 1}`
+		`g-fl-${index + 1}/12`
 	]).flat(),
 	'g-pd-s', 'g-pd-tb-s', 'g-pd-lr-s', 'g-pd-t-s', 'g-pd-r-s', 'g-pd-b-s', 'g-pd-l-s',
 	'g-fw-bold', 'g-fw-400', 'g-fw-500', 'g-fw-600', 'g-fw-700',
-	'g-lh-default', 'g-lh-one', 'g-lh-two', 'g-lh-1', 'g-lh-2',
+	'g-lh-default', 'g-lh-1', 'g-lh-2',
 	...['l', 'r', 'c', 'j', 's', 'e', 'ja', 'mp'].map(value => `g-ta-${value}`),
-	'g-tdl-lt', 'g-tdl-ul', 'g-tdl-ol', 'g-tdl-n', 'g-td-lh', 'g-td-ul',
-	'g-line-nowrap', 'g-nowrap', 'g-line-wrap', 'g-break',
-	'g-line-1', 'g-line-2', 'g-line-one', 'g-line-two',
+	'g-tdl-lt', 'g-tdl-ul', 'g-tdl-ol', 'g-tdl-n',
+	'g-line-nowrap', 'g-line-wrap',
+	'g-line-1', 'g-line-2',
 	...colorNames.flatMap(name => [`g-c-${name}`, `g-bg-${name}`]),
 	'g-bg-lg-blue', 'g-bg-lg-yellow',
 	'g-fixed', 'g-relative', 'g-absolute', 'g-fixed-full', 'g-absolute-full',
-	'g-bd', 'g-bdt', 'g-bdr', 'g-bdb', 'g-bdl', 'g-br', 'g-br-circle', 'g-br-default',
-	'g-bsh', 'g-bsh-t', 'g-bs', 'g-bs-t',
+	'g-bd', 'g-bdt', 'g-bdr', 'g-bdb', 'g-bdl', 'g-br-circle', 'g-br-default',
+	'g-bsh', 'g-bsh-t',
 	'g-h-full', 'g-w-full', 'g-size-full',
-	'g-none', 'g-dp-n', 'g-hide', 'g-show', 'g-dp-b', 'g-block',
-	'g-dp-i', 'g-inline', 'g-dp-ib', 'g-inline-block', 'g-d-n', 'g-d-b', 'g-d-i', 'g-d-ib',
+	'g-none', 'g-hide', 'g-show', 'g-block',
+	'g-inline', 'g-inline-block', 'g-d-n', 'g-d-b', 'g-d-i', 'g-d-ib',
 	'g-operable', 'g-pointer', 'g-disabled', 'g-unanimated', 'g-scroller',
-	'g-divider', 'g-divide', 'g-dot', 'g-of-h', 'g-bsz-bb', 'g-bs-bb'
+	'g-divider', 'g-dot', 'g-of-h', 'g-bsz-bb'
 ];
 
 const numericUtilities = [
 	'g-fs-37', 'g-lh-43', 'g-br-19',
-	'g-image-41', 'g-image-circle-41', 'g-image-radius-41', 'g-img-41', 'g-imgc-41', 'g-imgr-41',
+	'g-image-41', 'g-image-circle-41', 'g-image-radius-41',
 	'g-f-7', 'g-f-3/7', 'g-fw-350', 'g-t-7', 'g-l-7', 'g-b-7', 'g-r-7',
 	...['m', 'pd'].flatMap(name => [
 		`g-${name}-7`,
@@ -436,8 +437,7 @@ describe('presetStyle', () => {
 		const css = compact(source);
 
 		expect(matched).toEqual(new Set([
-			'g-grid', 'g-inline-grid', 'g-gtc-3', 'g-gc-span-2', 'g-gaf-rd',
-			'g-col-2'
+			'g-grid', 'g-inline-grid', 'g-gtc-3', 'g-gc-span-2', 'g-gaf-rd'
 		]));
 		expect(css).toMatch(/\.g-grid\{[^}]*display:grid[^}]*box-sizing:border-box/);
 		expect(css).toContain('.g-gtc-3{grid-template-columns:repeat(3,minmax(0,1fr))}');
@@ -447,7 +447,7 @@ describe('presetStyle', () => {
 		expect(matched).not.toContain('g-grid-cols-3');
 		expect(matched).not.toContain('g-col-span-2');
 		expect(matched).not.toContain('g-grid-flow-row-dense');
-		expect(css).toContain('.g-col-2{flex:2}');
+		expect(matched).not.toContain('g-col-2');
 		expect(css).not.toContain('.g-col-2{grid-column:2}');
 	});
 
@@ -514,42 +514,27 @@ describe('presetStyle', () => {
 		expect(matched).toEqual(new Set());
 	});
 
-	it('keeps source-only deprecated utilities compatible', async () => {
-		const { css: source } = await generateStyleOnly([
-			'g-col', 'g-col-2', 'g-3of7', 'g-height-full', 'g-width-full',
-			'g-tl', 'g-tc', 'g-tr', 'g-b', 'g-bt', 'g-bb', 'g-bl',
-			'g-fw-w', 'g-fw-4', 'g-row', 'g-bs', 'g-bs-t', 'g-bs-bb',
-			'g-dp-n', 'g-dp-b', 'g-dp-i', 'g-dp-ib',
-			'g-img-41', 'g-imgc-41', 'g-imgr-41', 'g-td-lh', 'g-td-ul',
-			'g-nowrap', 'g-break', 'g-line-one', 'g-line-two', 'g-lh-one', 'g-lh-two',
-			'g-divide'
-		].join(' '));
-		const css = compact(source);
+	it('does not generate deprecated utilities or their variants', async () => {
+		const baseline = readFileSync(`${process.cwd()}/packages/index/__tests__/fixtures/deprecated.css`, 'utf8');
+		const utilities = [
+			...extractLegacyUtilities(baseline),
+			'g-3of7', 'g-img-37', 'g-imgc-37', 'g-imgr-37'
+		];
+		for (const prefix of ['g-', 'app-']) {
+			const tokens = utilities.flatMap((token) => {
+				const name = token.replace(/^g-/, prefix);
+				return [name, `hover:${name}`, `md:${name}`, `dark:${name}`];
+			});
+			const { matched } = await generate(tokens.join(' '), { prefix });
+			expect(matched).toEqual(new Set());
+		}
+	});
 
-		expect(css).toContain('.g-col{flex:1}');
-		expect(css).toContain('.g-col-2{flex:2}');
-		expect(source).toContain('.g-3of7{flex:0 0 42.8571428571%;}');
-		expect(css).toContain('.g-height-full{height:100%}');
-		expect(css).toContain('.g-width-full{width:100%}');
-		expect(css).toContain('.g-tl{text-align:left!important}');
-		expect(css).toContain('.g-tc{text-align:center!important}');
-		expect(css).toContain('.g-tr{text-align:right!important}');
-		expect(source).toContain('.g-b::before,.g-b::after');
-		expect(source).toContain('.g-bt::before,.g-bt::after');
-		expect(source).toContain('.g-bb::before,.g-bb::after');
-		expect(source).toContain('.g-bl::before,.g-bl::after');
-		expect(css).toContain('.g-fw-w{flex-wrap:wrap}');
-		expect(css).toContain('.g-fw-4{width:33.3333333333%;float:left}');
-		expect(css).toContain('.g-row{padding:0;margin:0}');
-		expect(css).toContain('.g-bs{box-shadow:var(--border-shadow-default)!important}');
-		expect(css).toContain('.g-bs-bb{box-sizing:border-box}');
-		expect(css).toContain('.g-dp-n{display:none!important}');
-		expect(css).toContain('.g-img-41{width:41px;height:41px;max-width:41px;min-width:41px;line-height:41px}');
-		expect(css).toContain('.g-td-lh{text-decoration:line-through!important}');
-		expect(css).toContain('.g-nowrap{white-space:nowrap!important}');
-		expect(css).toContain('.g-line-one{display:-webkit-box');
-		expect(css).toContain('.g-lh-one{height:var(--line-height-limit);line-height:var(--line-height-limit)}');
-		expect(css).toContain('.g-divide{position:relative;display:inline-block');
+	it('leaves removed names to Mini when explicitly combined', async () => {
+		const { css, matched } = await generateCombined('g-b g-col-2');
+		expect(matched).toEqual(new Set(['g-b']));
+		expect(compact(css)).toContain('.g-b{border-width:1px}');
+		expect(css).not.toContain('.g-b::before');
 	});
 
 	it('does not retain renamed UnoCSS draft utilities', async () => {
@@ -686,7 +671,7 @@ describe('presetStyle', () => {
 
 	it('keeps @deot/style semantics when explicitly combined with presetMini', async () => {
 		const { css: source } = await generateCombined([
-			'g-ai-c', 'g-col', 'g-w-12', 'g-fl-4/12', 'g-fw-400', 'g-br-4',
+			'g-ai-c', 'g-f-1', 'g-w-12', 'g-fl-4/12', 'g-fw-400', 'g-br-4',
 			'g-bg-blue-mid', 'g-bg-white', 'g-block', 'g-m-4', 'g-flex', 'g-grid',
 			'g-bd', 'g-b-1', 'g-b-[1px_solid_red]', 'g-gap-4', 'g-flex-1',
 			'g-inline-grid', 'g-grid-cols-3', 'g-bottom-1', 'g-transition', 'g-transform'
@@ -694,7 +679,7 @@ describe('presetStyle', () => {
 		const css = compact(source);
 
 		expect(css).toContain('.g-ai-c{align-items:center}');
-		expect(css).toContain('.g-col{flex:1}');
+		expect(css).toContain('.g-f-1{flex:1}');
 		expect(css).toContain('.g-w-12{width:12px}');
 		expect(source).toContain('.g-fl-4\\/12{width:33.3333333333%;float:left;}');
 		expect(css).toContain('.g-fw-400{font-weight:400}');

@@ -1,6 +1,17 @@
 @use "sass:map";
 @use "sass:list";
+@use "sass:meta";
 @use "../../functions/index" as fi;
+
+/*
+ * 当前图片类与兼容类共享尺寸配置；此模块自身不输出 CSS。
+ */
+$image-size-list: 256, 150, 128, 100, 96, 64, 56, 40, 32, 24;
+$image-size-list-join-data: false !default;
+
+@if $image-size-list-join-data and meta.type-of($image-size-list-join-data) == 'list' {
+	$image-size-list: list.join($image-size-list, $image-size-list-join-data);
+}
 
 $image-size-options: (name: image-size);
 

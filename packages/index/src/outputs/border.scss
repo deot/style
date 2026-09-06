@@ -26,25 +26,6 @@ $color: ft.themefix(border-color-default);
 	@include mc.common-border-1px(top, $color);
 }
 
-/*
- * @deprecated 使用 g-bd、g-bdt、g-bdr、g-bdb、g-bdl。
- */
-#{vd.$computed-prefix}b {
-	@include mc.common-border-1px('', $color);
-}
-#{vd.$computed-prefix}bb {
-	@include mc.common-border-1px(bottom, $color);
-}
-#{vd.$computed-prefix}bl {
-	@include mc.common-border-1px(left, $color);
-}
-#{vd.$computed-prefix}bt {
-	@include mc.common-border-1px(top, $color);
-}
-#{vd.$computed-prefix}br {
-	@include mc.common-border-1px(right, $color);
-}
-
 #{vd.$computed-prefix}br-circle {
 	border-radius: 100% !important;
 }

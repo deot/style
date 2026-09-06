@@ -6,6 +6,8 @@
 
 > 这是下一主版本的破坏性变更：此前依赖内置 Mini rules 的项目需要改用本仓库 token，或按本文显式组合 `presetMini()`。
 
+本 preset 已移除 deprecated matcher，旧名可能落到 Mini 的其他规则；额外加载兼容 CSS 也不能消除全部属性冲突。旧类应按 [Deprecated 迁移](./deprecated.md)优先替换。
+
 Variant Group transformer 也仍由本 preset 提供：
 
 ```html

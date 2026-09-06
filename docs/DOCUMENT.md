@@ -6,6 +6,8 @@
 
 ## 命名约定
 
+本文仅列当前工具类。旧类由 Sass 的 `index.deprecated.scss` 独立入口提供，默认完整入口仍包含它；UnoCSS 已移除旧 matcher，兼容方式和映射见 [Deprecated 迁移](./deprecated.md)。
+
 > 本仓库的工具类以 CSS 原生语义为基础：直接映射单一 CSS 属性或属性值时，优先使用简短且可识别的缩写，例如 `w`、`h`、`f`、`fs`、`lh`、`ai`、`gtc`；同时设置多个属性或表达完整布局、状态和行为时，优先使用含义清晰的完整名称，例如 `size`、`reset`、`clearfix`。
 >
 > 一个缩写在最新规则中只归属一个属性，例如 `fw` 只表示 `font-weight`、`fwr` 表示 `flex-wrap`、`bsh` 表示 `box-shadow`。部分无歧义短写会有意保留，例如 `g-g-*` 表示 Gap、Padding Safe Area 中的 `s` 表示 `safe-area`。
@@ -31,6 +33,7 @@ packages/index/src/
 ├── scripts/         # Style.useREM
 ├── variables/       # 默认配置、颜色与主题
 ├── index.scss       # 完整样式入口
+├── index.deprecated.scss # 仅旧类的兼容入口
 ├── index.normalize.scss
 ├── index.normalize-only.scss
 ├── index.rem.scss
@@ -229,6 +232,7 @@ UnoCSS 不限于以上预生成数值，并为所有方向支持 `[]` 和 `()`�
 | `.g-ta-j/s/e` | justify / start / end |
 | `.g-ta-ja/mp` | justify-all / match-parent |
 | `.g-tdl-lt/ul/ol/n` | 删除线 / 下划线 / 上划线 / 无文本装饰线 |
+| `.g-ws-nw` | Sass 与 UnoCSS 均提供的普通不换行规则 |
 | `.g-line-nowrap` | 带 `!important` 的不换行语义 |
 | `.g-line-wrap` | 使用 `word-break`、`overflow-wrap` 与 `text-wrap` 处理长文本和连续字符 |
 | `.g-line-{n}` | 多行截断；Sass 预生成 `1/2`，UnoCSS 支持任意正整数 |

@@ -5,7 +5,8 @@ import { createPatternPrefix, createStaticRule } from './utils';
 export const createFontWeightRules = (options: ResolvedPresetStyleOptions): Rule[] => [
 	createStaticRule(options, 'fw-bold', { 'font-weight': 'bold' }),
 	/*
-	 * 1～12 已被浮动栅格占用；CSS 数字字重只接管 13～1000。
+	 * 迁移期保留旧浮动栅格的 1～12，避免旧 token 被重新解释为字重。
+	 * 当前数字字重范围为 13～1000。
 	 */
 	[
 		new RegExp(`^${createPatternPrefix(options)}fw-(\\d+)$`),

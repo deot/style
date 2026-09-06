@@ -173,15 +173,7 @@ export const createBorderRules = (options: ResolvedPresetStyleOptions): Rule[] =
 		createStaticRule(options, 'bdb', createBorderRule('b', options)),
 		createStaticRule(options, 'bdl', createBorderRule('l', options)),
 		createStaticRule(options, 'br-circle', { 'border-radius': '100% !important' }),
-		createStaticRule(options, 'br-default', { 'border-radius': 'var(--border-radius-default) !important' }),
-		/*
-		 * @deprecated 使用 g-bd、g-bdt、g-bdr、g-bdb、g-bdl；旧类只保留 @deot/style 兼容。
-		 */
-		createStaticRule(options, 'b', createBorderRule('', options)),
-		createStaticRule(options, 'bt', createBorderRule('t', options)),
-		createStaticRule(options, 'br', createBorderRule('r', options)),
-		createStaticRule(options, 'bb', createBorderRule('b', options)),
-		createStaticRule(options, 'bl', createBorderRule('l', options))
+		createStaticRule(options, 'br-default', { 'border-radius': 'var(--border-radius-default) !important' })
 	];
 
 	return rules;

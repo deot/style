@@ -49,8 +49,6 @@ describe('index.scss', () => {
 		expect(source.css).toMatch(`.g-lh-16{line-height:16px}`);
 		expect(source.css).toMatch(`.g-lh-1{line-height:1}`);
 		expect(source.css).toMatch(`.g-lh-default{line-height:1.5}`);
-		expect(source.css).toMatch(`.g-lh-one{height:32px;line-height:32px}`);
-		expect(source.css).toMatch(`.g-lh-two{height:calc(32px*2);line-height:32px}`);
 	});
 
 	it('font-size', () => {
@@ -63,7 +61,6 @@ describe('index.scss', () => {
 		expect(source.css).toMatch(`.g-w-12\\/12{width:100%}`);
 		expect(source.css).toMatch(`.g-fl-12\\/12{float:left;width:100%}`);
 		expect(source.css).toMatch(`.g-fl-row{padding:0;margin:0}`);
-		expect(source.css).toMatch(`.g-fw-12{width:100%}`);
 		expect(source.css).not.toMatch(`.g-w-12{width:100%}`);
 	});
 
@@ -75,9 +72,6 @@ describe('index.scss', () => {
 		expect(source.css).toMatch(`.g-f-1{flex:1}`);
 		expect(source.css).toMatch(`.g-f-2{flex:2}`);
 		expect(source.css).toMatch(`.g-f-1\\/5{flex:0 0 20%}`);
-		expect(source.css).toMatch(`.g-1of5{flex:0 0 20%}`);
-		expect(source.css).toMatch(`.g-col{flex:1}`);
-		expect(source.css).toMatch(`.g-col-2{flex:2}`);
 
 		const custom = sass.compileString(`@use './variables/default' with ($prefix: 'app-'); @use './outputs/flex.scss'`);
 		expect(custom.css).toMatch(`.app-f-2{flex:2}`);
@@ -107,9 +101,6 @@ describe('index.scss', () => {
 		expect(source.css).toMatch(`.g-image-40{width:40px;height:40px;max-width:40px;min-width:40px;line-height:40px}`);
 		expect(source.css).toMatch(`.g-image-radius-40{width:40px;height:40px;max-width:40px;min-width:40px;line-height:40px;border-radius:4px}`);
 		expect(source.css).toMatch(`.g-image-circle-40{width:40px;height:40px;max-width:40px;min-width:40px;line-height:40px;border-radius:50%}`);
-		expect(source.css).toMatch(`.g-img-40{width:40px;height:40px;max-width:40px;min-width:40px;line-height:40px}`);
-		expect(source.css).toMatch(`.g-imgr-40{width:40px;height:40px;max-width:40px;min-width:40px;line-height:40px;border-radius:4px}`);
-		expect(source.css).toMatch(`.g-imgc-40{width:40px;height:40px;max-width:40px;min-width:40px;line-height:40px;border-radius:50%}`);
 	});
 
 	it('position', () => {
@@ -127,13 +118,11 @@ describe('index.scss', () => {
 		expect(source.css).toMatch(`.g-ta-e{text-align:end !important}`);
 		expect(source.css).toMatch(`.g-ta-ja{text-align:justify-all !important}`);
 		expect(source.css).toMatch(`.g-ta-mp{text-align:match-parent !important}`);
-		expect(source.css).toMatch(`.g-tl{text-align:left !important}`);
-		expect(source.css).toMatch(`.g-tc{text-align:center !important}`);
-		expect(source.css).toMatch(`.g-tr{text-align:right !important}`);
 		expect(source.css).toMatch(`.g-tdl-lt{text-decoration-line:line-through}`);
 		expect(source.css).toMatch(`.g-tdl-ul{text-decoration-line:underline}`);
 		expect(source.css).toMatch(`.g-tdl-ol{text-decoration-line:overline}`);
 		expect(source.css).toMatch(`.g-tdl-n{text-decoration-line:none}`);
+		expect(source.css).toMatch(`.g-ws-nw{white-space:nowrap}`);
 		expect(source.css)
 			// eslint-disable-next-line @stylistic/max-len
 			.toMatch(`.g-line-2{display:-webkit-box;overflow:hidden;text-overflow:ellipsis;-webkit-box-orient:vertical;-webkit-line-clamp:2;word-break:break-all;text-wrap:wrap;overflow-wrap:break-word;white-space:break-spaces}`);
@@ -147,11 +136,6 @@ describe('index.scss', () => {
 		expect(source.css).toMatch(`.g-bdr{position:relative;transform:translateZ(0)}`);
 		expect(source.css).toMatch(`.g-bdb{position:relative;transform:translateZ(0)}`);
 		expect(source.css).toMatch(`.g-bdl{position:relative;transform:translateZ(0)}`);
-		expect(source.css).toMatch(`.g-b{position:relative;transform:translateZ(0)}`);
-		expect(source.css).toMatch(`.g-bt{position:relative;transform:translateZ(0)}`);
-		expect(source.css).toMatch(`.g-bb{position:relative;transform:translateZ(0)}`);
-		expect(source.css).toMatch(`.g-bl{position:relative;transform:translateZ(0)}`);
-		expect(source.css).toMatch(`.g-br{position:relative;transform:translateZ(0)}`);
 		expect(source.css).toMatch(`.g-br-4{border-radius:4px}`);
 		expect(source.css).not.toContain('.g-bdw-');
 		expect(source.css).not.toContain('.g-bds-');
@@ -165,7 +149,6 @@ describe('index.scss', () => {
 		const source = sass.compileString(`@use './outputs/box-shadow.scss'`);
 		expect(source.css)
 			.toMatch(`.g-bsh{box-shadow:var(--border-shadow-default) !important}`);
-		expect(source.css).toMatch(`.g-bs{box-shadow:var(--border-shadow-default) !important}`);
 	});
 
 	it('reset', () => {
@@ -189,7 +172,6 @@ describe('index.scss', () => {
 		expect(source.css).toMatch(`.g-d-n{display:none !important}`);
 		expect(source.css).toMatch(`.g-divider`);
 		expect(source.css).toMatch(`.g-bsz-bb`);
-		expect(source.css).toMatch(`.g-bs-bb`);
 		expect(source.css).toMatch(`.g-disabled{pointer-events:none}`);
 		expect(source.css).toMatch(`.g-operable{font-size:14px;color:var(--color-highlight) !important;cursor:pointer}`);
 	});

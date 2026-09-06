@@ -36,11 +36,6 @@ export const createFlexRules = (options: ResolvedPresetStyleOptions): Rule[] => 
 			'align-items': 'center'
 		}),
 		/*
-		 * @deprecated 使用 g-f-{n}；g-col 等价于 g-f-1。
-		 */
-		createStaticRule(options, 'col', { flex: '1' }),
-		createStaticRule(options, 'col-2', { flex: '2' }),
-		/*
 		 * 分数表示固定 Flex 占比，与 Mini 的 g-flex-* 区分。
 		 */
 		[
@@ -98,19 +93,7 @@ export const createFlexRules = (options: ResolvedPresetStyleOptions): Rule[] => 
 		],
 		createStaticRule(options, 'od-first', { order: '-9999' }),
 		createStaticRule(options, 'od-last', { order: '9999' }),
-		createStaticRule(options, 'od-default', { order: '0' }),
-		/*
-		 * @deprecated 使用 g-f-{part}/{total}。
-		 */
-		[
-			new RegExp(`^${patternPrefix}(\\d+)of(\\d+)$`),
-			([, value, total]) => {
-				const part = nonNegativeInteger(value);
-				const count = nonNegativeInteger(total);
-				if (part === void 0 || count === void 0 || part < 1 || count < 1 || part > count) return;
-				return { flex: `0 0 ${percent(part, count)}` };
-			}
-		]
+		createStaticRule(options, 'od-default', { order: '0' })
 	];
 	const flexRules = {
 		'fd-r': ['flex-direction', 'row'],
@@ -146,12 +129,6 @@ export const createFlexRules = (options: ResolvedPresetStyleOptions): Rule[] => 
 	Object.entries(flexRules).forEach(([name, [property, value]]) => {
 		rules.push(createStaticRule(options, name, { [property]: value }));
 	});
-	/*
-	 * @deprecated 使用 g-fwr-w、g-fwr-wr、g-fwr-n；旧类只保留 @deot/style 兼容。
-	 */
-	for (const [name, value] of Object.entries({ w: 'wrap', wr: 'wrap-reverse', n: 'nowrap' })) {
-		rules.push(createStaticRule(options, `fw-${name}`, { 'flex-wrap': value }));
-	}
 
 	return rules;
 };

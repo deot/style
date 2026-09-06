@@ -19,12 +19,6 @@ export const createOtherRules = (options: ResolvedPresetStyleOptions): Rule[] =>
 	for (const [name, value] of Object.entries({ n: 'none', b: 'block', i: 'inline', ib: 'inline-block' })) {
 		rules.push(createStaticRule(options, `d-${name}`, { display: `${value} !important` }));
 	}
-	/*
-	 * @deprecated g-dp-n/b/i/ib 分别改用 g-d-n/b/i/ib；旧类只保留 @deot/style 兼容。
-	 */
-	for (const [name, value] of Object.entries({ n: 'none', b: 'block', i: 'inline', ib: 'inline-block' })) {
-		rules.push(createStaticRule(options, `dp-${name}`, { display: `${value} !important` }));
-	}
 	rules.push(
 		createStaticRule(options, 'operable', {
 			'font-size': unitValue(14, options),
@@ -60,30 +54,13 @@ export const createOtherRules = (options: ResolvedPresetStyleOptions): Rule[] =>
 			'background': '#ccc',
 			'box-sizing': 'border-box'
 		}),
-		/*
-		 * @deprecated 使用 g-divider；旧类只保留 @deot/style 兼容。
-		 */
-		createStaticRule(options, 'divide', {
-			'position': 'relative',
-			'display': 'inline-block',
-			'width': unitValue(1, options),
-			'height': unitValue(12, options),
-			'margin': `0 ${unitValue(8, options)}`,
-			'vertical-align': 'middle',
-			'background': '#ccc',
-			'box-sizing': 'border-box'
-		}),
 		createStaticRule(options, 'dot', {
 			'display': 'block',
 			'width': unitValue(5, options),
 			'height': unitValue(5, options),
 			'border-radius': '50%'
 		}),
-		createStaticRule(options, 'bsz-bb', { 'box-sizing': 'border-box' }),
-		/*
-		 * @deprecated 使用 g-bsz-bb；旧类只保留 @deot/style 兼容。
-		 */
-		createStaticRule(options, 'bs-bb', { 'box-sizing': 'border-box' })
+		createStaticRule(options, 'bsz-bb', { 'box-sizing': 'border-box' })
 	);
 
 	return rules;

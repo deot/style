@@ -14,7 +14,7 @@
 
 ## 特性
 
-- 两个包默认使用 `g-` 前缀，并覆盖相同的公共工具类语义。
+- 两个包默认使用 `g-` 前缀，并覆盖相同的当前公共工具类语义；旧类由 Sass 独立兼容入口提供。
 - `@deot/style` 支持配置单位、缩放、前缀、CSS Variables、主题与全局 reset。
 - `@deot/style` 提供完整 CSS、normalize、rem、rpx 和局部 rem 构建产物。
 - `@deot/style-unocss` 提供本仓库按需规则，并复用 Mini 官方 variants，支持布局、Flex/Grid 子项、交互、排版、标准 Border、Outline、SVG、动态值、CSS Variables 与 Variant Group；Mini rules 由项目按需显式组合。
@@ -71,6 +71,7 @@ export default defineConfig({
 
 - [选择与安装](./docs/getting-started.md)：先确定 CSS、Sass 或 UnoCSS 接入方式。
 - [接入与迁移](./docs/integration.md)：Web、REM、RPX、UnoCSS 和多入口开发场景。
+- [Deprecated 迁移](./docs/deprecated.md)：旧类映射、独立兼容 CSS 和迁移边界。
 - [`@deot/style-unocss`](./packages/unocss/README.md)：按需规则、配置语义与动态类名。
 - [与 UnoCSS Mini 组合](./docs/unocss-mini.md)：规则来源、覆盖结果和 Mini-only token 迁移。
 - [`@deot/style` Sass](./packages/index/README.md)：配置、主题、函数和 mixin。

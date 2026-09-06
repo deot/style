@@ -26,6 +26,7 @@
 			{ label: { zh: '仓库概览', en: 'Overview' }, value: 'introduction', source: 'README.md' },
 			{ label: { zh: '选择与安装', en: 'Choose and Install' }, value: 'getting-started', source: 'docs/getting-started.md' },
 			{ label: { zh: '接入与迁移', en: 'Integration and Migration' }, value: 'integration', source: 'docs/integration.md' },
+			{ label: { zh: 'Deprecated 迁移', en: 'Deprecated Migration' }, value: 'deprecated', source: 'docs/deprecated.md' },
 			{ label: { zh: '@deot/style-unocss', en: '@deot/style-unocss' }, value: 'unocss', source: 'packages/unocss/README.md' },
 			{ label: { zh: '与 UnoCSS Mini 组合', en: 'Use with UnoCSS Mini' }, value: 'unocss-mini', source: 'docs/unocss-mini.md' },
 			{ label: { zh: '@deot/style Sass', en: '@deot/style Sass' }, value: 'sass', source: 'packages/index/README.md' },
@@ -53,7 +54,8 @@
 					label: lang === 'zh-CN' ? '开始使用' : 'Start',
 					children: [
 						documentItem('getting-started', lang),
-						documentItem('integration', lang)
+						documentItem('integration', lang),
+						documentItem('deprecated', lang)
 					]
 				},
 				{
