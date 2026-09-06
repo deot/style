@@ -1,11 +1,18 @@
-@forward "./gen-mixins/image" show $image-size-list, $image-size-list-join-data;
 @use "sass:map";
+@use "sass:meta";
+@use "sass:list";
 @use "../variables/default" as vd;
 @use "./gen-mixins/image" as gm;
 
 $options: (unit: vd.$unit, scale: vd.$scale, prefix: vd.$prefix);
+$image-size-list: 256, 150, 128, 100, 96, 64, 56, 40, 32, 24;
+$image-size-list-join-data: false !default;
+
+@if $image-size-list-join-data and meta.type-of($image-size-list-join-data) == 'list' {
+	$image-size-list: list.join($image-size-list, $image-size-list-join-data);
+}
 
 // 输出最新的图片复合语义类
-@include gm.image-size(gm.$image-size-list, map.merge($options, (name: image)));
-@include gm.image-size(gm.$image-size-list, map.merge($options, (name: image-circle, mode: 'circle')));
-@include gm.image-size(gm.$image-size-list, map.merge($options, (name: image-radius, mode: 'radius')));
+@include gm.image-size($image-size-list, map.merge($options, (name: image)));
+@include gm.image-size($image-size-list, map.merge($options, (name: image-circle, mode: 'circle')));
+@include gm.image-size($image-size-list, map.merge($options, (name: image-radius, mode: 'radius')));

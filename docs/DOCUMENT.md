@@ -6,7 +6,7 @@
 
 ## 命名约定
 
-本文仅列当前工具类。旧类由 Sass 的 `index.deprecated.scss` 独立入口提供，默认完整入口仍包含它；UnoCSS 已移除旧 matcher，兼容方式和映射见 [Deprecated 迁移](./deprecated.md)。
+本文仅列当前工具类，所有正常 Sass/CSS 入口均不包含旧类。默认 `g-`、px、scale 1 的旧类由 `index.deprecated.scss` 独立入口提供；UnoCSS 已移除旧 matcher，兼容方式和映射见 [Deprecated 迁移](./deprecated.md)。
 
 > 本仓库的工具类以 CSS 原生语义为基础：直接映射单一 CSS 属性或属性值时，优先使用简短且可识别的缩写，例如 `w`、`h`、`f`、`fs`、`lh`、`ai`、`gtc`；同时设置多个属性或表达完整布局、状态和行为时，优先使用含义清晰的完整名称，例如 `size`、`reset`、`clearfix`。
 >

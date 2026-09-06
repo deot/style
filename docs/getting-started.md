@@ -38,7 +38,7 @@ npm install @deot/style
 | `dist/index.rem-part.css` | 仅字号、行高、间距，使用 `rg-` 前缀 | 在 px 项目中局部混入 REM |
 | `dist/index.deprecated.css` | 仅旧类，无 theme、reset 或当前类 | UnoCSS 项目的临时兼容 |
 
-完整入口仍含 deprecated 类；REM-part 和分类 Sass 输出只保留当前类。旧类映射、自定义兼容配置及变化见 [Deprecated 迁移](./deprecated.md)。
+所有正常入口和分类 Sass 输出都只包含当前类。默认 `g-`、px、scale 1 的旧类兼容方式及映射见 [Deprecated 迁移](./deprecated.md)。
 
 每个页面只应选择一个完整入口，避免相同选择器互相覆盖。
 

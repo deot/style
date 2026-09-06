@@ -6,11 +6,12 @@
 @use "./gen-mixins/image" as gi;
 
 /*
- * 已发布的旧工具类集中保留在此，供 Sass 完整入口与独立兼容入口使用。
+ * 已发布的旧工具类集中保留在此，仅由独立兼容入口使用。
  * 不加载 theme、reset 或当前工具类；CSS Variables 由调用方提供。
  */
 $color: ft.themefix(border-color-default);
 $image-options: (unit: vd.$unit, scale: vd.$scale, prefix: vd.$prefix);
+$image-size-list: 256, 150, 128, 100, 96, 64, 56, 40, 32, 24;
 
 /**
  * @deprecated 使用 g-f-1。
@@ -240,6 +241,6 @@ $image-options: (unit: vd.$unit, scale: vd.$scale, prefix: vd.$prefix);
 /*
  * @deprecated 使用 g-image-*、g-image-circle-*、g-image-radius-*。
  */
-@include gi.image-size(gi.$image-size-list, map.merge($image-options, (name: img)));
-@include gi.image-size(gi.$image-size-list, map.merge($image-options, (name: imgc, mode: 'circle')));
-@include gi.image-size(gi.$image-size-list, map.merge($image-options, (name: imgr, mode: 'radius')));
+@include gi.image-size($image-size-list, map.merge($image-options, (name: img)));
+@include gi.image-size($image-size-list, map.merge($image-options, (name: imgc, mode: 'circle')));
+@include gi.image-size($image-size-list, map.merge($image-options, (name: imgr, mode: 'radius')));

@@ -23,7 +23,7 @@ import '@deot/style/dist/index.css';
 
 需要包含 normalize.css 时改为引入 `@deot/style/dist/index.normalize.css`。全部入口及适用场景见[选择与安装](../../docs/getting-started.md)。
 
-完整入口继续包含后置的 deprecated 兼容类。只需要兼容旧类时可加载 `@deot/style/dist/index.deprecated.css`；自定义 Sass 配置后加载 `@deot/style/src/index.deprecated.scss`。独立入口不包含 theme、reset 或当前类，依赖的主题变量需由 UnoCSS preflight 或项目提供，完整映射及限制见 [Deprecated 迁移](../../docs/deprecated.md)。
+所有正常入口只包含当前类。旧项目可临时加载默认 `g-`、px、scale 1 的 `@deot/style/dist/index.deprecated.css`；该入口不包含 theme、reset 或当前类，依赖的主题变量需由 UnoCSS preflight 或项目提供。完整映射及限制见 [Deprecated 迁移](../../docs/deprecated.md)。
 
 需要按视口设置 REM 时使用：
 
@@ -215,7 +215,7 @@ UnoCSS 还提供 `g-w-{n}` 数值尺寸、`screen`、内容尺寸、任意值和
 @use '@deot/style/src/outputs/padding';
 ```
 
-可选输出模块与[工具类参考](../../docs/DOCUMENT.md)中的分类一一对应。分类模块只生成当前类，旧类集中在 `outputs/deprecated.scss`，由完整入口或独立兼容入口加载。
+可选输出模块与[工具类参考](../../docs/DOCUMENT.md)中的分类一一对应。正常入口和分类模块只生成当前类，旧类集中在 `outputs/deprecated.scss`，仅由独立兼容入口加载。
 
 ## 相关文档
 

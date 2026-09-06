@@ -9,7 +9,7 @@
 - 一个页面不要同时加载 `@deot/style` 完整工具类 CSS 与 UnoCSS preset 产物。
 - 从 Sass 迁移到 UnoCSS 时可以保留主要 `g-*` 类名，但必须重新确认 `scale`、动态类名和 preflight。
 
-UnoCSS 只覆盖当前类，已移除 deprecated matcher。迁移期可单独加载 `@deot/style/dist/index.deprecated.css`；自定义配置、旧 variants、REM-part 和新旧类混用的限制见 [Deprecated 迁移](./deprecated.md)。
+UnoCSS 只覆盖当前类，已移除 deprecated matcher。默认 `g-`、px、scale 1 的项目可在迁移期单独加载 `@deot/style/dist/index.deprecated.css`；rem、rpx、`rg-`、自定义配置和旧 variants 应直接迁移，详见 [Deprecated 迁移](./deprecated.md)。
 
 ## Web：预编译 CSS
 

@@ -77,14 +77,14 @@ const generateStyleOnly = async (tokens: string) => {
 describe('legacy utilities', () => {
 	it('covers the 600 historical utilities across current rules and Sass compatibility CSS', async () => {
 		const fullCSS = compile().css;
-		const fullUtilities = extractLegacyUtilities(fullCSS);
+		const current = extractLegacyUtilities(fullCSS);
 		const baseline = readFileSync(`${process.cwd()}/packages/index/__tests__/fixtures/deprecated.css`, 'utf8');
 		const deprecated = extractLegacyUtilities(baseline);
 		const compatibilityCSS = compileString('@use \'./index.deprecated\'').css;
-		const current = fullUtilities.filter(utility => !deprecated.includes(utility));
+		const historical = [...new Set([...current, ...deprecated])];
 		const { css, matched } = await generateStyleOnly(current.join(' '));
 
-		expect(fullUtilities.filter(utility => !CURRENT_ADDITIONS.has(utility))).toHaveLength(600);
+		expect(historical.filter(utility => !CURRENT_ADDITIONS.has(utility))).toHaveLength(600);
 		expect(GRID_ADDITIONS).toHaveLength(132);
 		expect(deprecated).toHaveLength(85);
 		expect(extractLegacyUtilities(compatibilityCSS)).toEqual(deprecated);
@@ -93,7 +93,6 @@ describe('legacy utilities', () => {
 			.toEqual(collectUtilityDeclarations(fullCSS, current));
 		expect(collectUtilityDeclarations(compatibilityCSS, deprecated))
 			.toEqual(collectUtilityDeclarations(baseline, deprecated));
-		expect(collectUtilityDeclarations(fullCSS, deprecated))
-			.toEqual(collectUtilityDeclarations(baseline, deprecated));
+		expect(deprecated.filter(utility => current.includes(utility))).toEqual([]);
 	});
 });
