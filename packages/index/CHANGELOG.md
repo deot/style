@@ -1,5 +1,17 @@
 # @deot/style ChangeLog
 
+## v1.3.0
+
+_2026-09-06_
+
+### Features
+
+- feat: make deprecated CSS a standalone opt-in entry ([d38fedb](https://github.com/deot/style/commit/d38fedb2600c7cf86f003b73479b23aa4b150d02))
+- feat: isolate deprecated classes behind a compatibility entry ([20b8598](https://github.com/deot/style/commit/20b8598c0344f463125510cfb1bcb3d17751a63c))
+- feat: stop bundling Mini rules and disambiguate abbreviations ([83116c1](https://github.com/deot/style/commit/83116c17621b3f398e0eccf39069c94a731c914c))
+- feat: add Grid utilities and canonicalize flex shorthand ([2a22d2b](https://github.com/deot/style/commit/2a22d2bcc5f825ecda14851e6fd2d8e3009c73b8))
+- feat: canonicalize size and flex class names ([ccc01a1](https://github.com/deot/style/commit/ccc01a15eda449667179ca663399087d42129bb6))
+
 ## v1.2.0
 
 _2026-09-03_
