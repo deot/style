@@ -24,14 +24,15 @@
 		};
 		const documents = [
 			{ label: { zh: '仓库概览', en: 'Overview' }, value: 'introduction', source: 'README.md' },
-			{ label: { zh: '选择与安装', en: 'Choose and Install' }, value: 'getting-started', source: 'docs/getting-started.md' },
-			{ label: { zh: '接入与迁移', en: 'Integration and Migration' }, value: 'integration', source: 'docs/integration.md' },
-			{ label: { zh: 'Deprecated 迁移', en: 'Deprecated Migration' }, value: 'deprecated', source: 'docs/deprecated.md' },
-			{ label: { zh: '@deot/style-unocss', en: '@deot/style-unocss' }, value: 'unocss', source: 'packages/unocss/README.md' },
-			{ label: { zh: '与 UnoCSS Mini 组合', en: 'Use with UnoCSS Mini' }, value: 'unocss-mini', source: 'docs/unocss-mini.md' },
-			{ label: { zh: '@deot/style Sass', en: '@deot/style Sass' }, value: 'sass', source: 'packages/index/README.md' },
-			{ label: { zh: 'Sass/CSS 示例', en: 'Sass/CSS Playground' }, value: 'playground', source: 'docs/playground.md' },
-			{ label: { zh: '工具类参考', en: 'Utilities' }, value: 'utilities', source: 'docs/DOCUMENT.md' }
+			{ label: { zh: '选择与安装', en: 'Choose and Install' }, value: 'getting-started', source: 'docs/start/installation.md' },
+			{ label: { zh: '接入与迁移', en: 'Integration and Migration' }, value: 'integration', source: 'docs/start/integration.md' },
+			{ label: { zh: 'Deprecated 迁移', en: 'Deprecated Migration' }, value: 'deprecated', source: 'docs/style/deprecated.md' },
+			{ label: { zh: '概览与配置', en: 'Overview and Configuration' }, value: 'unocss', source: 'packages/unocss/README.md' },
+			{ label: { zh: '工具类参考', en: 'Utilities' }, value: 'unocss-utilities', source: 'docs/unocss/DOCUMENT.md' },
+			{ label: { zh: 'presetMini 组合、覆盖与配置', en: 'Mini Composition and Overrides' }, value: 'unocss-mini', source: 'docs/unocss/mini.md' },
+			{ label: { zh: '概览与配置', en: 'Overview and Configuration' }, value: 'sass', source: 'packages/index/README.md' },
+			{ label: { zh: '参考与示例', en: 'Reference and Examples' }, value: 'playground', source: 'docs/style/reference-examples.md' },
+			{ label: { zh: '工具类参考', en: 'Utilities' }, value: 'utilities', source: 'docs/style/DOCUMENT.md' }
 		];
 		const readmes = Object.fromEntries(documents.map(item => [item.value, item.source]));
 		const readmeRoutes = Object.fromEntries(documents.map(item => [
@@ -54,22 +55,23 @@
 					label: lang === 'zh-CN' ? '开始使用' : 'Start',
 					children: [
 						documentItem('getting-started', lang),
-						documentItem('integration', lang),
-						documentItem('deprecated', lang)
+						documentItem('integration', lang)
 					]
 				},
 				{
-					label: lang === 'zh-CN' ? '包与配置' : 'Packages and Configuration',
+					label: 'UnoCSS',
 					children: [
 						documentItem('unocss', lang),
-						documentItem('unocss-mini', lang),
-						documentItem('sass', lang)
+						documentItem('unocss-utilities', lang),
+						documentItem('unocss-mini', lang)
 					]
 				},
 				{
-					label: lang === 'zh-CN' ? '参考与示例' : 'Reference and Examples',
+					label: 'Style',
 					children: [
+						documentItem('sass', lang),
 						documentItem('utilities', lang),
+						documentItem('deprecated', lang),
 						documentItem('playground', lang)
 					]
 				}
@@ -120,8 +122,8 @@
 						eyebrow: '@deot/style workspace',
 						title: t('一套工具类，两种交付方式', 'One utility system, two delivery modes'),
 						description: t(
-							'使用 @deot/style 交付预编译 CSS 与可配置 Sass，或使用 @deot/style-unocss 按需生成同一套 g-* 语义。',
-							'Use @deot/style for prebuilt CSS and configurable Sass, or @deot/style-unocss to generate the same g-* semantics on demand.'
+							'使用 @deot/style 交付预编译 CSS 与可配置 Sass，或使用 @deot/style-unocss 按需生成共享核心工具类与动态扩展。',
+							'Use @deot/style for prebuilt CSS and configurable Sass, or @deot/style-unocss for shared core utilities and dynamic extensions on demand.'
 						),
 						align: 'left',
 						accent,
@@ -136,7 +138,8 @@
 						],
 						actions: [
 							action(t('选择接入方式', 'Choose an Integration'), '/guide/getting-started'),
-							action(t('查看 UnoCSS Preset', 'Open UnoCSS Preset'), '/guide/unocss', 'outline')
+							action(t('查看 UnoCSS Preset', 'Open UnoCSS Preset'), '/guide/unocss', 'outline'),
+							action(t('查看 Style 配置', 'Open Style Configuration'), '/guide/sass', 'outline')
 						]
 					}, { ...stack, marginBottom: 64, fullWidth: true }),
 					block('home-features', 'features', {
@@ -187,7 +190,11 @@
 						accent,
 						accentSecondary,
 						background: '',
-						actions: [action(t('查看接入与迁移', 'Open Integration Guide'), '/guide/integration')]
+						actions: [
+							action(t('查看接入与迁移', 'Open Integration Guide'), '/guide/integration'),
+							action(t('UnoCSS 工具类参考', 'UnoCSS Utilities'), '/guide/unocss-utilities', 'outline'),
+							action(t('Style 工具类参考', 'Style Utilities'), '/guide/utilities', 'outline')
+						]
 					}, { ...stack, marginBottom: 0, fullWidth: true })
 				]
 			};
@@ -229,7 +236,7 @@
 					localeReadmes[lang] || localeReadmes['zh-CN']
 				)[value],
 				resource: ({ source, runtime }) => {
-					if (source === 'README.md' || /^(docs\/[^/]+\.md|packages\/[^/]+\/README\.md)$/.test(source)) {
+					if (Object.hasOwn(readmeRoutes, source)) {
 						return runtime.mode === 'development'
 							? `/${source}`
 							: new URL(source, repositoryRaw).href;
@@ -244,8 +251,11 @@
 					} catch {
 						return undefined;
 					}
-					if (target.origin !== logicalOrigin) return undefined;
-					const path = target.pathname.replace(/^\//, '');
+					const isRepositoryLink = target.href.startsWith(repositoryBlob);
+					if (target.origin !== logicalOrigin && !isRepositoryLink) return undefined;
+					const path = isRepositoryLink
+						? target.pathname.slice(new URL(repositoryBlob).pathname.length)
+						: target.pathname.replace(/^\//, '');
 					const route = readmeRoutes[path];
 					if (route) return `/${lang}${route}${target.search}${target.hash}`;
 					return `${new URL(path, repositoryBlob).href}${target.search}${target.hash}`;

@@ -11,13 +11,13 @@
 | `@deot/style/dist/index.css` | 当前完整工具类、theme 和 reset，不含 deprecated |
 | `@deot/style/dist/index.normalize.css` | 当前完整样式与 Normalize，不含 deprecated |
 | `@deot/style/dist/index.rem.css` / `index.rpx.css` | 相应配置下的当前样式，不含 deprecated |
-| `@deot/style/dist/index.deprecated.css` | 默认 `g-`、`px`、`scale: 1` 配置下的旧类，无 theme、reset 和最新类 |
+| `@deot/style/dist/index.deprecated.css` | 默认 `g-`、`px`、`scale: 1` 配置下的全部 85 个旧类，无 theme、reset 和最新类 |
 | `@deot/style/src/index.deprecated.scss` | 仅 `@use "./outputs/deprecated"`，对应上述默认兼容入口 |
 | `@deot/style/dist/index.rem-part.css` | 仅当前字号、行高和间距，使用 `rg-`；不包含 deprecated |
 
-所有正常 Sass/CSS 入口和分类 `outputs/*.scss` 都只生成当前类。仍需要旧类时，显式加载唯一的独立兼容入口。
+所有正常 Sass/CSS 入口和非 deprecated 分类模块都只生成当前类。仍需要旧类时，显式加载唯一的独立兼容入口。
 
-## UnoCSS 项目临时兼容
+## 接入兼容 CSS
 
 使用包含上述入口的新版本 `@deot/style`：
 
@@ -25,7 +25,20 @@
 pnpm add @deot/style
 ```
 
-应用入口：
+### 普通 CSS 项目
+
+需要当前工具类时，在应用入口按以下顺序加载：
+
+```ts
+import '@deot/style/dist/index.deprecated.css';
+import '@deot/style/dist/index.css';
+```
+
+完整默认入口同时提供旧类依赖的主题变量。不要同时叠加其他完整单位入口。
+
+### UnoCSS 项目
+
+在应用入口加载兼容 CSS 和 UnoCSS 产物，不引入完整 Style CSS：
 
 ```ts
 import '@deot/style/dist/index.deprecated.css';
@@ -34,7 +47,11 @@ import 'virtual:uno.css';
 
 UnoCSS 配置继续使用 `presetStyle()`。其变量 preflight 默认提供兼容类依赖的 `--border-color-default`、`--border-shadow-default`、`--border-shadow-default-top` 和 `--line-height-limit`。单独使用兼容 CSS、或项目自行关闭 preflights 时，应先由项目主题提供这些变量，也可以单独加载 Sass 的 `outputs/theme`。兼容 CSS 本身不定义主题变量。
 
-逐步替换旧类，完成迁移后移除独立兼容 CSS。普通 CSS 项目若还需要当前工具类，应先加载兼容入口，再加载 `@deot/style/dist/index.css`，让当前声明保持更高的层叠优先级。
+### 迁移顺序与适用配置
+
+两种方式都应逐步替换旧类，完成迁移后移除独立兼容 CSS。UnoCSS 项目若不再使用 Style 的其他能力，也可移除该依赖。
+
+后加载只在其他层叠条件相同时影响优先级，不保证覆盖不同属性或 `!important`。迁移时应替换旧类，不在同一元素上叠加新旧定义。
 
 兼容产物固定为默认 `g-`、px、scale 1，不读取 `UNOCSS_OPTIONS`，也不提供 rem、rpx、`rg-` 或其他自定义配置的预编译入口。这些项目应直接迁移旧类。
 
@@ -85,11 +102,11 @@ UnoCSS 配置继续使用 `presetStyle()`。其变量 preflight 默认提供兼�
 - **Variants**：静态 CSS 不恢复旧 UnoCSS variants。`hover:g-col` 应改为 `hover:g-f-1`，`md:g-img-37` 应改为 `md:g-image-37`；分组语法中的旧类也必须替换。
 - **层叠顺序**：同时加载当前 CSS 时，应先加载 deprecated，再加载当前入口。迁移时直接替换旧类，避免在同一元素叠加新旧定义；HTML class 的书写顺序不决定 CSS 优先级。
 - **单位与前缀**：rem、rpx、`rg-` 和其他自定义配置没有兼容产物，应直接迁移。`index.rem-part.css` 不再包含此前的 `rg-lh-one/two`。
-- **Mini 组合**：本 preset 移除旧 matcher 后，旧名可能落到 Mini 的其他规则，例如 `g-b` 会由 Mini 生成 `border-width: 1px`，不再由本 preset 生成高清伪元素边框。静态兼容 CSS 与 Mini 生成的声明可能叠加，调整导入顺序不能消除不同属性之间的冲突；请优先迁移这些旧名。组合配置见[与 UnoCSS Mini 组合](./unocss-mini.md)。
+- **Mini 组合**：本 preset 移除旧 matcher 后，旧名可能落到 Mini 的其他规则，例如 `g-b` 会由 Mini 生成 `border-width: 1px`，不再由本 preset 生成高清伪元素边框。静态兼容 CSS 与 Mini 生成的声明可能叠加，调整导入顺序不能消除不同属性之间的冲突；请优先迁移这些旧名。组合配置见[与 UnoCSS Mini 组合](../unocss/mini.md)。
 
 ## 相关文档
 
 - [当前工具类参考](./DOCUMENT.md)
-- [UnoCSS 配置](../packages/unocss/README.md)
-- [Sass 配置与主题](../packages/index/README.md)
-- [接入与迁移](./integration.md)
+- [UnoCSS 配置](../../packages/unocss/README.md)
+- [Sass 配置与主题](../../packages/index/README.md)
+- [接入与迁移](../start/integration.md)

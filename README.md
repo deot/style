@@ -14,69 +14,36 @@
 
 ## 特性
 
-- 两个包默认使用 `g-` 前缀，并覆盖相同的当前公共工具类语义；旧类由 Sass 独立兼容入口提供。
+- 两个包默认使用 `g-` 前缀；UnoCSS 覆盖 Style 当前核心工具类，并提供额外动态规则。两包输出范围和 scale 行为不同，旧类由 Sass 独立兼容入口提供。
 - `@deot/style` 支持配置单位、缩放、前缀、CSS Variables、主题与全局 reset。
 - `@deot/style` 提供完整 CSS、normalize、rem、rpx 和局部 rem 构建产物。
 - `@deot/style-unocss` 提供本仓库按需规则，并复用 Mini 官方 variants，支持布局、Flex/Grid 子项、交互、排版、标准 Border、Outline、SVG、动态值、CSS Variables 与 Variant Group；Mini rules 由项目按需显式组合。
-- 内置 Flex、Grid、浮动栅格、主题变量、BEM mixin 与常用 Sass 函数。
+- 两包均提供 Flex、Grid、浮动栅格和主题变量；BEM mixin 与 Sass 函数由 `@deot/style` 提供。
 - JavaScript 入口提供 `Style.useREM()`，用于按视口宽度设置根字号。
 
-## 选择并安装
+## 阅读导航
 
-直接使用 CSS 或 Sass：
+按“开始使用 → 对应包配置 → 对应包工具类”阅读：
 
-```bash
-pnpm add @deot/style
-```
+### 开始使用
 
-已经使用 UnoCSS：
+- [选择与安装](./docs/start/installation.md)：比较 CSS、Sass 与 UnoCSS，安装所需依赖。
+- [接入与迁移](./docs/start/integration.md)：构建插件、Web/REM/RPX、多入口开发，以及 UnoCSS 接入兼容 CSS 的步骤。
 
-```bash
-pnpm add -D unocss @deot/style-unocss
-```
+### UnoCSS · @deot/style-unocss
 
-完整选择依据见[选择与安装](./docs/getting-started.md)。
+- [概览与配置](./packages/unocss/README.md)：preset 参数、variants、环境变量和 safelist。
+- [工具类参考](./docs/unocss/DOCUMENT.md)：自有规则、完整取值范围、动态值与输出。
+- [presetMini 组合、覆盖与配置](./docs/unocss/mini.md)：本仓库有、Mini 有、同名覆盖及配置归属。
 
-## CSS / Sass 基础用法
+### Style · @deot/style
 
-```ts
-import '@deot/style/dist/index.css';
-```
+- [概览与配置](./packages/index/README.md)：预编译入口、Sass 配置、主题和按需加载。
+- [工具类参考](./docs/style/DOCUMENT.md)：实际 Sass/CSS 输出及有限数值集合。
+- [Deprecated 兼容与迁移](./docs/style/deprecated.md)：唯一兼容入口、旧类映射和边界。
+- [参考与示例](./docs/style/reference-examples.md)：主题键、函数、mixin、REM API 与交互示例。
 
-```html
-<section class="g-flex g-ai-c g-jc-sb g-pd-16">
-	<strong class="g-c-info">@deot/style</strong>
-	<span class="g-bg-gray-mid g-br-8 g-pd-lr-8 g-pd-tb-4">ready</span>
-</section>
-```
-
-需要包含 normalize.css 时改为：
-
-```ts
-import '@deot/style/dist/index.normalize.css';
-```
-
-## UnoCSS 基础用法
-
-```ts
-import { defineConfig } from 'unocss';
-import { presetStyle } from '@deot/style-unocss';
-
-export default defineConfig({
-	presets: [presetStyle()]
-});
-```
-
-## 文档
-
-- [选择与安装](./docs/getting-started.md)：先确定 CSS、Sass 或 UnoCSS 接入方式。
-- [接入与迁移](./docs/integration.md)：Web、REM、RPX、UnoCSS 和多入口开发场景。
-- [Deprecated 迁移](./docs/deprecated.md)：旧类映射、独立兼容 CSS 和迁移边界。
-- [`@deot/style-unocss`](./packages/unocss/README.md)：按需规则、配置语义与动态类名。
-- [与 UnoCSS Mini 组合](./docs/unocss-mini.md)：规则来源、覆盖结果和 Mini-only token 迁移。
-- [`@deot/style` Sass](./packages/index/README.md)：配置、主题、函数和 mixin。
-- [工具类参考](./docs/DOCUMENT.md)：完整的 `g-*` 类说明。
-- [Sass/CSS 示例](./docs/playground.md)：交互式体验布局、工具类和 REM。
+两份工具类参考只展示当前规则，历史类名仅在 Deprecated 专页维护。不要同时加载完整 Style CSS 和 UnoCSS 工具类产物。
 
 ## 本地开发
 
@@ -98,7 +65,7 @@ npm run build
 npm run test -- --package-name index --no-coverage
 npm run test -- --package-name unocss --no-coverage
 
-# 代码检查
+# 代码检查（包含 Stylelint 自动修复）
 npm run lint
 ```
 

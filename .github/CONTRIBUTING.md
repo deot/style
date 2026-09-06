@@ -12,13 +12,13 @@
 
 ## 分支管理
 
-基于我们的 [发布周期](./CHANGELOG.md)，我们每个月都会从 `master` 分支切一个 `feature` 分支出来（比如 `features-3.1` 分支用来发布 3.1 版本）。 如果你要修一个 `bug`，那么请发 `pull request` 到 `master`；如果你要提一个增加新功能的 `pull request`，那么请基于 `feature` 分支来做。
+当前默认分支为 `main`。修复和功能开发均从 `main` 创建工作分支，并向 `main` 提交 `pull request`；如果维护者为具体任务指定了其他目标分支，以该任务约定为准。
 
 ## Bugs
 
 我们使用 [`GitHub Issues`](https://github.com/deot/style/issues) 来做 `bug` 追踪。
 
-在你报告一个 `bug` 之前，请先确保已经搜索过已有的 `issue` 和阅读了我们的 [常见问题](https://github.com/deot/style/wiki/FAQ)。
+在报告 `bug` 之前，请先搜索已有 `issue`，并按[仓库概览](../README.md)确认所用包的配置、工具类范围和迁移说明。
 
 ## 新增功能
 
@@ -38,22 +38,22 @@
 
 ## Pull Request
 
-`WYA` 团队会关注所有的 `pull request`，我们会 `review` 以及合并你的代码，也有可能要求你做一些修改或者告诉你我们为什么不能接受这样的修改。
+维护者会审查 `pull request`，并根据测试、兼容性和文档情况决定是否合并，或说明需要调整的内容。
 
 **在你发送 `Pull Request` 之前**，请确认你是按照下面的步骤来做的：
 
-1. 基于 [正确的分支](/)来做修改。
-2. 在项目根目录下运行了 `npm install`。
+1. 按本文“分支管理”选择目标分支。
+2. 在项目根目录下运行了 `pnpm install`。
 3. 如果你修复了一个 `bug` 或者新增了一个功能，请确保写了相应的测试，这很重要。
-4. 确认所有的测试都是通过的 `npm run test`。 小贴士：开发过程中可以用 `npm run test` 来运行指定的测试。
-5. 确保你的代码通过了 `lint` 检查 `npm run lint`. 小贴士: `Lint` 会在你 `git commit` 的时候自动运行。
+4. 运行 `npm run test -- --package-name '*' --no-coverage` 验证两个包；可用 `--package-name index` 或 `--package-name unocss` 单独验证。
+5. 运行 `npm run lint:es`；涉及 Sass 时检查相关 Stylelint 结果。完整 `npm run lint` 包含自动修复，应确认其 diff；提交钩子只检查暂存文件，不替代全量验证。
 
 
 ## 开发流程
 
-在你 `clone` 了 `@deot/style`  的代码并且使用 `npm install` 安装完依赖后，你还可以运行下面几个常用的命令：
+在你 `clone` 了 `@deot/style` 的代码并使用 `pnpm install` 安装依赖后，可运行以下命令：
 
-1. `npm run dev` 在本地运行 `dev`。
-2. `npm run lint` / `npm run lint:fix` / `npm run lint:watch` 检查代码风格/修复/监听。
-3. `npm run build` 构建 `dev` 到 `dist` 目录。
-4. `npm run test` 运行测试。
+1. `npm run dev` 监听两个包的测试；`npm run docs:dev` 构建 Style 并启动文档站。
+2. `npm run lint:es` 检查 JS/TS 和 Markdown 代码块。注意现有 `npm run lint` 中的 Stylelint 带自动修复，不是只读检查。
+3. `npm run build` 构建各子包到对应 `dist` 目录；`npm run typecheck` 检查类型。
+4. 文档按 [仓库概览](../README.md)的三个分组组织。工具类变更同步对应包的参考，旧类仅在 [Deprecated 专页](../docs/style/deprecated.md)维护；两份子包 README 保持独立可读。
