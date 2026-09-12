@@ -207,12 +207,29 @@
 			: location.pathname.endsWith('/')
 				? location.pathname
 				: new URL('./', location.href).pathname;
+		const logo = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#be185d"/><rect x="11" y="13" width="37" height="15" rx="5" fill="#fff"/><path d="M16 18h27v5H16z" fill="#fce7f3"/><path d="M48 20h5v14H34v7" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="28" y="39" width="12" height="16" rx="5" fill="#fff"/></svg>')}`;
+		if (typeof document !== 'undefined') {
+			const favicon = document.createElement('link');
+			favicon.rel = 'icon';
+			favicon.type = 'image/svg+xml';
+			favicon.href = logo;
+			document.head.appendChild(favicon);
+		}
 
 		window.$docs = {
 			base: new URL(basePath, location.origin).href,
 			namespace: '@deot/style-site',
 			repository: 'https://github.com/deot/style',
 			theme: { default: 'system' },
+			layout: {
+				header: {
+					brand: {
+						logo,
+						label: '@deot/style',
+						value: '/'
+					}
+				}
+			},
 			locales,
 			routes: Object.fromEntries([
 				['/', {

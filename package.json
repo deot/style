@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@deot/dev": "^2.9.15",
-    "@deot/docs": "^1.0.9",
+    "@deot/docs": "^1.1.2",
     "normalize.css": "^8.0.1",
     "unocss": "^66.9.1"
   }
