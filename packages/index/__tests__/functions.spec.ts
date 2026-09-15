@@ -51,4 +51,39 @@ describe('functions/', () => {
 		const source = sass.compileString(`@use './variables/default' as vd; vd.$scale: 2; @use './functions/helper' as fh;#{fh.prefix((name: 'test'))}#{fh.suffix(10)}{ color: red }`);
 		expect(source.css).toMatch('.g-test-20{');
 	});
+
+	it('remfix 24', () => {
+		const source = sass.compileString(`@use './functions/helper' as fh;a{width: fh.remfix(24)}`);
+		expect(source.css).toMatch('a{width:calc(var(--rem, calc(100vw / 750)) * 24)}');
+	});
+
+	it('remfix 24px', () => {
+		const source = sass.compileString(`@use './functions/helper' as fh;a{width: fh.remfix(24px)}`);
+		expect(source.css).toMatch('a{width:calc(var(--rem, calc(100vw / 750)) * 24)}');
+	});
+
+	it('remfix custom rem', () => {
+		const source = sass.compileString(`@use './functions/helper' as fh;a{width: fh.remfix(24, (rem: --unit))}`);
+		expect(source.css).toMatch('a{width:calc(var(--unit, calc(100vw / 750)) * 24)}');
+	});
+
+	it('remfix custom base-width', () => {
+		const source = sass.compileString(`@use './functions/helper' as fh;a{width: fh.remfix(24, (base-width: 375))}`);
+		expect(source.css).toMatch('a{width:calc(var(--rem, calc(100vw / 375)) * 24)}');
+	});
+
+	it('remfix rem without dashes', () => {
+		const source = sass.compileString(`@use './functions/helper' as fh;a{width: fh.remfix(24, (rem: unit))}`);
+		expect(source.css).toMatch('a{width:calc(var(--unit, calc(100vw / 750)) * 24)}');
+	});
+
+	it('remfix ignores scale', () => {
+		const source = sass.compileString(`@use './variables/default' as vd; vd.$scale: 2; @use './functions/helper' as fh;a{width: fh.remfix(24)}`);
+		expect(source.css).toMatch('a{width:calc(var(--rem, calc(100vw / 750)) * 24)}');
+	});
+
+	it('remfix default rem variable', () => {
+		const source = sass.compileString(`@use './variables/default' as vd; vd.$rem-var: '--unit'; @use './functions/helper' as fh;a{width: fh.remfix(24)}`);
+		expect(source.css).toMatch('a{width:calc(var(--unit, calc(100vw / 750)) * 24)}');
+	});
 });

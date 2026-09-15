@@ -11,7 +11,7 @@ $direction-map: ('l': left, 'r': right, 't': top, 'b': bottom);
 	$options: ();
 
 	@each $item in $rest {
-		@if  meta.type-of($item) == 'map' {
+		@if meta.type-of($item) == 'map' {
 			$options: map.merge($options, $item);
 		} @else if meta.type-of($item) == 'list' {
 			$options: map.merge($options, merge($item));
@@ -34,14 +34,16 @@ $direction-map: ('l': left, 'r': right, 't': top, 'b': bottom);
 	)}#{if(sass($name and $name != ""): #{$name}-; else: "")};
 }
 
-// 10/10px是number类型, 后者带单位; "10px"是string类型
-// 当scale = 2时: 10px -> 20px; 当单位为rem时：10 -> 10rem; 仅当字符串时，保持不变
+/**
+ * 10/10px是number类型, 后者带单位; "10px"是string类型
+ * 当scale = 2时: 10px -> 20px; 当单位为rem时：10 -> 10rem; 仅当字符串时，保持不变
+ */
 @function unitfix($value, $rest...) {
 	$options: merge((unit: vd.$unit, scale: vd.$scale), $rest...);
 	$unit: map.get($options, 'unit');
 	$scale: map.get($options, 'scale');
 
-	@if  meta.type-of($value) == 'number' {
+	@if meta.type-of($value) == 'number' {
 		$value: if(sass(math.is_unitless($value)): #{$value * $scale}#{$unit}; else: #{$value * $scale});
 	} @else if meta.type-of($value) == 'string' {
 		$value: string.unquote($value);
@@ -55,7 +57,7 @@ $direction-map: ('l': left, 'r': right, 't': top, 'b': bottom);
 	$options: merge((scale: vd.$scale), $rest...);
 	$scale: map.get($options, 'scale');
 
-	@if  meta.type-of($value) == 'number' {
+	@if meta.type-of($value) == 'number' {
 		$value: $value * $scale;
 	} @else if meta.type-of($value) == 'string' {
 		$value: string.unquote($value);
@@ -66,4 +68,30 @@ $direction-map: ('l': left, 'r': right, 't': top, 'b': bottom);
 
 @function percentw($col, $total) {
 	@return math.percentage(math.div($col, $total));
+}
+
+/**
+ * remfix(24) = calc(var(--rem, calc(100vw / 750)) * 24)
+ * n 是 750 画布上的长度，与手写 24rem / g-fs-24 同一坐标系（750 宽 = 100vw）
+ * 不乘 $scale：$scale 只用于 unitfix/suffix 把 375 token 放大到 750 rem；再乘会与 24rem 叠乘错位
+ */
+@function remfix($value, $rest...) {
+	$options: merge((rem: vd.$rem-var, base-width: 750), $rest...);
+	$rem: map.get($options, 'rem');
+	$base-width: map.get($options, 'base-width');
+	$rem: #{string.unquote(#{$rem})};
+
+	@if string.index($rem, '--') != 1 {
+		$rem: --#{$rem};
+	}
+
+	@if meta.type-of($value) == 'number' {
+		@if not math.is-unitless($value) {
+			$value: math.div($value, $value * 0 + 1);
+		}
+	} @else if meta.type-of($value) == 'string' {
+		$value: string.unquote($value);
+	}
+
+	@return string.unquote('calc(var(#{$rem}, calc(100vw / #{$base-width})) * #{$value})');
 }

@@ -35,12 +35,13 @@ import '@deot/style/dist/index.css';
 
 所有正常入口只包含当前类。旧项目可临时加载默认 `g-`、px、scale 1 的 `@deot/style/dist/index.deprecated.css`；该入口不包含 theme、reset 或当前类，依赖的主题变量需由 UnoCSS preflight 或项目提供。完整映射及限制见 [Deprecated 迁移](https://github.com/deot/style/blob/main/docs/style/deprecated.md)。
 
-选择 REM 入口后，需要按视口设置根字号时使用以下方法；默认 px 入口不需要调用。`750` 与预编译 REM 入口的 scale 2 搭配使用，其他设计稿基准见[REM API](https://github.com/deot/style/blob/main/docs/style/reference-examples.md)。
+选择 REM 入口后，需要按视口设置根字号时使用以下方法；默认 px 入口不需要调用。`750` 与预编译 REM 入口的 scale 2 搭配使用。默认同时注入 `font-size` 和 `--rem`；后者供 Sass `remfix()` 辅助手写尺寸。参数与 `remfix` 见[REM API](https://github.com/deot/style/blob/main/docs/style/reference-examples.md)。
 
 ```ts
 import { Style } from '@deot/style/dist';
 
 Style.useREM(750);
+Style.useREM(750, { fontSize: false }); // 只注入 --rem，配合 remfix()
 ```
 
 ## Sass 配置
@@ -81,6 +82,7 @@ pnpm add -D sass
 | 变量 | 默认值 | 说明 |
 | --- | --- | --- |
 | `$scale` | `1` | 数字尺寸及其类名后缀的缩放倍数；比例、编号、字重等不缩放 |
+| `$rem-var` | `--rem` | `remfix` 默认 CSS 变量名，需与 `Style.useREM()` 注入的变量一致 |
 | `$unit` | `px` | 无单位数字转换后的单位 |
 | `$prefix` | `g` | 工具类前缀；末尾连字符可省略，空字符串会移除前缀 |
 | `$allow-css-variables` | `true` | 使用 `var(--*)` 输出主题引用 |

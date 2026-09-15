@@ -174,7 +174,7 @@ import 'virtual:uno.css';
 @use '@deot/style/src/index';
 ```
 
-应用入口加载 `styles/index.scss`，并在挂载前初始化根字号：
+应用入口加载 `styles/index.scss`，并在挂载前调用 `Style.useREM()`：
 
 ```ts
 import { Style } from '@deot/style/dist';
@@ -183,7 +183,9 @@ import './styles/index.scss';
 Style.useREM(750);
 ```
 
-`$scale: 2` 会同时缩放数值后缀和属性值。例如基础字号 14 会输出为 `.g-fs-28 { font-size: 28rem; }`，对应 750 宽设计稿上的 28px 标注。
+默认同时注入根字号和 `--rem`。不想改根字号时可用 `Style.useREM(750, { fontSize: false })`，业务尺寸用 `helper.remfix(24)` 辅助处理。完整参数见 [REM API](../style/reference-examples.md)。
+
+`$scale: 2` 会同时缩放数值后缀和属性值。例如基础字号 14 会输出为 `.g-fs-28 { font-size: 28rem; }`，对应 750 宽设计稿上的 28px 标注。`remfix` 不乘 `$scale`。
 
 若桌面容器需要固定按 375px 展示移动页面，业务项目会把根字号固定为 `0.5px`；这是宿主环境策略，不属于 `Style.useREM()` 的通用行为。
 

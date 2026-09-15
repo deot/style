@@ -2,8 +2,11 @@
 
 // 定义默认属性
 
-// 缩放
+// 缩放：unitfix/suffix 把源 token 放大到输出值（如 rem 入口 375 稿 -> scale 2 -> 750 rem）
 $scale: 1 !default;
+
+// remfix / Style.useREM 使用的 CSS 变量名
+$rem-var: '--rem' !default;
 
 // 单位
 $unit: px !default;

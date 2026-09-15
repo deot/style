@@ -19,7 +19,7 @@
 - `@deot/style` 提供完整 CSS、normalize、rem、rpx 和局部 rem 构建产物。
 - `@deot/style-unocss` 提供本仓库按需规则，并复用 Mini 官方 variants，支持布局、Flex/Grid 子项、交互、排版、标准 Border、Outline、SVG、动态值、CSS Variables 与 Variant Group；Mini rules 由项目按需显式组合。
 - 两包均提供 Flex、Grid、浮动栅格和主题变量；BEM mixin 与 Sass 函数由 `@deot/style` 提供。
-- JavaScript 入口提供 `Style.useREM()`，用于按视口宽度设置根字号。
+- JavaScript 入口提供 `Style.useREM()`，用于按视口宽度设置根字号和 `--rem`；Sass `remfix()` 可按同一坐标系写尺寸。
 
 ## 阅读导航
 

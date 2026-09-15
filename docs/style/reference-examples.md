@@ -41,6 +41,7 @@
 | `unitfix($value, $rest...)` | 缩放数字并补单位；字符串保持原值 |
 | `suffix($value, $rest...)` | 缩放数字类名后缀；字符串保持原值 |
 | `percentw($col, $total)` | 将分栏比例转换为百分比 |
+| `remfix($value, $rest...)` | 输出 `calc(var(--rem, calc(100vw / 750)) * n)`，配合 `Style.useREM()`；n 按 750 画布取值，不乘 `$scale` |
 
 ```scss
 @use '@deot/style/src/functions/helper' as helper;
@@ -48,8 +49,11 @@
 .card {
 	padding: helper.unitfix(16);
 	width: helper.percentw(1, 3);
+	height: helper.remfix(24);
 }
 ```
+
+`remfix(24)` 与手写 `24rem` 同一坐标系。默认读取 `$rem-var`（`--rem`），可用 `(rem: --unit)`、`(base-width: 375)` 覆盖；`$scale` 不会改变输出。与 `Style.useREM()` 的配合见下文。
 
 ### Theme
 
@@ -117,13 +121,16 @@
 
 ## JavaScript：Style.useREM
 
-`Style.useREM(baseWidth)` 会将根元素字号设置为：
+`Style.useREM(baseWidth, options)` 按视口宽度计算：
 
 ```text
 document width / baseWidth px
 ```
 
-默认 `baseWidth` 是 `750`，因此视口宽度始终等于 `750rem`。函数会立即刷新一次，并在窗口 resize 时重新计算。
+默认 `baseWidth` 是 `750`。函数会立即刷新一次，并在窗口 resize 时重新计算。默认同时注入根元素 `font-size`（`!important`）和 CSS 变量 `--rem`：
+
+- `font-size`：使 `750rem` 等于视口宽度，配合预编译 rem 工具类
+- `--rem`：供 Sass `remfix()` 使用，不依赖根字号；未注入时 `remfix` 回退为 `calc(100vw / 750)`
 
 ```ts
 import '@deot/style/dist/index.rem.css';
@@ -132,13 +139,38 @@ import { Style } from '@deot/style/dist';
 Style.useREM();
 ```
 
+第二个参数控制注入哪些属性，可只注入其中一项，也可同时注入：
+
+| 选项 | 类型 | 默认 | 说明 |
+| --- | --- | --- | --- |
+| `fontSize` | `boolean` | `true` | 注入根元素 `font-size` |
+| `rem` | `boolean \| string` | `true` | `true` 注入 `--rem`；`false` 不注入；字符串作为变量名（无 `--` 时自动补上） |
+
+```ts
+Style.useREM(750, { rem: false });
+Style.useREM(750, { fontSize: false });
+Style.useREM(750, { rem: '--unit' });
+```
+
+只注入 `--rem` 时，页面上的 `rem` 单位不会随视口变化。业务手写尺寸用 `remfix()` 辅助处理：
+
+```scss
+@use '@deot/style/src/functions/helper' as helper;
+
+.card {
+	width: helper.remfix(24);
+}
+```
+
+自定义变量名时，Sass `$rem-var` 或 `remfix(..., (rem: --unit))` 需与 `useREM` 的 `rem` 选项一致。
+
 `index.rem.css` 固定使用 scale 2，示例与 750 宽设计稿搭配。若改用 375 宽设计稿，应从 Sass 源码配置 `$unit: rem`、`$scale: 1` 并加载生成的样式，再调用：
 
 ```ts
 Style.useREM(375);
 ```
 
-`baseWidth` 只控制根字号，不改变 CSS 产物的单位、类名或 scale；仅把 `750` 改为 `375`，不会把预编译 scale 2 的 CSS 转为 scale 1。Sass 加载顺序见[接入与迁移](../start/integration.md)。
+`baseWidth` 只控制注入值的计算，不改变 CSS 产物的单位、类名或 scale；仅把 `750` 改为 `375`，不会把预编译 scale 2 的 CSS 转为 scale 1。`remfix` 也不乘 `$scale`。Sass 加载顺序见[接入与迁移](../start/integration.md)。
 
 应用生命周期内应只调用一次；当前 API 不返回移除 resize 监听器的方法。
 
