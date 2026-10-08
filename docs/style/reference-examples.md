@@ -82,7 +82,7 @@
 | `common-text-line($line)` | 指定行数截断 |
 | `common-clear-fix($content: false)` | 清除浮动；true 时在伪元素内接收内容块 |
 | `common-scroll($size: 4)` | WebKit 滚动条样式，尺寸通过 unitfix 处理 |
-| `common-border-1px($direction: '', $color, $border-radius: inherit)` | 空方向为全边，或 top/right/bottom/left；颜色必传，适配 2x/3x 屏 |
+| `common-border-1px($direction: '', $color, $border-radius: inherit)` | 空方向为全边，或 top/right/bottom/left；颜色必传；高分屏下边框宽度减半，由浏览器对齐到整数设备像素 |
 
 ## BEM mixin
 

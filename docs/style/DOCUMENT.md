@@ -203,7 +203,7 @@ Sass 不预生成 Gap 类；在本包项目中使用业务 CSS 的 `gap/column-g
 | `g-br-circle` | `border-radius: 100% !important` | 固定类 |
 | `g-br-default` | `border-radius: var(--border-radius-default) !important` | 默认 8px |
 | `g-bsh` / `g-bsh-t` | `box-shadow` 引用 `--border-shadow-default` / `--border-shadow-default-top` | 普通声明 |
-| `g-bd` / `g-bdt` / `g-bdr` / `g-bdb` / `g-bdl` | 全边 / 上 / 右 / 下 / 左高清细边框 | 设置 relative、translateZ(0)，使用伪元素与 2x/3x 媒体查询 |
+| `g-bd` / `g-bdt` / `g-bdr` / `g-bdb` / `g-bdl` | 全边 / 上 / 右 / 下 / 左高清细边框 | 设置 relative、isolation: isolate，使用伪元素；≥2dppx 且支持 `@supports` 时边框宽度减半 |
 
 数字圆角在 `$scale > 1` 时追加基础值 `1, 3, 5, 7, 9`，再缩放。高清边框颜色引用 `--border-color-default`，上/左使用 `::before`，全边/右/下使用 `::after`；与业务伪元素组合时注意占用。
 

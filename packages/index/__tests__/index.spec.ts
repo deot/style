@@ -131,11 +131,18 @@ describe('index.scss', () => {
 	it('border', () => {
 		const source = sass.compileString(`@use './outputs/border.scss'`);
 		expect(source.css)
-			.toMatch(`.g-bd{position:relative;transform:translateZ(0)}.g-bd::before,.g-bd::after`);
-		expect(source.css).toMatch(`.g-bdt{position:relative;transform:translateZ(0)}`);
-		expect(source.css).toMatch(`.g-bdr{position:relative;transform:translateZ(0)}`);
-		expect(source.css).toMatch(`.g-bdb{position:relative;transform:translateZ(0)}`);
-		expect(source.css).toMatch(`.g-bdl{position:relative;transform:translateZ(0)}`);
+			.toMatch(`.g-bd{position:relative;isolation:isolate}.g-bd::before,.g-bd::after`);
+		expect(source.css).toMatch(`.g-bdt{position:relative;isolation:isolate}`);
+		expect(source.css).toMatch(`.g-bdr{position:relative;isolation:isolate}`);
+		expect(source.css).toMatch(`.g-bdb{position:relative;isolation:isolate}`);
+		expect(source.css).toMatch(`.g-bdl{position:relative;isolation:isolate}`);
+		expect(source.css)
+			.toContain(`@media(resolution >= 2dppx){@supports(border-width: 0.5px){.g-bd::after{border-width:0.5px}}}`);
+		expect(source.css)
+			.toContain(`@media(resolution >= 2dppx){@supports(border-width: 0.5px){.g-bdt::before{border-width:0.5px}}}`);
+		expect(source.css).not.toContain('scale(');
+		expect(sass.compileString(`@use './index.rem.scss'`).css).toContain(`.g-bd::after{border-width:1rem}`);
+		expect(sass.compileString(`@use './index.rpx.scss'`).css).toContain(`.g-bd::after{border-width:1rpx}`);
 		expect(source.css).toMatch(`.g-br-4{border-radius:4px}`);
 		expect(source.css).not.toContain('.g-bdw-');
 		expect(source.css).not.toContain('.g-bds-');

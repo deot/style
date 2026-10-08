@@ -1,5 +1,4 @@
 @use 'sass:meta';
-@use 'sass:math';
 @use "../functions/index" as fi;
 
 
@@ -125,10 +124,16 @@ $unitb: px !default;
  * 已为父元素添加position: relative;
  * 其他只操作before和after;
  * 暂时不抽离公用
+ *
+ * 高分屏下把边框宽度减半：浏览器会把 border-width 向下对齐到整数设备像素，且不足 1 个设备像素时取 1，
+ * 任意缩放比例下都是实色的整像素线；不用 transform 缩放，缩放后的右、下边缘对不齐设备像素，会发虚或缺失
+ *
+ * @supports 只起版本闸门的作用（它判断的是能否解析，不是能否渲染）：
+ * 会把 0.5px 画成 0 的老浏览器不认识 @supports，整块被跳过，保留完整宽度的边框
  */
 @mixin common-border-1px($direction: '', $color, $border-radius: inherit) {
 	position: relative;
-	transform: translateZ(0);
+	isolation: isolate; /* 伪元素的层级只在自身内部生效 */
 
 	& {
 		&::before,
@@ -149,7 +154,6 @@ $unitb: px !default;
 				left: 0;
 				width: 100%;
 				border-top: fi.unitfix(1) solid $color;
-				transform-origin: 0 top;
 			}
 		} @else if $direction == 'right' {
 			&::after {
@@ -157,7 +161,6 @@ $unitb: px !default;
 				right: 0;
 				height: 100%;
 				border-right: fi.unitfix(1) solid $color;
-				transform-origin: right 0;
 			}
 		} @else if $direction == 'bottom' {
 			&::after {
@@ -165,7 +168,6 @@ $unitb: px !default;
 				left: 0;
 				width: 100%;
 				border-bottom: fi.unitfix(1) solid $color;
-				transform-origin: 0 bottom;
 			}
 		} @else if $direction == 'left' {
 			&::before {
@@ -173,7 +175,6 @@ $unitb: px !default;
 				left: 0;
 				height: 100%;
 				border-left: fi.unitfix(1) solid $color;
-				transform-origin: left 0;
 			}
 		} @else {
 			&::after {
@@ -182,84 +183,21 @@ $unitb: px !default;
 				width: 100%;
 				height: 100%;
 				border: fi.unitfix(1) solid $color;
-				transform-origin: 0 0;
 			}
 		}
 	}
 
 	@media (resolution >= 2dppx) {
-		& {
-			@if  meta.type-of($border-radius) == 'number' {
-				&::before,
-				&::after {
-					border-radius: fi.unitfix($border-radius * 2);
-				}
-			}
-
-			@if $direction == 'top' {
-				&::before {
-					width: 200%;
-					transform: scale(0.5);
-				}
-			} @else if $direction == 'right' {
-				&::after {
-					height: 200%;
-					transform: scale(0.5);
-				}
-			} @else if $direction == 'bottom' {
-				&::after {
-					width: 200%;
-					transform: scale(0.5);
-				}
-			} @else if $direction == 'left' {
-				&::before {
-					height: 200%;
-					transform: scale(0.5);
-				}
-			} @else {
-				&::after {
-					width: 200%;
-					height: 200%;
-					transform: scale(0.5);
-				}
-			}
-		}
-	}
-
-	@media (resolution >= 3dppx) {
-		& {
-			@if  meta.type-of($border-radius) == 'number' {
-				&::before,
-				&::after {
-					border-radius: fi.unitfix($border-radius * 3);
-				}
-			}
-
-			@if $direction == 'top' {
-				&::before {
-					width: 300%;
-					transform: scale(math.div(1, 3));
-				}
-			} @else if $direction == 'right' {
-				&::after {
-					height: 300%;
-					transform: scale(math.div(1, 3));
-				}
-			} @else if $direction == 'bottom' {
-				&::after {
-					width: 300%;
-					transform: scale(math.div(1, 3));
-				}
-			} @else if $direction == 'left' {
-				&::before {
-					height: 300%;
-					transform: scale(math.div(1, 3));
-				}
-			} @else {
-				&::after {
-					width: 300%;
-					height: 300%;
-					transform: scale(math.div(1, 3));
+		@supports (border-width: 0.5px) {
+			& {
+				@if $direction == 'top' or $direction == 'left' {
+					&::before {
+						border-width: fi.unitfix(0.5);
+					}
+				} @else {
+					&::after {
+						border-width: fi.unitfix(0.5);
+					}
 				}
 			}
 		}
