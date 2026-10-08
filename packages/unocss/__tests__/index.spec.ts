@@ -1075,7 +1075,9 @@ describe('presetStyle', () => {
 		expect(css).toContain('.g-bg-white{background-color:#fff!important}');
 		expect(source).not.toContain('.g-bg-white input');
 		expect(source).toContain('.g-bd::before,.g-bd::after');
-		expect(css).toContain('@media(resolution>=2dppx)');
+		expect(css).toContain('.g-bd{position:relative;isolation:isolate}');
+		expect(css).toContain('@media(resolution>=2dppx){@supports(border-width:0.5px){.g-bd::after{border-width:0.5px}}}');
+		expect(css).not.toContain('scale(');
 		expect(source).toContain('.g-scroller::-webkit-scrollbar-thumb');
 		expect(source).toContain('.g-reset ol,.g-reset ul,.g-reset li');
 		expect(source).toContain('.g-unset h1,.g-unset h2');

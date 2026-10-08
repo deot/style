@@ -284,7 +284,7 @@ g-b-[1px_dashed_var(--color)] → border: 1px dashed var(--color)
 | `g-br-{n}` | `border-radius: npx` | 仅非负整数形式，不支持 `[]/()` |
 | `g-br-circle` / `g-br-default` | `border-radius: 100% / var(--border-radius-default) !important` | default 默认 8px |
 | `g-bsh` / `g-bsh-t` | box-shadow 引用默认/顶部主题阴影变量 | 仅固定类 |
-| `g-bd` / `g-bdt` / `g-bdr` / `g-bdb` / `g-bdl` | 全边/上/右/下/左高清伪元素边框 | relative + translateZ(0)，2x/3x 媒体查询缩放 |
+| `g-bd` / `g-bdt` / `g-bdr` / `g-bdb` / `g-bdl` | 全边/上/右/下/左高清伪元素边框 | relative + isolation: isolate，≥2dppx 且支持 `@supports` 时边框宽度减半 |
 
 高清边框上/左使用 `::before`，其余使用 `::after`，颜色取 `--border-color-default`。固定细边框尺寸和主题尺寸应用 scale；它们不是标准 Border 简写。裸 `g-bdr` 是高清右边框，`g-bdr-[1px_solid_red]` 是标准右边框，`g-br-8` 是圆角。
 

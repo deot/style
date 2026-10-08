@@ -45,63 +45,55 @@ const createBorderRule = (
 	direction: BorderDirection,
 	options: ResolvedPresetStyleOptions
 ): CSSObject[] => {
-	const isVertical = direction === 'r' || direction === 'l';
 	/*
 	 * 上、左边框使用 ::before，其余方向使用 ::after，与原 Sass 产物保持一致。
 	 */
 	const pseudo = direction === 't' || direction === 'l' ? '::before' : '::after';
 	const edge = {
 		'': {
-			'top': '0',
-			'left': '0',
-			'width': '100%',
-			'height': '100%',
-			'border': `${unitValue(1, options)} solid var(--border-color-default)`,
-			'transform-origin': '0 0'
+			top: '0',
+			left: '0',
+			width: '100%',
+			height: '100%',
+			border: `${unitValue(1, options)} solid var(--border-color-default)`
 		},
 		't': {
 			'top': '0',
 			'left': '0',
 			'width': '100%',
-			'border-top': `${unitValue(1, options)} solid var(--border-color-default)`,
-			'transform-origin': '0 top'
+			'border-top': `${unitValue(1, options)} solid var(--border-color-default)`
 		},
 		'r': {
 			'top': '0',
 			'right': '0',
 			'height': '100%',
-			'border-right': `${unitValue(1, options)} solid var(--border-color-default)`,
-			'transform-origin': 'right 0'
+			'border-right': `${unitValue(1, options)} solid var(--border-color-default)`
 		},
 		'b': {
 			'bottom': '0',
 			'left': '0',
 			'width': '100%',
-			'border-bottom': `${unitValue(1, options)} solid var(--border-color-default)`,
-			'transform-origin': '0 bottom'
+			'border-bottom': `${unitValue(1, options)} solid var(--border-color-default)`
 		},
 		'l': {
 			'top': '0',
 			'left': '0',
 			'height': '100%',
-			'border-left': `${unitValue(1, options)} solid var(--border-color-default)`,
-			'transform-origin': 'left 0'
+			'border-left': `${unitValue(1, options)} solid var(--border-color-default)`
 		}
 	}[direction] as CSSObject;
 	/*
-	 * 高分屏下先放大伪元素，再按像素密度缩小，得到物理像素级细边框。
+	 * 高分屏下把边框宽度减半：浏览器会把 border-width 向下对齐到整数设备像素，且不足 1 个设备像素时取 1，
+	 * 任意缩放比例下都是实色的整像素线；不用 transform 缩放，缩放后的右、下边缘对不齐设备像素，会发虚或缺失。
+	 * @supports 只起版本闸门的作用：会把 0.5px 画成 0 的老浏览器不认识 @supports，整块被跳过，保留完整宽度的边框。
 	 */
-	const scaled = (ratio: number): CSSObject => ({
-		...(isVertical || !direction ? { height: `${ratio * 100}%` } : {}),
-		...(!isVertical || !direction ? { width: `${ratio * 100}%` } : {}),
-		transform: `scale(${1 / ratio})`
-	});
+	const hairline = '@media (resolution >= 2dppx) $$ @supports (border-width: 0.5px)';
 
 	return [
 		/*
-		 * translateZ(0) 保留原实现的合成层行为，避免缩放边框渲染不稳定。
+		 * isolation 让伪元素的层级只在自身内部生效。
 		 */
-		{ position: 'relative', transform: 'translateZ(0)' },
+		{ position: 'relative', isolation: 'isolate' },
 		withSelector(value => `${value}::before,${value}::after`, {
 			'position': 'absolute',
 			'z-index': '1',
@@ -113,8 +105,7 @@ const createBorderRule = (
 			'box-sizing': 'border-box'
 		}),
 		withSelector(value => `${value}${pseudo}`, edge),
-		withParent('@media (resolution >= 2dppx)', value => `${value}${pseudo}`, scaled(2)),
-		withParent('@media (resolution >= 3dppx)', value => `${value}${pseudo}`, scaled(3))
+		withParent(hairline, value => `${value}${pseudo}`, { 'border-width': unitValue(0.5, options) })
 	];
 };
 
