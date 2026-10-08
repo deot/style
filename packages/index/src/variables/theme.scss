@@ -30,8 +30,8 @@ $theme: (
 
 	// 圆角
 	border-radius-default: fi.unitfix(8),
-	border-shadow-default: 0 0 fi.unitfix(8) 0 rgba(0, 0, 0, 0.1),
-	border-shadow-default-top: 0 fi.unitfix(-2) fi.unitfix(10) 0 rgba(0, 0, 0, 0.08),
+	border-shadow-default: 0 0 fi.unitfix(8) 0 rgb(0 0 0 / 10%),
+	border-shadow-default-top: 0 fi.unitfix(-2) fi.unitfix(10) 0 rgb(0 0 0 / 8%),
 
 	// 行高
 	line-height-default: 1.5,
@@ -45,9 +45,9 @@ $theme: (
 	font-size-large: fi.unitfix(16),
 
 	// 滚动条
-	scrollbar-track-bg-color: rgba(0, 0, 0, 0),
-	scrollbar-thumb-bg-color: rgba(0, 0, 0, 0.2),
-	scrollbar-track-box-shadow: inset 0 0 fi.unitfix(10) rgba(0, 0, 0, 0)
+	scrollbar-track-bg-color: rgb(0 0 0 / 0%),
+	scrollbar-thumb-bg-color: rgb(0 0 0 / 20%),
+	scrollbar-track-box-shadow: inset 0 0 fi.unitfix(10) rgb(0 0 0 / 0%)
 ) !default;
 $theme-merge-data: false !default;
 

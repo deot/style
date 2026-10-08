@@ -21,7 +21,7 @@
     "lint": "npm run lint:es && npm run lint:style",
     "lint:fix": "npm run lint:es -- --fix && npm run lint:style -- --fix",
     "lint:es": "eslint . --color",
-    "lint:style": "stylelint --fix 'packages/index/src/**/*.{css,scss}' --cache --cache-location node_modules/.cache/stylelint/",
+    "lint:style": "stylelint 'packages/index/src/**/*.{css,scss}' --cache --cache-location node_modules/.cache/stylelint/",
     "typecheck": "tsc --noEmit --skipLibCheck"
   },
   "scripts-info": {
