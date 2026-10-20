@@ -183,8 +183,8 @@ Sass 不预生成 Gap 类；在本包项目中使用业务 CSS 的 `gap/column-g
 | 灰 | `gray-dark, gray-mid, gray-light` |
 | 紫 | `purple-dark, purple-mid, purple-light` |
 | 黑白 | `black, white, black-dark, black-mid, black-light` |
-| 简写色值 | `444, 67, f2, f8, ef, cd, e8, d9, f4, f9, 000, 333, 51, 666, 999, aaa, bbb, bd` |
-| 主题语义 | `info, success, error, warning`，引用对应 `--color-*` |
+| 简写色值 | `444, 67, f2, f8, ef, cd, e8, d9, f4, f9, 000, 333, 51, 666, 999, aaa, bbb, bd, fff, ffff`；`fff`、`ffff` 均为不透明白色 |
+| 主题语义 | `primary, default, success, error, warning`，引用对应 `--color-*`；`g-bg-primary`、`g-bg-default` 使用对应 `--background-color-*` |
 
 色值来源为 [variables/color.scss](../../packages/index/src/variables/color.scss)。关闭 CSS Variables 后，主题语义色输出具体值。业务扩展主题键不会自动变成颜色工具类。
 
@@ -230,7 +230,7 @@ Sass 不预生成 Gap 类；在本包项目中使用业务 CSS 的 `gap/column-g
 | `g-pointer` | `cursor: pointer !important` | 固定类 |
 | `g-disabled` | `pointer-events: none` | 不替代 HTML disabled 属性 |
 | `g-unanimated` | `animation: 0 !important` | 不关闭 transition |
-| `g-operable` | 14px 字号、主题高亮色（important）、pointer 光标 | 字号随配置缩放 |
+| `g-operable` | 14px 字号、主题主色 `--color-primary`（important）、pointer 光标 | 字号随配置缩放 |
 | `g-scroller` | WebKit 滚动条：宽 4px、横向高 2px、轨道/滑块圆角 5px及主题颜色 | 固定尺寸随配置缩放 |
 | `g-divider` | 1px × 12px，左右 margin 8px，#ccc 背景、relative、inline-block、middle、border-box | 固定尺寸随配置缩放 |
 | `g-dot` | block、5px × 5px、50% 圆角 | 尺寸随配置缩放；颜色自行组合 |

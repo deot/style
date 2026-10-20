@@ -47,7 +47,7 @@ import './styles/index.scss';
 @use '@deot/style/src/functions/helper' as helper;
 @use '@deot/style/src/variables/theme' with (
 	$theme-merge-data: (
-		color-highlight: #456cf6,
+		color-primary: #456cf6,
 		border-radius-default: helper.unitfix(8),
 		font-size-default: helper.unitfix(13)
 	)
@@ -164,7 +164,7 @@ import 'virtual:uno.css';
 );
 @use '@deot/style/src/variables/theme' with (
 	$theme-merge-data: (
-		color-highlight: #456cf6
+		color-primary: #456cf6
 	)
 );
 ```

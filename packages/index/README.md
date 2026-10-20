@@ -16,7 +16,7 @@ import '@deot/style/dist/index.css';
 
 ```html
 <section class="g-flex g-ai-c g-jc-sb g-pd-16">
-	<strong class="g-c-info">@deot/style</strong>
+	<strong class="g-c-primary">@deot/style</strong>
 	<span class="g-bg-gray-mid g-br-8 g-pd-lr-8 g-pd-tb-4">ready</span>
 </section>
 ```
@@ -67,7 +67,7 @@ pnpm add -D sass
 
 @use '@deot/style/src/variables/theme' with (
 	$theme-merge-data: (
-		color-highlight: #7c3aed,
+		color-primary: #7c3aed,
 		border-radius-default: 12px
 	)
 );
@@ -95,7 +95,7 @@ pnpm add -D sass
 - `$theme-merge-data`：覆盖同名键并保留其他默认值，适合只调整部分主题。
 - `$theme`：替换完整主题 map，适合由项目统一维护全部主题键；缺少的键不会自动补回。
 
-两个 map 都可以加入 `color-primary` 等业务语义键，并通过 `themefix()` 使用。完整加载顺序见[接入与迁移](https://github.com/deot/style/blob/main/docs/start/integration.md)。
+两个 map 都可以配置 `color-primary` 等主题键，也可以加入业务语义键，并通过 `themefix()` 使用。`g-c-primary`、`g-c-default` 使用对应的 `color-*`，`g-bg-primary`、`g-bg-default` 使用对应的 `background-color-*`。完整加载顺序见[接入与迁移](https://github.com/deot/style/blob/main/docs/start/integration.md)。
 
 主题键、函数、Common/BEM mixin 和 `Style.useREM()` 的完整说明见[参考与示例](https://github.com/deot/style/blob/main/docs/style/reference-examples.md)。
 

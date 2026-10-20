@@ -255,9 +255,10 @@ g-b-[1px_dashed_var(--color)] → border: 1px dashed var(--color)
 | 灰 | `gray-dark/gray-mid/gray-light` → #edeef0/#f5f6f7/#f7f8fa |
 | 紫 | `purple-dark/purple-mid/purple-light` → #8b61f3/#a48efc/#cca3ff |
 | 黑白 | `black/white` → #000/#fff；`black-dark/black-mid/black-light` → #2e3136/#636770/#9c9fa6 |
-| 三位简写 | `444, 000, 333, 666, 999, aaa, bbb` → 相应三位十六进制色 |
+| 三位简写 | `444, 000, 333, 666, 999, aaa, bbb, fff` → 相应三位十六进制色 |
+| 四位简写 | `ffff` → 不透明白色，与 `fff` 相同 |
 | 两位简写 | `67, f2, f8, ef, cd, e8, d9, f4, f9, 51, bd` → 三次重复，例如 bd 为 #bdbdbd |
-| 主题语义 | `info/success/error/warning` → 对应 `var(--color-*)` |
+| 主题语义 | `primary/default/success/error/warning` → 对应 `var(--color-*)`；`g-bg-primary`、`g-bg-default` 使用对应 `var(--background-color-*)` |
 
 `g-c-[#123456]`、`g-bg-[rgb(0_0_0)]`、`g-c-(--brand)` 可用于动态颜色。未列出的裸颜色名不能依赖本 preset 自动匹配，应写为任意值，例如 `g-c-[red]`。主题变量可以由业务 CSS 覆盖，但不会自动注册业务颜色键。
 
@@ -335,7 +336,7 @@ Outline Width 不提供 Border Width 的裸关键字缩写；需要关键字时�
 | `g-pointer` | `cursor: pointer !important`，不同于普通 `g-cu-p` |
 | `g-disabled` | `pointer-events: none`；不替代 HTML disabled |
 | `g-unanimated` | `animation: 0 !important`，不关闭 transition |
-| `g-operable` | 14px 字号、主题高亮色（important）和 pointer 光标 |
+| `g-operable` | 14px 字号、主题主色 `--color-primary`（important）和 pointer 光标 |
 | `g-scroller` | WebKit 滚动条：宽 4px、横向高 2px、轨道/滑块圆角 5px及主题颜色 |
 | `g-divider` | 1px × 12px、左右 margin 8px、#ccc 背景、relative、inline-block、middle、border-box |
 | `g-dot` | block、5px × 5px、50% 圆角；颜色自行组合 |

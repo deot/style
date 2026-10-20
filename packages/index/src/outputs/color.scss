@@ -1,4 +1,5 @@
 @use "sass:map";
+@use "sass:list";
 @use "../variables/color" as vc;
 @use "../variables/default" as vd;
 @use "../functions/helper" as fh;
@@ -28,6 +29,8 @@ $color-list: ('red-mid', vc.$red-mid),
 	('purple-light', vc.$purple_light),
 	('black', vc.$black),
 	('white', vc.$white),
+	('fff', vc.$white),
+	('ffff', vc.$white),
 	('444', vc.$c444),
 	('67', vc.$c67),
 	('f2', vc.$cf2),
@@ -46,7 +49,6 @@ $color-list: ('red-mid', vc.$red-mid),
 	('aaa', vc.$caaa),
 	('bbb', vc.$cbbb),
 	('bd', vc.$cbd),
-	('info', ft.themefix(color-info)),
 	('success', ft.themefix(color-success)),
 	('error', ft.themefix(color-error)),
 	('warning', ft.themefix(color-warning));
@@ -54,8 +56,22 @@ $line-gradient-list: ('blue', to right, vc.$blue-mid, vc.$blue-light),
 	('yellow', to right, vc.$yellow-mid, vc.$yellow-light);
 $options: (unit: vd.$unit, prefix: vd.$prefix);
 
-@include gm.color($color-list, map.merge($options, (name: c))); // g-c-*
-@include gm.background-color($color-list, map.merge($options, (name: bg))); // g-bg-*
+@include gm.color(
+	list.join($color-list, (
+		('primary', ft.themefix(color-primary)),
+		('default', ft.themefix(color-default))
+	)),
+	map.merge($options, (name: c))
+); // g-c-*
+
+@include gm.background-color(
+	list.join($color-list, (
+		('primary', ft.themefix(background-color-primary)),
+		('default', ft.themefix(background-color-default))
+	)),
+	map.merge($options, (name: bg))
+); // g-bg-*
+
 @include gm.line-gradient($line-gradient-list, map.merge($options, (name: bg-lg))); // g-bg-lg-*
 
 /*

@@ -25,6 +25,14 @@ const GRID_ADDITIONS = [
 const IMAGE_SIZES = [256, 150, 128, 100, 96, 64, 56, 40, 32, 24];
 
 const CURRENT_ADDITIONS = new Set([
+	'g-c-primary',
+	'g-bg-primary',
+	'g-c-default',
+	'g-bg-default',
+	'g-c-fff',
+	'g-bg-fff',
+	'g-c-ffff',
+	'g-bg-ffff',
 	'g-ws-nw',
 	'g-h-full',
 	'g-w-full',
@@ -75,7 +83,7 @@ const generateStyleOnly = async (tokens: string) => {
 };
 
 describe('legacy utilities', () => {
-	it('covers the 600 historical utilities across current rules and Sass compatibility CSS', async () => {
+	it('covers the 598 retained historical utilities across current rules and Sass compatibility CSS', async () => {
 		const fullCSS = compile().css;
 		const current = extractLegacyUtilities(fullCSS);
 		const baseline = readFileSync(`${process.cwd()}/packages/index/__tests__/fixtures/deprecated.css`, 'utf8');
@@ -84,7 +92,7 @@ describe('legacy utilities', () => {
 		const historical = [...new Set([...current, ...deprecated])];
 		const { css, matched } = await generateStyleOnly(current.join(' '));
 
-		expect(historical.filter(utility => !CURRENT_ADDITIONS.has(utility))).toHaveLength(600);
+		expect(historical.filter(utility => !CURRENT_ADDITIONS.has(utility))).toHaveLength(598);
 		expect(GRID_ADDITIONS).toHaveLength(132);
 		expect(deprecated).toHaveLength(85);
 		expect(extractLegacyUtilities(compatibilityCSS)).toEqual(deprecated);

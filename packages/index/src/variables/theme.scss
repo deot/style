@@ -17,16 +17,16 @@
  * 		为true时使用会转化为var(--value)
  */
 $theme: (
-	color-default: #515a6e,
-	color-highlight: #5495f6,
-	color-info: #0177de,
-	color-success: #00a854,
-	color-error: #f04134,
-	color-warning: #ffbf00,
+	color-default: #1d2129,
+	color-primary: #456cf6,
+	color-success: #00b42a,
+	color-error: #f53f3f,
+	color-warning: #fadc19,
+	color-disabled: #8f939c,
 
 	// 背景颜色
-	background-color-default: #f5f6fa,
-	background-color-highlight: #5495f6,
+	background-color-default: #f8f8f8,
+	background-color-primary: #2d7fff,
 
 	// 圆角
 	border-radius-default: fi.unitfix(8),

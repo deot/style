@@ -29,6 +29,8 @@ export const colors = {
 	'purple-light': '#cca3ff',
 	'black': '#000',
 	'white': '#fff',
+	'fff': '#fff',
+	'ffff': '#fff',
 	'444': '#444',
 	'67': '#676767',
 	'f2': '#f2f2f2',
@@ -47,7 +49,8 @@ export const colors = {
 	'aaa': '#aaa',
 	'bbb': '#bbb',
 	'bd': '#bdbdbd',
-	'info': 'var(--color-info)',
+	'primary': 'var(--color-primary)',
+	'default': 'var(--color-default)',
 	'success': 'var(--color-success)',
 	'error': 'var(--color-error)',
 	'warning': 'var(--color-warning)'
@@ -61,8 +64,9 @@ export const resolveColorValue = (value: string, options: ResolvedPresetStyleOpt
 export const createColorRules = (options: ResolvedPresetStyleOptions): Rule[] => {
 	const rules: Rule[] = [];
 	Object.entries(colors).forEach(([name, color]) => {
+		const backgroundColor = name === 'primary' || name === 'default' ? `var(--background-color-${name})` : color;
 		rules.push(createStaticRule(options, `c-${name}`, { color: `${color} !important` }));
-		rules.push(createStaticRule(options, `bg-${name}`, { 'background-color': `${color} !important` }));
+		rules.push(createStaticRule(options, `bg-${name}`, { 'background-color': `${backgroundColor} !important` }));
 	});
 	for (const [name, start, end] of [
 		['blue', colors['blue-mid'], colors['blue-light']],

@@ -7,14 +7,14 @@ import { unitValue } from '../rules/utils';
  */
 export const createVariablesPreflight = (options: ResolvedPresetStyleOptions): Preflight => ({
 	getCSS: () => `:root {
-	--color-default: #515a6e;
-	--color-highlight: #5495f6;
-	--color-info: #0177de;
-	--color-success: #00a854;
-	--color-error: #f04134;
-	--color-warning: #ffbf00;
-	--background-color-default: #f5f6fa;
-	--background-color-highlight: #5495f6;
+	--color-default: #1d2129;
+	--color-primary: #456cf6;
+	--color-success: #00b42a;
+	--color-error: #f53f3f;
+	--color-warning: #fadc19;
+	--color-disabled: #8f939c;
+	--background-color-default: #f8f8f8;
+	--background-color-primary: #2d7fff;
 	--border-radius-default: ${unitValue(8, options)};
 	--border-shadow-default: 0 0 ${unitValue(8, options)} 0 rgba(0, 0, 0, 0.1);
 	--border-shadow-default-top: 0 ${unitValue(-2, options)} ${unitValue(10, options)} 0 rgba(0, 0, 0, 0.08);

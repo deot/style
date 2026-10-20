@@ -9,7 +9,7 @@ describe('functions/', () => {
 
 	it('themefix allow-css-variables = false', () => {
 		const source = sass.compileString(`@use './variables/default' as vd; vd.$allow-css-variables: false; @use './functions/theme.scss' as ft;a{color: ft.themefix(color-default)}`);
-		expect(source.css).toMatch('a{color:#515a6e}');
+		expect(source.css).toMatch('a{color:#1d2129}');
 	});
 
 	it('unitfix 10rem', () => {

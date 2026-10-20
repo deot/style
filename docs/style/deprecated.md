@@ -57,10 +57,19 @@ UnoCSS 配置继续使用 `presetStyle()`。其变量 preflight 默认提供兼�
 
 ## 完整迁移映射
 
-下表使用兼容入口固定的 `g-` 前缀。
+下表使用默认 `g-` 前缀。颜色旧名不在兼容 CSS 中保留。
 
 | 旧类 | 最新类 | 行为差异或说明 |
 | --- | --- | --- |
+| `g-c-info` | `g-c-primary` | 使用 `--color-primary` |
+| `g-bg-info` | `g-bg-primary` | 使用 `--background-color-primary` |
+| `g-bd{direction}c-info` | `g-bd{direction}c-primary` | UnoCSS；direction 为空或 `t/r/b/l` |
+| `g-olc-info` | `g-olc-primary` | UnoCSS；轮廓颜色 |
+| `g-tdc-info` | `g-tdc-primary` | UnoCSS；文字装饰颜色 |
+| `g-fill-info` | `g-fill-primary` | UnoCSS；SVG 填充色 |
+| `g-stroke-info` | `g-stroke-primary` | UnoCSS；SVG 描边色 |
+| `color-info`、`color-highlight` | `color-primary` | Sass 主题键；对应 CSS Variables 同步更名 |
+| `background-color-highlight` | `background-color-primary` | Sass 主题键；对应 CSS Variables 同步更名 |
 | `g-col`、`g-col-2` | `g-f-1`、`g-f-2` | 分别为 `flex: 1` 和 `flex: 2` |
 | `g-{part}of{total}` | `g-f-{part}/{total}` | `flex: 0 0 百分比`；旧 Sass 范围为 `g-1of1`，以及 total 为 2～5、part 为 1～total−1 的分数 |
 | `g-fw-w`、`g-fw-wr`、`g-fw-n` | `g-fwr-w`、`g-fwr-wr`、`g-fwr-n` | Flex Wrap，分别为 wrap、wrap-reverse、nowrap |

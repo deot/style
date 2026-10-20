@@ -22,7 +22,7 @@ export const createOtherRules = (options: ResolvedPresetStyleOptions): Rule[] =>
 	rules.push(
 		createStaticRule(options, 'operable', {
 			'font-size': unitValue(14, options),
-			'color': 'var(--color-highlight) !important',
+			'color': 'var(--color-primary) !important',
 			'cursor': 'pointer'
 		}),
 		createStaticRule(options, 'disabled', { 'pointer-events': 'none' }),

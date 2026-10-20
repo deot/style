@@ -6,14 +6,14 @@
 
 | 键 | 默认值 |
 | --- | --- |
-| `color-default` | `#515a6e` |
-| `color-highlight` | `#5495f6` |
-| `color-info` | `#0177de` |
-| `color-success` | `#00a854` |
-| `color-error` | `#f04134` |
-| `color-warning` | `#ffbf00` |
-| `background-color-default` | `#f5f6fa` |
-| `background-color-highlight` | `#5495f6` |
+| `color-default` | `#1d2129` |
+| `color-primary` | `#456cf6` |
+| `color-success` | `#00b42a` |
+| `color-error` | `#f53f3f` |
+| `color-warning` | `#fadc19` |
+| `color-disabled` | `#8f939c` |
+| `background-color-default` | `#f8f8f8` |
+| `background-color-primary` | `#2d7fff` |
 | `border-radius-default` | `8px` |
 | `border-shadow-default` | `0 0 8px 0 rgb(0 0 0 / 10%)` |
 | `border-shadow-default-top` | `0 -2px 10px 0 rgb(0 0 0 / 8%)` |
@@ -98,7 +98,7 @@
 
 	@include modifier(active) {
 		@include when(selected) {
-			color: #0177de;
+			color: #456cf6;
 		}
 	}
 }

@@ -19,6 +19,20 @@ describe('index.scss', () => {
 		const source = sass.compileString(`@use './outputs/theme.scss'`);
 
 		expect(source.css).toMatch(`:root{--`);
+		for (const [key, value] of Object.entries({
+			'color-default': '#1d2129',
+			'color-primary': '#456cf6',
+			'color-success': '#00b42a',
+			'color-error': '#f53f3f',
+			'color-warning': '#fadc19',
+			'color-disabled': '#8f939c',
+			'background-color-default': '#f8f8f8',
+			'background-color-primary': '#2d7fff'
+		})) {
+			expect(source.css).toContain(`--${key}: ${value};`);
+		}
+		expect(source.css).not.toContain('-highlight');
+		expect(source.css).not.toContain('--color-info');
 	});
 
 	it('padding', () => {
@@ -41,7 +55,45 @@ describe('index.scss', () => {
 		const source = sass.compileString(`@use './outputs/color.scss'`);
 		expect(source.css).toMatch(`.g-c-white{color:#fff !important}`);
 		expect(source.css).toMatch(`.g-bg-white{background-color:#fff !important}`);
+		for (const name of ['fff', 'ffff']) {
+			expect(source.css).toContain(`.g-c-${name}{color:#fff !important}`);
+			expect(source.css).toContain(`.g-bg-${name}{background-color:#fff !important}`);
+		}
+		expect(source.css).toContain('.g-c-primary{color:var(--color-primary) !important}');
+		expect(source.css).toContain('.g-bg-primary{background-color:var(--background-color-primary) !important}');
+		expect(source.css).toContain('.g-c-default{color:var(--color-default) !important}');
+		expect(source.css).toContain('.g-bg-default{background-color:var(--background-color-default) !important}');
+		expect(source.css).not.toContain('.g-c-info');
+		expect(source.css).not.toContain('.g-bg-info');
 		expect(source.css).toMatch(`.g-bg-lg-blue{background:#6ab4ff;background-image:linear-gradient(to right, #16a3ff, #6ab4ff)}`);
+	});
+
+	it('primary and default colors without CSS variables', () => {
+		const source = sass.compileString(`
+			@use './variables/default' with ($allow-css-variables: false);
+			@use './outputs/color';
+		`);
+		expect(source.css).toContain('.g-c-primary{color:#456cf6 !important}');
+		expect(source.css).toContain('.g-bg-primary{background-color:#2d7fff !important}');
+		expect(source.css).toContain('.g-c-default{color:#1d2129 !important}');
+		expect(source.css).toContain('.g-bg-default{background-color:#f8f8f8 !important}');
+
+		const custom = sass.compileString(`
+			@use './variables/default' with ($allow-css-variables: false, $prefix: app);
+			@use './variables/theme' with ($theme-merge-data: (
+				color-primary: #123456,
+				background-color-primary: #abcdef,
+				color-default: #654321,
+				background-color-default: #fedcba
+			));
+			@use './outputs/color';
+			@use './outputs/other';
+		`);
+		expect(custom.css).toContain('.app-c-primary{color:#123456 !important}');
+		expect(custom.css).toContain('.app-bg-primary{background-color:#abcdef !important}');
+		expect(custom.css).toContain('.app-c-default{color:#654321 !important}');
+		expect(custom.css).toContain('.app-bg-default{background-color:#fedcba !important}');
+		expect(custom.css).toContain('.app-operable{font-size:14px;color:#123456 !important;cursor:pointer}');
 	});
 
 	it('line-height', () => {
@@ -180,7 +232,7 @@ describe('index.scss', () => {
 		expect(source.css).toMatch(`.g-divider`);
 		expect(source.css).toMatch(`.g-bsz-bb`);
 		expect(source.css).toMatch(`.g-disabled{pointer-events:none}`);
-		expect(source.css).toMatch(`.g-operable{font-size:14px;color:var(--color-highlight) !important;cursor:pointer}`);
+		expect(source.css).toMatch(`.g-operable{font-size:14px;color:var(--color-primary) !important;cursor:pointer}`);
 	});
 
 	it('prefix = ""', () => {
@@ -198,20 +250,20 @@ describe('index.scss', () => {
 
 	it('unit = rem', () => {
 		const source = sass.compileString(`@use './variables/default' as vd; vd.$unit: rem; @use './outputs/other.scss'`);
-		expect(source.css).toMatch(`.g-operable{font-size:14rem;color:var(--color-highlight) !important;cursor:pointer}`);
+		expect(source.css).toMatch(`.g-operable{font-size:14rem;color:var(--color-primary) !important;cursor:pointer}`);
 	});
 
 	it('scale = 2 & unit = rpx', () => {
 		// eslint-disable-next-line @stylistic/max-len
 		const source = sass.compileString(`@use './variables/default' as vd; vd.$scale: 2; vd.$unit: rpx; @use './outputs/other.scss'; @use './outputs/font-size.scss'; @use './outputs/flex.scss'`);
-		expect(source.css).toMatch(`.g-operable{font-size:28rpx;color:var(--color-highlight) !important;cursor:pointer}`);
+		expect(source.css).toMatch(`.g-operable{font-size:28rpx;color:var(--color-primary) !important;cursor:pointer}`);
 		expect(source.css).toMatch(`.g-fs-16{font-size:16rpx}`);
 		expect(source.css).toMatch(`.g-f-2{flex:2}`);
 	});
 
 	it('allow-css-variables = false', () => {
 		const source = sass.compileString(`@use './variables/default' as vd; vd.$allow-css-variables: false; @use './outputs/other.scss';`);
-		expect(source.css).toMatch(`.g-operable{font-size:14px;color:#5495f6 !important;cursor:pointer}`);
+		expect(source.css).toMatch(`.g-operable{font-size:14px;color:#456cf6 !important;cursor:pointer}`);
 	});
 
 	it('allow-asterisk-wildcard', () => {

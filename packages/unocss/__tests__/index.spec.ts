@@ -39,7 +39,7 @@ const colorNames = [
 	'gray-dark', 'gray-mid', 'gray-light', 'black-dark', 'black-mid', 'black-light',
 	'purple-dark', 'purple-mid', 'purple-light', 'black', 'white', '444', '67', 'f2', 'f8', 'ef',
 	'cd', 'e8', 'd9', 'f4', 'f9', '000', '333', '51', '666', '999', 'aaa', 'bbb', 'bd',
-	'info', 'success', 'error', 'warning'
+	'fff', 'ffff', 'primary', 'default', 'success', 'error', 'warning'
 ];
 
 const gridUtilities = [
@@ -1067,11 +1067,25 @@ describe('presetStyle', () => {
 	});
 
 	it('generates the theme variables and complex selectors', async () => {
-		const { css: source } = await generate('g-c-info g-bg-white g-bd g-scroller g-reset g-unset');
+		const { css: source } = await generate('g-c-primary g-bg-primary g-operable g-bg-white g-bd g-scroller g-reset g-unset');
 		const css = compact(source);
 
-		expect(css).toContain('--color-info:#0177de;');
-		expect(css).toContain('.g-c-info{color:var(--color-info)!important}');
+		for (const [key, value] of Object.entries({
+			'color-default': '#1d2129',
+			'color-primary': '#456cf6',
+			'color-success': '#00b42a',
+			'color-error': '#f53f3f',
+			'color-warning': '#fadc19',
+			'color-disabled': '#8f939c',
+			'background-color-default': '#f8f8f8',
+			'background-color-primary': '#2d7fff'
+		})) {
+			expect(css).toContain(`--${key}:${value};`);
+		}
+		expect(css).not.toContain('-highlight');
+		expect(css).toContain('.g-c-primary{color:var(--color-primary)!important}');
+		expect(css).toContain('.g-bg-primary{background-color:var(--background-color-primary)!important}');
+		expect(css).toMatch(/\.g-operable\{[^}]*color:var\(--color-primary\)!important/);
 		expect(css).toContain('.g-bg-white{background-color:#fff!important}');
 		expect(source).not.toContain('.g-bg-white input');
 		expect(source).toContain('.g-bd::before,.g-bd::after');
@@ -1081,6 +1095,21 @@ describe('presetStyle', () => {
 		expect(source).toContain('.g-scroller::-webkit-scrollbar-thumb');
 		expect(source).toContain('.g-reset ol,.g-reset ul,.g-reset li');
 		expect(source).toContain('.g-unset h1,.g-unset h2');
+	});
+
+	it('does not emit removed info colors', async () => {
+		const { css, matched } = await generate('g-c-info g-bg-info g-bdc-info g-olc-info g-tdc-info g-fill-info g-stroke-info');
+		expect(matched.size).toBe(0);
+		expect(css).not.toContain('--color-info');
+	});
+
+	it('generates default colors and white aliases', async () => {
+		const { css: source } = await generate('g-c-default g-bg-default g-c-fff g-bg-fff g-c-ffff g-bg-ffff');
+		const css = compact(source);
+		expect(css).toContain('.g-c-default{color:var(--color-default)!important}');
+		expect(css).toContain('.g-bg-default{background-color:var(--background-color-default)!important}');
+		expect(css).toContain('.g-c-fff,.g-c-ffff{color:#fff!important}');
+		expect(css).toContain('.g-bg-fff,.g-bg-ffff{background-color:#fff!important}');
 	});
 
 	it('implements every documented repository utility without relying on presetMini', async () => {
