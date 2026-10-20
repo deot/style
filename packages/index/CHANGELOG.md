@@ -1,5 +1,18 @@
 # @deot/style ChangeLog
 
+## v1.3.1
+
+_2026-10-20_
+
+### Bugfixes
+
+- fix: draw the hairline border with a halved border-width instead of transform scaling ([9f9a1ea](https://github.com/deot/style/commit/9f9a1ea3e7363d647ec77c9f17542dd11cc3647c))
+
+### Features
+
+- feat: unify theme colors and add primary and default utilities ([212e366](https://github.com/deot/style/commit/212e366ba4acd77112ed43212ea8360cea0508f3))
+- feat: add remfix and optional --rem injection in useREM ([0a614ea](https://github.com/deot/style/commit/0a614ead36a1c7ea869bf7b77e46c5945a308c2e))
+
 ## v1.3.0
 
 _2026-09-06_

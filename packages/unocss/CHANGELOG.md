@@ -1,5 +1,17 @@
 # @deot/style-unocss ChangeLog
 
+## v1.3.1
+
+_2026-10-20_
+
+### Bugfixes
+
+- fix: draw the hairline border with a halved border-width instead of transform scaling ([3b26d19](https://github.com/deot/style/commit/3b26d19268e8c7f7f98ee0c078583cd005e35a67))
+
+### Features
+
+- feat: unify theme colors and add primary and default utilities ([212e366](https://github.com/deot/style/commit/212e366ba4acd77112ed43212ea8360cea0508f3))
+
 ## v1.3.0
 
 _2026-09-06_
