@@ -189,7 +189,8 @@ Style.useREM(375);
 {
 	views: ['runtime', 'files'],
 	viewport: 'auto',
-	viewportOptions: ['auto', 375, [768, 560]]
+	viewportOptions: ['auto', 375, [768, 560]],
+	local: false
 }
 </config>
 -->
@@ -237,7 +238,7 @@ const align = ref('g-ai-c');
 	</main>
 </template>
 
-<style scoped>
+<style>
 .demo { display: grid; gap: 16px; width: min(100%, 720px); box-sizing: border-box; }
 .controls { display: flex; flex-wrap: wrap; gap: 12px; }
 label { display: grid; gap: 4px; font: 13px/1.5 system-ui; }
@@ -259,7 +260,8 @@ code { overflow-wrap: anywhere; color: #475569; }
 {
 	views: ['runtime', 'files'],
 	viewport: 375,
-	viewportOptions: ['auto', 375, 768]
+	viewportOptions: ['auto', 375, 768],
+	local: false
 }
 </config>
 -->
@@ -296,7 +298,7 @@ const selected = ref(presets[0]);
 	</main>
 </template>
 
-<style scoped>
+<style>
 .demo { display: grid; gap: 16px; width: min(100%, 560px); box-sizing: border-box; font-family: system-ui; }
 .controls { gap: 8px; }
 button { padding: 7px 12px; cursor: pointer; border: 1px solid #cbd5e1; border-radius: 6px; background: white; }
@@ -318,7 +320,8 @@ code { overflow-wrap: anywhere; color: #475569; }
 {
 	views: ['runtime', 'files'],
 	viewport: 375,
-	viewportOptions: [375, 768, 'auto']
+	viewportOptions: [375, 768, 'auto'],
+	local: false
 }
 </config>
 -->
@@ -354,7 +357,7 @@ onBeforeUnmount(() => window.removeEventListener('resize', update));
 	</main>
 </template>
 
-<style scoped>
+<style>
 .demo { display: grid; gap: 16px; padding: 16px; box-sizing: border-box; font: 14px/1.5 system-ui; }
 .box {
 	display: grid;

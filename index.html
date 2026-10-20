@@ -1,112 +1,279 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-	<title>@deot/style 文档</title>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<meta charset="UTF-8">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@deot/docs-client/dist/index.style.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@deot/docs-renderer/dist/index.style.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@deot/docs-markdown/dist/index.style.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@deot/docs-playground/dist/index.style.css">
+	<title>@deot/style</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="description" content="@deot/style 提供预编译 CSS、可配置 Sass 与 UnoCSS 按需工具类。">
 </head>
 <body>
 	<div id="app"></div>
 	<script>
 		const repositoryRaw = 'https://raw.githubusercontent.com/deot/style/refs/heads/main/';
-		const repositoryBlob = 'https://github.com/deot/style/blob/main/';
-		const styleDist = window.__DOCS_RUNTIME__?.mode === 'development'
-			? '/packages/index/dist/'
-			: 'https://cdn.jsdelivr.net/npm/@deot/style@2.0.0/dist/';
+		const repositoryPath = '/deot/style/blob/main/';
+		const repositoryBlob = `https://github.com${repositoryPath}`;
 		const locales = {
 			'zh-CN': { label: '简体中文' },
 			'en-US': { label: 'English' }
 		};
-		const documents = [
-			{ label: { zh: '仓库概览', en: 'Overview' }, value: 'introduction', source: 'README.md' },
-			{ label: { zh: '选择与安装', en: 'Choose and Install' }, value: 'getting-started', source: 'docs/start/installation.md' },
-			{ label: { zh: '接入与迁移', en: 'Integration and Migration' }, value: 'integration', source: 'docs/start/integration.md' },
-			{ label: { zh: 'Deprecated 迁移', en: 'Deprecated Migration' }, value: 'deprecated', source: 'docs/style/deprecated.md' },
-			{ label: { zh: '概览与配置', en: 'Overview and Configuration' }, value: 'unocss', source: 'packages/unocss/README.md' },
-			{ label: { zh: '工具类参考', en: 'Utilities' }, value: 'unocss-utilities', source: 'docs/unocss/DOCUMENT.md' },
-			{ label: { zh: 'presetMini 组合、覆盖与配置', en: 'Mini Composition and Overrides' }, value: 'unocss-mini', source: 'docs/unocss/mini.md' },
-			{ label: { zh: '概览与配置', en: 'Overview and Configuration' }, value: 'sass', source: 'packages/index/README.md' },
-			{ label: { zh: '参考与示例', en: 'Reference and Examples' }, value: 'playground', source: 'docs/style/reference-examples.md' },
-			{ label: { zh: '工具类参考', en: 'Utilities' }, value: 'utilities', source: 'docs/style/DOCUMENT.md' }
-		];
-		const readmes = Object.fromEntries(documents.map(item => [item.value, item.source]));
-		const readmeRoutes = Object.fromEntries(documents.map(item => [
-			item.source,
-			`/guide/${item.value}`
-		]));
-		const localeReadmes = Object.fromEntries(Object.keys(locales).map(lang => [lang, readmes]));
-		const documentItem = (value, lang) => {
-			const item = documents.find(document => document.value === value);
-			return {
-				label: lang === 'zh-CN' ? item.label.zh : item.label.en,
-				value: `/guide/${value}`
-			};
+		const documents = {
+			introduction: {
+				zh: '仓库概览',
+				en: 'Overview',
+				source: 'README.md'
+			},
+			'getting-started': {
+				zh: '选择与安装',
+				en: 'Choose and Install',
+				source: 'docs/start/installation.md'
+			},
+			integration: {
+				zh: '接入与迁移',
+				en: 'Integration and Migration',
+				source: 'docs/start/integration.md'
+			},
+			deprecated: {
+				zh: 'Deprecated 迁移',
+				en: 'Deprecated Migration',
+				source: 'docs/style/deprecated.md'
+			},
+			unocss: {
+				zh: '概览与配置',
+				en: 'Overview and Configuration',
+				source: 'packages/unocss/README.md'
+			},
+			'unocss-utilities': {
+				zh: '工具类参考',
+				en: 'Utilities',
+				source: 'docs/unocss/DOCUMENT.md'
+			},
+			'unocss-mini': {
+				zh: 'presetMini 组合、覆盖与配置',
+				en: 'Mini Composition and Overrides',
+				source: 'docs/unocss/mini.md'
+			},
+			sass: {
+				zh: '概览与配置',
+				en: 'Overview and Configuration',
+				source: 'packages/index/README.md'
+			},
+			playground: {
+				zh: '参考与示例',
+				en: 'Reference and Examples',
+				source: 'docs/style/reference-examples.md'
+			},
+			utilities: {
+				zh: '工具类参考',
+				en: 'Utilities',
+				source: 'docs/style/DOCUMENT.md'
+			}
 		};
-		const sidebars = Object.fromEntries(Object.keys(locales).map(lang => [
-			lang,
-			[
-				documentItem('introduction', lang),
+		const sidebars = {};
+		for (const lang of Object.keys(locales)) {
+			const item = value => ({
+				label: documents[value][lang === 'zh-CN' ? 'zh' : 'en'],
+				value: `/guide/${value}`
+			});
+			sidebars[lang] = [
+				item('introduction'),
 				{
 					label: lang === 'zh-CN' ? '开始使用' : 'Start',
 					children: [
-						documentItem('getting-started', lang),
-						documentItem('integration', lang)
+						item('getting-started'),
+						item('integration')
 					]
 				},
 				{
 					label: 'UnoCSS',
 					children: [
-						documentItem('unocss', lang),
-						documentItem('unocss-utilities', lang),
-						documentItem('unocss-mini', lang)
+						item('unocss'),
+						item('unocss-utilities'),
+						item('unocss-mini')
 					]
 				},
 				{
 					label: 'Style',
 					children: [
-						documentItem('sass', lang),
-						documentItem('utilities', lang),
-						documentItem('deprecated', lang),
-						documentItem('playground', lang)
+						item('sass'),
+						item('utilities'),
+						item('deprecated'),
+						item('playground')
 					]
 				}
-			]
-		]));
+			];
+		}
 
 		const createHomeDocument = (lang) => {
 			const t = (zh, en) => (lang === 'zh-CN' ? zh : en);
-			const accent = '#be185d';
-			const accentSecondary = '#0f766e';
-			const accents = [accent, accentSecondary, '#d97706'];
-			const action = (label, to, variant = 'solid') => ({
+			const action = (label, to) => ({
 				label,
 				to: `/${lang}${to}`,
-				variant,
+				variant: 'solid',
 				size: 'large',
-				color: accent,
-				textColor: variant === 'solid' ? '#ffffff' : accent
+				color: '#0080a0'
 			});
 			const stack = {
 				marginTop: 0,
 				marginBottom: 80,
 				paddingTop: 0,
 				paddingBottom: 0,
-				maxWidth: 1200
+				maxWidth: 1536
 			};
-			const block = (id, type, props, appearance = stack) => ({
+			const block = (id, type, props, appearance = {}) => ({
 				id,
 				module: { type, version: 1, props },
-				appearance
+				appearance: { ...stack, ...appearance }
 			});
-			const cards = items => items.map((item, index) => ({
-				...item,
-				accent: item.accent || accents[index]
-			}));
+
+			const hero = {
+				eyebrow: '@deot/style workspace',
+				title: t('一套工具类，三种接入方式', 'One utility system, three ways to integrate'),
+				description: t(
+					'预编译 CSS 直接引入。\nSass 源码按项目编译。\nUnoCSS 按需生成工具类。',
+					'Import prebuilt CSS directly.\nCompile Sass source for your project.\nGenerate utilities on demand with UnoCSS.'
+				),
+				align: 'left',
+				background: '',
+				showVisual: true,
+				minHeight: 500,
+				visual: {
+					type: 'code',
+					title: t('三种接入方式 · 任选一种', 'Three entry points · choose one'),
+					language: 'ts',
+					content: [
+						`// main.ts · ${t('预编译 CSS', 'Prebuilt CSS')}`,
+						"import '@deot/style/dist/index.css';",
+						'',
+						`// main.scss · ${t('Sass 源码', 'Sass source')}`,
+						"@use '@deot/style/src/index';",
+						'',
+						`// uno.config.ts · ${t('UnoCSS 按需生成', 'On-demand UnoCSS')}`,
+						"import { defineConfig } from 'unocss';",
+						"import { presetStyle } from '@deot/style-unocss';",
+						'export default defineConfig({ presets: [presetStyle()] });'
+					].join('\n')
+				},
+				highlights: [
+					{ value: '2', label: t('独立发布包', 'Published packages') },
+					{ value: '7', label: t('预编译 CSS 入口', 'Prebuilt CSS entries') },
+					{ value: 'g-*', label: t('核心工具类语义', 'Core utility semantics') }
+				],
+				actions: [
+					action(t('选择接入方式', 'Choose an Integration'), '/guide/getting-started')
+				]
+			};
+
+			const features = {
+				eyebrow: t('选择交付方式', 'Delivery modes'),
+				title: t('按项目需求选择接入方式', 'Choose the integration your project needs'),
+				description: t(
+					'需要直接使用、编译期定制，还是按需生成？三种方式共享核心工具类语义，配置与输出范围各有不同。',
+					'Use CSS directly, customize it at build time, or generate it on demand. The three paths share core utility semantics, with different configuration and output scopes.'
+				),
+				columns: 3,
+				gap: 24,
+				items: [
+					{
+						title: t('预编译 CSS', 'Prebuilt CSS'),
+						description: t(
+							'默认提供 px 工具类，另有 rem、rpx、normalize 与局部 rem 入口；旧类由独立兼容 CSS 提供。',
+							'Use px utilities by default, with rem, rpx, normalize and partial rem entries available. Legacy classes have a separate compatibility CSS entry.'
+						),
+						badge: '@deot/style',
+						icon: 'grid'
+					},
+					{
+						title: t('可配置 Sass', 'Configurable Sass'),
+						description: t(
+							'在构建期调整 prefix、unit、scale、主题与 reset，再从 Sass 源码生成项目样式。',
+							'Set prefix, unit, scale, theme and reset at build time, then generate project CSS from Sass source.'
+						),
+						badge: '@deot/style',
+						icon: 'filter',
+						accent: 'var(--docs-color-secondary)'
+					},
+					{
+						title: t('UnoCSS 按需生成', 'On-demand UnoCSS'),
+						description: t(
+							'保留核心 g-* 规则，复用官方 variants，并只为源码中出现的静态 token 生成 CSS。',
+							'Keep core g-* rules, reuse official variants and generate CSS only for static tokens found in source.'
+						),
+						badge: '@deot/style-unocss',
+						icon: 'link',
+						accent: 'light-dark(#a16207, #fcd34d)'
+					}
+				]
+			};
+
+			const code = {
+				eyebrow: t('代码示例', 'Code example'),
+				title: t('用工具类组合一个卡片', 'Compose a card with utilities'),
+				description: t(
+					'默认配置下，三种接入方式均支持这些类名；布局、间距、排版和颜色直接写在标记中。',
+					'All three integrations support these classes with default options. Compose layout, spacing, typography and colors directly in your markup.'
+				),
+				filename: 'card.html',
+				language: 'html',
+				content: [
+					'<article class="g-pd-24 g-br-12 g-bg-white">',
+					'  <header class="g-flex-ac g-jc-sb g-m-b-12">',
+					`    <h2 class="g-fs-18 g-fw-600 g-c-333">${t('任务概览', 'Task overview')}</h2>`,
+					`    <span class="g-fs-12 g-c-success">${t('已完成', 'Completed')}</span>`,
+					'  </header>',
+					'  <p class="g-fs-14 g-lh-22 g-c-666">',
+					`    ${t('用工具类组合布局、间距、排版与语义色。', 'Compose layout, spacing, typography and semantic colors with utilities.')}`,
+					'  </p>',
+					'</article>'
+				].join('\n')
+			};
+
+			const steps = {
+				eyebrow: t('配置边界', 'Configuration boundaries'),
+				title: t('这些差异会直接影响迁移结果', 'These differences directly affect migration'),
+				columns: 3,
+				items: [
+					{
+						title: t('前缀、单位与 Reset', 'Prefix, unit and reset'),
+						description: t(
+							'两类包默认使用 g-、px 与 reset；Sass 在编译期配置，Preset 通过 presetStyle(options) 配置。',
+							'Both packages default to g-, px and reset; configure Sass at compile time and the Preset through presetStyle(options).'
+						),
+						icon: '01'
+					},
+					{
+						title: t('理解 scale', 'Understand scale'),
+						description: t(
+							'Sass 同步缩放数字后缀和值；UnoCSS 数字 token 不应用 scale，仅固定语义尺寸与主题尺寸受其影响。',
+							'Sass scales numeric suffixes and values. UnoCSS applies scale only to fixed semantic and theme sizes, not numeric tokens.'
+						),
+						icon: '02',
+						accent: 'var(--docs-color-secondary)'
+					},
+					{
+						title: t('明确生成职责', 'Assign generation ownership'),
+						description: t(
+							'动态类名需静态映射或 safelist；组合 presetMini 时设 variants: false，并避免叠加完整工具类 CSS。',
+							'Dynamic classes need static mappings or a safelist. Set variants: false when composing presetMini, and avoid loading the full utility CSS alongside the Preset.'
+						),
+						icon: '03',
+						accent: 'light-dark(#a16207, #fcd34d)'
+					}
+				]
+			};
+
+			const cta = {
+				eyebrow: t('接入指南', 'Integration guide'),
+				title: t('按目标环境完成配置', 'Configure for each target environment'),
+				description: t(
+					'查看 Web、REM、RPX、UnoCSS 与多入口开发场景的边界和迁移建议。',
+					'Review boundaries and migration guidance for Web, REM, RPX, UnoCSS and multi-entry development.'
+				),
+				align: 'center',
+				background: '',
+				actions: [
+					action(t('查看接入与迁移', 'Open Integration Guide'), '/guide/integration')
+				]
+			};
 
 			return {
 				schemaVersion: 2,
@@ -115,112 +282,77 @@
 					mode: 'sortable',
 					maxWidth: 1920,
 					minHeight: 600,
-					background: '#ffffff'
+					contentWidth: 1536,
+					sidePattern: true,
+					background: ''
 				},
 				blocks: [
-					block('home-hero', 'hero', {
-						eyebrow: '@deot/style workspace',
-						title: t('一套工具类，两种交付方式', 'One utility system, two delivery modes'),
-						description: t(
-							'使用 @deot/style 交付预编译 CSS 与可配置 Sass，或使用 @deot/style-unocss 按需生成共享核心工具类与动态扩展。',
-							'Use @deot/style for prebuilt CSS and configurable Sass, or @deot/style-unocss for shared core utilities and dynamic extensions on demand.'
-						),
-						align: 'left',
-						accent,
-						accentSecondary,
-						background: '',
-						showVisual: true,
-						minHeight: 500,
-						highlights: [
-							{ value: '2', label: t('独立发布包', 'Published packages') },
-							{ value: 'g-*', label: t('共享工具类语义', 'Shared utility semantics') },
-							{ value: 'Sass / UnoCSS', label: t('静态与按需', 'Static and on-demand') }
-						],
-						actions: [
-							action(t('选择接入方式', 'Choose an Integration'), '/guide/getting-started'),
-							action(t('查看 UnoCSS Preset', 'Open UnoCSS Preset'), '/guide/unocss', 'outline'),
-							action(t('查看 Style 配置', 'Open Style Configuration'), '/guide/sass', 'outline')
-						]
-					}, { ...stack, marginBottom: 64, fullWidth: true }),
-					block('home-features', 'features', {
-						eyebrow: t('选择交付方式', 'Delivery modes'),
-						title: t('按项目构建方式接入', 'Integrate for the way your project builds'),
-						description: t(
-							'两个包共享核心工具类，但配置时机、scale 语义和输出方式不同。',
-							'The packages share core utilities while differing in configuration timing, scale semantics and output.'
-						),
-						columns: 3,
-						gap: 24,
-						items: cards([
-							{
-								title: '@deot/style',
-								description: t('直接引入 px、rem、rpx、normalize 产物，或由 Sass 源码生成项目样式。', 'Import px, rem, rpx and normalize outputs, or generate project CSS from Sass source.'),
-								badge: 'CSS / Sass',
-								icon: 'grid'
-							},
-							{
-								title: '@deot/style-unocss',
-								description: t('提供 @deot/style 兼容规则并复用 Mini 官方 variants，只生成源码实际使用的 token。', 'Provide @deot/style-compatible rules with official Mini variants and generate only tokens found in source.'),
-								badge: 'UnoCSS',
-								icon: 'filter'
-							},
-							{
-								title: t('共享 g-* 语义', 'Shared g-* semantics'),
-								description: t('布局、间距、颜色、排版与辅助类可以在迁移时保持主要类名。', 'Keep core layout, spacing, color, typography and helper class names while migrating.'),
-								badge: 'Utilities',
-								icon: 'link'
-							}
-						])
+					block('home-hero', 'hero', hero, {
+						marginBottom: 24,
+						fullWidth: true
 					}),
-					block('home-steps', 'steps', {
-						eyebrow: t('接入路径', 'Integration path'),
-						title: t('先选择，再配置，最后验证', 'Choose, configure, then verify'),
-						columns: 3,
-						items: cards([
-							{ title: t('选择', 'Choose'), description: t('预编译 CSS、可配置 Sass 或 UnoCSS 按需生成。', 'Pick prebuilt CSS, configurable Sass or on-demand UnoCSS.'), icon: '01' },
-							{ title: t('配置', 'Configure'), description: t('确定 prefix、unit、scale、主题与构建目标。', 'Set prefix, unit, scale, theme and build target.'), icon: '02' },
-							{ title: t('验证', 'Verify'), description: t('检查静态 token、动态 safelist，并避免重复引入完整样式。', 'Check static tokens and dynamic safelists, and avoid duplicate full style sources.'), icon: '03' }
-						])
+					block('home-features', 'features', features, {
+						marginBottom: 40
 					}),
-					block('home-cta', 'cta', {
-						eyebrow: t('接入指南', 'Integration guide'),
-						title: t('按目标环境完成配置', 'Configure for each target environment'),
-						description: t('查看 Web、REM、RPX、UnoCSS 与多入口开发场景的边界和迁移建议。', 'Review boundaries and migration guidance for Web, REM, RPX, UnoCSS and multi-entry development.'),
-						align: 'center',
-						accent,
-						accentSecondary,
-						background: '',
-						actions: [
-							action(t('查看接入与迁移', 'Open Integration Guide'), '/guide/integration'),
-							action(t('UnoCSS 工具类参考', 'UnoCSS Utilities'), '/guide/unocss-utilities', 'outline'),
-							action(t('Style 工具类参考', 'Style Utilities'), '/guide/utilities', 'outline')
-						]
-					}, { ...stack, marginBottom: 0, fullWidth: true })
+					block('home-code', 'code', code, {
+						marginBottom: 40
+					}),
+					block('home-steps', 'steps', steps, {
+						marginBottom: 40
+					}),
+					block('home-cta', 'cta', cta, {
+						marginBottom: 0,
+						fullWidth: true
+					})
 				]
 			};
 		};
 
-		const pathSegments = location.pathname.split('/');
-		const localeIndex = pathSegments.findIndex(segment => Boolean(locales[segment]));
-		const basePath = localeIndex >= 0
-			? `${pathSegments.slice(0, localeIndex).join('/')}/`
-			: location.pathname.endsWith('/')
-				? location.pathname
-				: new URL('./', location.href).pathname;
-		const logo = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#be185d"/><rect x="11" y="13" width="37" height="15" rx="5" fill="#fff"/><path d="M16 18h27v5H16z" fill="#fce7f3"/><path d="M48 20h5v14H34v7" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="28" y="39" width="12" height="16" rx="5" fill="#fff"/></svg>')}`;
-		if (typeof document !== 'undefined') {
-			const favicon = document.createElement('link');
-			favicon.rel = 'icon';
-			favicon.type = 'image/svg+xml';
-			favicon.href = logo;
-			document.head.appendChild(favicon);
+		const logoSvg = `
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+				<rect width="64" height="64" rx="16" fill="#0080a0"/>
+				<rect x="11" y="13" width="37" height="15" rx="5" fill="#fff"/>
+				<path d="M16 18h27v5H16z" fill="#cffafe"/>
+				<path d="M48 20h5v14H34v7" fill="none" stroke="#fff"
+					stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+				<rect x="28" y="39" width="12" height="16" rx="5" fill="#fff"/>
+			</svg>
+		`;
+		const logo = `data:image/svg+xml,${encodeURIComponent(logoSvg)}`;
+
+		const routes = {
+			'/': {
+				content: {
+					'zh-CN': createHomeDocument('zh-CN'),
+					'en-US': createHomeDocument('en-US')
+				}
+			}
+		};
+		const readmeRoutes = {};
+		for (const [value, { source }] of Object.entries(documents)) {
+			const route = `/guide/${value}`;
+			readmeRoutes[source] = route;
+			routes[route] = {
+				value,
+				content: 'default',
+				sidebar: sidebars,
+				header: 'default',
+				footer: 'default',
+				extra: null
+			};
 		}
+		routes['*'] = '/guide/getting-started';
 
 		window.$docs = {
-			base: new URL(basePath, location.origin).href,
 			namespace: '@deot/style-site',
 			repository: 'https://github.com/deot/style',
-			theme: { default: 'system' },
+			theme: {
+				default: 'system',
+				colors: {
+					'color-primary': { light: '#0080a0', dark: '#22d3ee' },
+					'color-secondary': { light: '#4338ca', dark: '#a5b4fc' }
+				}
+			},
 			layout: {
 				header: {
 					brand: {
@@ -231,32 +363,14 @@
 				}
 			},
 			locales,
-			routes: Object.fromEntries([
-				['/', {
-					content: {
-						'zh-CN': createHomeDocument('zh-CN'),
-						'en-US': createHomeDocument('en-US')
-					}
-				}],
-				...documents.map(item => [`/guide/${item.value}`, {
-					value: item.value,
-					content: 'default',
-					sidebar: sidebars,
-					header: 'default',
-					footer: 'default',
-					extra: null
-				}]),
-				['*', '/guide/getting-started']
-			]),
+			routes,
 			resolve: {
-				markdown: ({ lang, value }) => (
-					localeReadmes[lang] || localeReadmes['zh-CN']
-				)[value],
+				markdown: ({ value }) => documents[value]?.source,
 				resource: ({ source, runtime }) => {
 					if (Object.hasOwn(readmeRoutes, source)) {
 						return runtime.mode === 'development'
 							? `/${source}`
-							: new URL(source, repositoryRaw).href;
+							: `${repositoryRaw}${source}`;
 					}
 					return undefined;
 				},
@@ -264,30 +378,62 @@
 					const logicalOrigin = 'https://docs.local';
 					let target;
 					try {
-						target = new URL(href, new URL(source, `${logicalOrigin}/`));
+						target = new URL(href, `${logicalOrigin}/${source}`);
 					} catch {
 						return undefined;
 					}
 					const isRepositoryLink = target.href.startsWith(repositoryBlob);
 					if (target.origin !== logicalOrigin && !isRepositoryLink) return undefined;
+					if (target.origin === logicalOrigin) {
+						const segments = target.pathname.split('/');
+						const index = segments.findIndex(segment => Object.hasOwn(locales, segment));
+						if (index >= 0) {
+							return `/${segments.slice(index).join('/')}${target.search}${target.hash}`;
+						}
+					}
 					const path = isRepositoryLink
-						? target.pathname.slice(new URL(repositoryBlob).pathname.length)
+						? target.pathname.slice(repositoryPath.length)
 						: target.pathname.replace(/^\//, '');
 					const route = readmeRoutes[path];
 					if (route) return `/${lang}${route}${target.search}${target.hash}`;
-					return `${new URL(path, repositoryBlob).href}${target.search}${target.hash}`;
+					return `${repositoryBlob}${path}${target.search}${target.hash}`;
 				}
-			},
-			modules: {
-				'@deot/style': 'https://cdn.jsdelivr.net/npm/@deot/style@1.1.4/dist/index.js',
-				'@deot/style/dist': 'https://cdn.jsdelivr.net/npm/@deot/style@1.1.4/dist/index.js'
-			},
-			styles: {
-				'@deot/style/dist/index.normalize-only.css': `${styleDist}index.normalize-only.css`,
-				'@deot/style/dist/index.css': `${styleDist}index.css`
 			}
 		};
+		if (window.__DOCS_RUNTIME__?.mode === 'development') {
+			window.$docs.modules = {
+				'@deot/style': '/__docs/module/@deot/style',
+				'@deot/style/dist': '/__docs/module/@deot/style'
+			};
+			window.$docs.styles = {
+				'@deot/style/dist/index.normalize-only.css': '/packages/index/dist/index.normalize-only.css',
+				'@deot/style/dist/index.css': '/packages/index/dist/index.css'
+			};
+		}
 	</script>
-	<script type="module" src="https://cdn.jsdelivr.net/npm/@deot/docs-client/+esm"></script>
+	<script>
+		const entries = [
+			'https://cdn.jsdelivr.net/npm/@deot/docs-launch/+esm',
+			'https://esm.unpkg.com/@deot/docs-launch/dist/index.js'
+		];
+		const controller = new AbortController();
+		const timer = setTimeout(() => controller.abort(), 15000);
+		const fail = () => {
+			document.querySelector('#app').textContent = '文档入口加载失败，请刷新重试。';
+		};
+		Promise.any(entries.map(async (src) => {
+			const response = await fetch(src, { signal: controller.signal });
+			if (!response.ok || !/(?:java|ecma)script/i.test(response.headers.get('content-type'))) {
+				throw new Error(`Invalid launch response: ${src}`);
+			}
+			return { cdn: src.match(/^https?:.*?(?=@deot\/docs-launch)/)?.[0], source: await response.text() };
+		})).finally(() => {
+			clearTimeout(timer);
+			controller.abort();
+		}).then(({ cdn, source }) => {
+			window.$docs.runtime = { mode: 'production', ...window.$docs.runtime, cdn };
+			document.body.appendChild(Object.assign(document.createElement('script'), { type: 'module', textContent: source, onerror: fail }));
+		}).catch(fail);
+	</script>
 </body>
 </html>
