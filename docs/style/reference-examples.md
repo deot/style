@@ -41,7 +41,7 @@
 | `unitfix($value, $rest...)` | 缩放数字并补单位；字符串保持原值 |
 | `suffix($value, $rest...)` | 缩放数字类名后缀；字符串保持原值 |
 | `percentw($col, $total)` | 将分栏比例转换为百分比 |
-| `remfix($value, $rest...)` | 输出 `calc(var(--rem, calc(100vw / 750)) * n)`，配合 `Style.useREM()`；n 按 750 画布取值，不乘 `$scale` |
+| `remfix($value, $rest...)` | 输出 `calc(var(--rem, calc(100vw / 750)) * n)`，配合 `Style.useREM()`；n 按 750 画布取值，不乘 `$scale`；`(fallback: false)` 或 `$rem-fallback: false` 时不带回退值 |
 
 ```scss
 @use '@deot/style/src/functions/helper' as helper;
@@ -53,7 +53,7 @@
 }
 ```
 
-`remfix(24)` 与手写 `24rem` 同一坐标系。默认读取 `$rem-var`（`--rem`），可用 `(rem: --unit)`、`(base-width: 375)` 覆盖；`$scale` 不会改变输出。与 `Style.useREM()` 的配合见下文。
+`remfix(24)` 与手写 `24rem` 同一坐标系。默认读取 `$rem-var`（`--rem`），可用 `(rem: --unit)`、`(base-width: 375)` 覆盖；`$scale` 不会改变输出。变量一定有值时（例如已用 `@property` 注册初始值）可去掉回退值：`remfix(24, (rem: --unit, fallback: false))` 输出 `calc(var(--unit) * 24)`，也可以在加载时配置 `$rem-fallback: false` 作为默认。与 `Style.useREM()` 的配合见下文。
 
 ### Theme
 

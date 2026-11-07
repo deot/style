@@ -75,10 +75,13 @@ $direction-map: ('l': left, 'r': right, 't': top, 'b': bottom);
  * n 是 750 画布上的长度，与手写 24rem / g-fs-24 同一坐标系（750 宽 = 100vw）
  * 不乘 $scale：$scale 只用于 unitfix/suffix 把 375 token 放大到 750 rem；再乘会与 24rem 叠乘错位
  */
+// fallback：默认带回退值（--rem 未注入时按 100vw / 750）；变量一定有值时传 (fallback: false)，或配置 $rem-fallback: false
+// 例：remfix(24, (rem: --vc-rem, fallback: false)) = calc(var(--vc-rem) * 24)
 @function remfix($value, $rest...) {
-	$options: merge((rem: vd.$rem-var, base-width: 750), $rest...);
+	$options: merge((rem: vd.$rem-var, base-width: 750, fallback: vd.$rem-fallback), $rest...);
 	$rem: map.get($options, 'rem');
 	$base-width: map.get($options, 'base-width');
+	$fallback: map.get($options, 'fallback');
 	$rem: #{string.unquote(#{$rem})};
 
 	@if string.index($rem, '--') != 1 {
@@ -91,6 +94,10 @@ $direction-map: ('l': left, 'r': right, 't': top, 'b': bottom);
 		}
 	} @else if meta.type-of($value) == 'string' {
 		$value: string.unquote($value);
+	}
+
+	@if not $fallback {
+		@return string.unquote('calc(var(#{$rem}) * #{$value})');
 	}
 
 	@return string.unquote('calc(var(#{$rem}, calc(100vw / #{$base-width})) * #{$value})');

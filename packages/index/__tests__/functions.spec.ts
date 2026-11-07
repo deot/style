@@ -86,4 +86,14 @@ describe('functions/', () => {
 		const source = sass.compileString(`@use './variables/default' as vd; vd.$rem-var: '--unit'; @use './functions/helper' as fh;a{width: fh.remfix(24)}`);
 		expect(source.css).toMatch('a{width:calc(var(--unit, calc(100vw / 750)) * 24)}');
 	});
+
+	it('remfix without fallback', () => {
+		const source = sass.compileString(`@use './functions/helper' as fh;a{width: fh.remfix(24, (rem: --unit, fallback: false))}`);
+		expect(source.css).toMatch('a{width:calc(var(--unit) * 24)}');
+	});
+
+	it('remfix default without fallback', () => {
+		const source = sass.compileString(`@use './variables/default' as vd with ($rem-var: '--unit', $rem-fallback: false); @use './functions/helper' as fh;a{width: fh.remfix(24)}`);
+		expect(source.css).toMatch('a{width:calc(var(--unit) * 24)}');
+	});
 });

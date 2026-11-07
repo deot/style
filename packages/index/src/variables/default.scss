@@ -8,6 +8,9 @@ $scale: 1 !default;
 // remfix / Style.useREM 使用的 CSS 变量名
 $rem-var: '--rem' !default;
 
+// remfix 是否带回退值：var(--rem, calc(100vw / 750))；变量一定有值时（如已用 @property 注册）可关闭
+$rem-fallback: true !default;
+
 // 单位
 $unit: px !default;
 
