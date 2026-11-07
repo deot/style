@@ -106,7 +106,7 @@
 
 | Mixin | 参数与行为 |
 | --- | --- |
-| `block($block)` | 定义块并建立后续元素的命名上下文 |
+| `block($block)` | 定义块并建立后续元素的命名上下文；可传列表，见下方「多个 block」 |
 | `element($element, $root: true)` | 支持元素列表；默认将普通元素选择器置顶 |
 | `modifier($modifier, $root: true)` | 支持修饰符列表；默认置顶普通修饰符选择器 |
 | `when($state, $useHas: false)` | 当前选择器追加 is- 状态；true 时使用 has- |
@@ -115,6 +115,24 @@
 | `spec-selector($specSelector: '', $element: $E, $modifier: false, $block: $B)` | 与指定元素选择器组合，可传入连接符 |
 | `meb($modifier: false, $element: $E, $block: $B)` | 当前选择器下生成指定块的元素/修饰符 |
 | `share-rule($name)` / `extend-rule($name)` | 定义/扩展 `%shared-` 占位规则 |
+
+### 多个 block
+
+`block` 可以传列表，多个 block 共用一份规则（例如同一组件的两套类名前缀）。`element`、`modifier`、`configurable-m`、`spec-selector`、`meb` 按 block 配对：嵌套时每个父选择器只与它所属 block 的类名组合，不交叉；`pseudo` 给列表中的每一项都加上伪类。
+
+```scss
+@use '@deot/style/src/mixins/bem' as *;
+
+@include block((card, m-card)) {
+	@include when(active) {
+		@include element(title) {
+			color: #456cf6;
+		}
+	}
+}
+
+// .card.is-active .card__title, .m-card.is-active .m-card__title { color: #456cf6; }
+```
 
 `$B/$E` 是最近一次 block/element 的上下文，不是调用方必须提供的参数。模块还提供选择器辅助函数 `selector-to-string`、`contains-modifier`、`contain-when-flag`、`contain-pseudo-class` 和 `hit-all-special-nest-rule`，分别用于字符串化或判断修饰符、状态、伪类及其组合；一般业务使用上述 mixin 即可。
 

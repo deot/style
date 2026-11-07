@@ -195,6 +195,37 @@ describe('mixins/', () => {
 		expect(source.css).toMatch(`.b__e1:hover,.b__e2:hover{margin:0}`);
 	});
 
+	it('bem.scss, block list pairs configurable-m, spec-selector and meb', () => {
+		const source = sass.compileString(`
+			@use './mixins/bem.scss' as *;
+
+			@include block((b, bm)) {
+				@include element(e) {
+					@include configurable-m(m, e) {
+						margin: 0;
+					}
+
+					@include spec-selector(' > ', f) {
+						margin: 10px;
+					}
+
+					@include spec-selector('', e, m1) {
+						margin: 20px;
+					}
+
+					@include meb(m2, g) {
+						margin: 30px;
+					}
+				}
+			}
+		`);
+
+		expect(source.css).toMatch(`.b__e .b__e--m,.bm__e .bm__e--m{margin:0}`);
+		expect(source.css).toMatch(`.b__e>.b__f,.bm__e>.bm__f{margin:10px}`);
+		expect(source.css).toMatch(`.b__e.b__e--m1,.bm__e.bm__e--m1{margin:20px}`);
+		expect(source.css).toMatch(`.b__e .b__g--m2,.bm__e .bm__g--m2{margin:30px}`);
+	});
+
 	it('common.scss/common-border-1px', () => {
 		const source = sass.compileString(`@use './mixins/common.scss' as *; .b { @include common-border-1px('', inherit);}`);
 

@@ -86,6 +86,37 @@ $state-has-prefix: 'has-';
 	@return false;
 }
 
+// block 为列表时：每个父选择器只与它所属 block 的目标组合，不交叉
+// $combinator：'' 接在同一元素上，' ' 为后代，也可以是 >、+、~
+@function pair-with-block($parents, $blocks, $suffix, $combinator: ' ') {
+	$result: ();
+	$symbol: null;
+
+	@each $char in ('>', '+', '~') {
+		@if string.index($combinator, $char) {
+			$symbol: $char;
+		}
+	}
+
+	@each $block in $blocks {
+		$target: '.#{$block}#{$suffix}';
+
+		@each $parent in $parents {
+			@if belongs-to-block($parent, $block) {
+				@if $combinator == '' {
+					$result: list.join($result, selector.append($parent, $target), comma);
+				} @else if $symbol {
+					$result: list.join($result, selector.nest($parent, '#{$symbol} #{$target}'), comma);
+				} @else {
+					$result: list.join($result, selector.nest($parent, $target), comma);
+				}
+			}
+		}
+	}
+
+	@return $result;
+}
+
 /* Mix
  -------------------------- */
 
@@ -123,16 +154,10 @@ $state-has-prefix: 'has-';
 
 		@each $block in $B {
 			@each $unit in $element {
-				$target: '.#{$block}#{$element-separator}#{$unit}';
-
 				@if $nested {
-					@each $parent in $selector {
-						@if belongs-to-block($parent, $block) {
-							$result: list.join($result, selector.nest($parent, $target), comma);
-						}
-					}
+					$result: list.join($result, pair-with-block($selector, $block, $element-separator + $unit), comma);
 				} @else {
-					$result: list.append($result, $target, comma);
+					$result: list.append($result, '.#{$block}#{$element-separator}#{$unit}', comma);
 				}
 			}
 		}
@@ -241,6 +266,20 @@ $state-has-prefix: 'has-';
 		$interpolation: $element-separator + $E-flag;
 	}
 
+	@if list.length($B) > 1 {
+		@at-root {
+			#{pair-with-block($selector, $B, $interpolation + $modifier-separator + $modifier)} {
+				@content;
+			}
+		}
+	} @else {
+		@include -configurable-m-single($selector, $interpolation, $modifier) {
+			@content;
+		}
+	}
+}
+
+@mixin -configurable-m-single($selector, $interpolation, $modifier) {
 	@at-root {
 		#{$selector} {
 			.#{$B + $interpolation + $modifier-separator + $modifier} {
@@ -263,9 +302,17 @@ $state-has-prefix: 'has-';
 		$modifier-combo: $modifier-separator + $modifier;
 	}
 
-	@at-root {
-		#{&}#{$specSelector}.#{$block + $element-separator + $element + $modifier-combo} {
-			@content;
+	@if list.length($block) > 1 {
+		@at-root {
+			#{pair-with-block(&, $block, $element-separator + $element + $modifier-combo, $specSelector)} {
+				@content;
+			}
+		}
+	} @else {
+		@at-root {
+			#{&}#{$specSelector}.#{$block + $element-separator + $element + $modifier-combo} {
+				@content;
+			}
 		}
 	}
 }
@@ -278,6 +325,20 @@ $state-has-prefix: 'has-';
 		$modifier-combo: $modifier-separator + $modifier;
 	}
 
+	@if list.length($block) > 1 {
+		@at-root {
+			#{pair-with-block($selector, $block, $element-separator + $element + $modifier-combo)} {
+				@content;
+			}
+		}
+	} @else {
+		@include -meb-single($selector, $block, $element, $modifier-combo) {
+			@content;
+		}
+	}
+}
+
+@mixin -meb-single($selector, $block, $element, $modifier-combo) {
 	@at-root {
 		#{$selector} {
 			.#{$block + $element-separator + $element + $modifier-combo} {
