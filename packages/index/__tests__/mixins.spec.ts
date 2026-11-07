@@ -226,6 +226,30 @@ describe('mixins/', () => {
 		expect(source.css).toMatch(`.b__e .b__g--m2,.bm__e .bm__g--m2{margin:30px}`);
 	});
 
+	it('common.scss/common-border-1px, radius', () => {
+		const source = sass.compileString(`
+			@use './mixins/common.scss' as *;
+			.a { @include common-border-1px('', red, 4); }
+			.b { @include common-border-1px('', red, calc(var(--rem) * 8)); }
+			.c { @include common-border-1px('', red); }
+		`);
+
+		expect(source.css).toMatch(`.a::before,.a::after{`);
+		expect(source.css).toMatch(`border-radius:4px`);
+		// 字符串圆角原样输出（原先一律变为 inherit）
+		expect(source.css).toMatch(`border-radius:calc(var(--rem)*8)`);
+		expect(source.css).toMatch(`border-radius:inherit`);
+	});
+
+	it('common.scss/common-text-line, break', () => {
+		const withBreak = sass.compileString(`@use './mixins/common.scss' as *; .a { @include common-text-line(2); }`);
+		const withoutBreak = sass.compileString(`@use './mixins/common.scss' as *; .a { @include common-text-line(2, false); }`);
+
+		expect(withBreak.css).toMatch(`word-break:break-all`);
+		expect(withoutBreak.css).toMatch(`-webkit-line-clamp:2`);
+		expect(withoutBreak.css).not.toMatch(`word-break`);
+	});
+
 	it('common.scss/common-border-1px', () => {
 		const source = sass.compileString(`@use './mixins/common.scss' as *; .b { @include common-border-1px('', inherit);}`);
 

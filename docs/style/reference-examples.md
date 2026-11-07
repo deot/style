@@ -79,10 +79,10 @@
 | `common-flex-cc` | Flex 水平垂直居中 |
 | `common-break` | 长文本与连续字符换行 |
 | `common-ellipsis` | 单行省略 |
-| `common-text-line($line)` | 指定行数截断 |
+| `common-text-line($line, $break: true)` | 指定行数截断；`$break` 为 false 时不附带 `common-break` |
 | `common-clear-fix($content: false)` | 清除浮动；true 时在伪元素内接收内容块 |
 | `common-scroll($size: 4)` | WebKit 滚动条样式，尺寸通过 unitfix 处理 |
-| `common-border-1px($direction: '', $color, $border-radius: inherit)` | 空方向为全边，或 top/right/bottom/left；颜色必传；高分屏下边框宽度减半，由浏览器对齐到整数设备像素 |
+| `common-border-1px($direction: '', $color, $border-radius: inherit)` | 空方向为全边，或 top/right/bottom/left；颜色必传；圆角为数字时经 unitfix 处理，其他值（如 `remfix(8)`）原样输出；高分屏下边框宽度减半，由浏览器对齐到整数设备像素 |
 
 ## BEM mixin
 

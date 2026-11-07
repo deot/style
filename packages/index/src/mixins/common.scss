@@ -53,14 +53,17 @@ $unitb: px !default;
 	white-space: nowrap;
 }
 
-@mixin common-text-line($line) {
+// $break：是否同时应用 common-break（长单词、长链接在任意位置换行）
+@mixin common-text-line($line, $break: true) {
 	display: -webkit-box;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: $line;
 
-	@include common-break;
+	@if $break {
+		@include common-break;
+	}
 }
 
 /**
@@ -143,7 +146,7 @@ $unitb: px !default;
 			display: block; /* 父类为flex, 使用table无法撑开 */
 			clear: both;
 			pointer-events: none;
-			border-radius: if(sass(meta.type-of($border-radius) == "number"): fi.unitfix($border-radius); else: inherit);
+			border-radius: if(sass(meta.type-of($border-radius) == "number"): fi.unitfix($border-radius); else: $border-radius);
 			content: " ";
 			box-sizing: border-box;
 		}
