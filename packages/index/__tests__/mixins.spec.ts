@@ -97,6 +97,104 @@ describe('mixins/', () => {
 		expect(source.css).toMatch(`.b__e9 .b__e10 .b__e11{margin:50px}`);
 	});
 
+	it('bem.scss, block list shares one rule and pairs elements with their own block', () => {
+		const source = sass.compileString(`
+			@use './mixins/bem.scss' as *;
+
+			@include block((b, bm)) {
+				margin: 0;
+
+				@include when(d) {
+					margin: 10px;
+
+					@include element(e) {
+						margin: 20px;
+					}
+				}
+
+				@include element(e1) {
+					margin: 30px;
+
+					@include when(d) {
+						margin: 40px;
+					}
+				}
+
+				@include element((e2, e3)) {
+					margin: 50px;
+
+					@include pseudo(hover) {
+						margin: 60px;
+					}
+				}
+
+				@include element(e4, false) {
+					margin: 70px;
+				}
+
+				@include modifier(m) {
+					margin: 80px;
+				}
+
+				@include pseudo(hover) {
+					margin: 90px;
+
+					@include element(e5) {
+						margin: 100px;
+					}
+				}
+			}
+		`);
+
+		expect(source.css).toMatch(`.b,.bm{margin:0}`);
+		expect(source.css).toMatch(`.b.is-d,.bm.is-d{margin:10px}`);
+		// 嵌套时 element 只接在自己 block 的父选择器后面，不交叉组合
+		expect(source.css).toMatch(`.b.is-d .b__e,.bm.is-d .bm__e{margin:20px}`);
+		expect(source.css).toMatch(`.b__e1,.bm__e1{margin:30px}`);
+		expect(source.css).toMatch(`.b__e1.is-d,.bm__e1.is-d{margin:40px}`);
+		expect(source.css).toMatch(`.b__e2,.b__e3,.bm__e2,.bm__e3{margin:50px}`);
+		// 父选择器为列表时，每一项都加上伪类
+		expect(source.css).toMatch(`.b__e2:hover,.b__e3:hover,.bm__e2:hover,.bm__e3:hover{margin:60px}`);
+		expect(source.css).toMatch(`.b .b__e4,.bm .bm__e4{margin:70px}`);
+		expect(source.css).toMatch(`.b--m,.bm--m{margin:80px}`);
+		expect(source.css).toMatch(`.b:hover,.bm:hover{margin:90px}`);
+		expect(source.css).toMatch(`.b:hover .b__e5,.bm:hover .bm__e5{margin:100px}`);
+		expect(source.css).not.toMatch(`.b.is-d .bm__e`);
+	});
+
+	it('bem.scss, block list only pairs exact block names', () => {
+		const source = sass.compileString(`
+			@use './mixins/bem.scss' as *;
+
+			@include block((vc-select, vc-select-option)) {
+				@include when(d) {
+					@include element(e) {
+						margin: 0;
+					}
+				}
+			}
+		`);
+
+		// .vc-select-option 不应被当作 .vc-select 的选择器
+		expect(source.css).toMatch(`.vc-select.is-d .vc-select__e,.vc-select-option.is-d .vc-select-option__e{margin:0}`);
+	});
+
+	it('bem.scss, element list followed by pseudo (single block)', () => {
+		const source = sass.compileString(`
+			@use './mixins/bem.scss' as *;
+
+			@include block(b) {
+				@include element((e1, e2)) {
+					@include pseudo(hover) {
+						margin: 0;
+					}
+				}
+			}
+		`);
+
+		expect(source.css).toMatch(`.b__e1:hover,.b__e2:hover{margin:0}`);
+	});
+
 	it('common.scss/common-border-1px', () => {
 		const source = sass.compileString(`@use './mixins/common.scss' as *; .b { @include common-border-1px('', inherit);}`);
 

@@ -1,3 +1,5 @@
+@use 'sass:list';
+@use 'sass:selector';
 @use 'sass:string';
 @use 'sass:meta';
 
@@ -53,14 +55,58 @@ $state-has-prefix: 'has-';
 	@return contains-modifier($selector) or contain-when-flag($selector) or contain-pseudo-class($selector);
 }
 
+// 注：新增说明用 // 注释，/** */ 会原样输出到编译后的 CSS
+// 选择器是否属于 block：.{block} 之后紧跟结束、元素/修饰符分隔符或其他选择器的开始
+// 用于 block 为列表时，把 element 配对到各自 block 的父选择器上
+@function belongs-to-block($selector, $block) {
+	$string: meta.inspect($selector);
+	$needle: '.' + $block;
+	$index: string.index($string, $needle);
+
+	@while $index {
+		$next: string.slice($string, $index + string.length($needle), $index + string.length($needle));
+
+		@if $next == '' or $next == '_' or $next == '.' or $next == ':' or $next == ' ' or $next == '[' {
+			@return true;
+		}
+
+		@if $next == '-' and string.slice($string, $index + string.length($needle), $index + string.length($needle) + 1) == '--' {
+			@return true;
+		}
+
+		$found: string.index(string.slice($string, $index + 1), $needle);
+
+		@if $found {
+			$index: $index + $found;
+		} @else {
+			$index: null;
+		}
+	}
+
+	@return false;
+}
+
 /* Mix
  -------------------------- */
 
+// $block 支持列表，如 (vc-affix, vcm-affix)：多个 block 共用一份规则，element 与 modifier 按 block 配对
 @mixin block($block) {
 	$B: $block !global;
 
-	.#{$block} {
-		@content;
+	@if list.length($block) > 1 {
+		$selector: ();
+
+		@each $unit in $block {
+			$selector: list.append($selector, '.#{$unit}', comma);
+		}
+
+		#{$selector} {
+			@content;
+		}
+	} @else {
+		.#{$block} {
+			@content;
+		}
 	}
 }
 
@@ -69,6 +115,41 @@ $state-has-prefix: 'has-';
  */
 @mixin element($element, $root: true) {
 	$E: $element !global;
+	$selector: &;
+
+	@if list.length($B) > 1 {
+		$nested: hit-all-special-nest-rule($selector) or not $root;
+		$result: ();
+
+		@each $block in $B {
+			@each $unit in $element {
+				$target: '.#{$block}#{$element-separator}#{$unit}';
+
+				@if $nested {
+					@each $parent in $selector {
+						@if belongs-to-block($parent, $block) {
+							$result: list.join($result, selector.nest($parent, $target), comma);
+						}
+					}
+				} @else {
+					$result: list.append($result, $target, comma);
+				}
+			}
+		}
+
+		@at-root {
+			#{$result} {
+				@content;
+			}
+		}
+	} @else {
+		@include -element-single($element, $root) {
+			@content;
+		}
+	}
+}
+
+@mixin -element-single($element, $root) {
 	$selector: &;
 	$current-selector: "";
 
@@ -99,6 +180,28 @@ $state-has-prefix: 'has-';
 }
 
 @mixin modifier($modifier, $root: true) {
+	@if list.length($B) > 1 {
+		$result: ();
+
+		@each $parent in & {
+			@each $unit in $modifier {
+				$result: list.append($result, '#{$parent}#{$modifier-separator}#{$unit}', comma);
+			}
+		}
+
+		@at-root {
+			#{$result} {
+				@content;
+			}
+		}
+	} @else {
+		@include -modifier-single($modifier, $root) {
+			@content;
+		}
+	}
+}
+
+@mixin -modifier-single($modifier, $root) {
 	$selector: &;
 
 	// 支持数组
@@ -207,8 +310,15 @@ $state-has-prefix: 'has-';
  * 如 [clsssName] [className]:hover
  */
 @mixin pseudo($pseudo) {
-	@at-root #{&}#{':#{$pseudo}'} {
-		@content;
+	// 父选择器为列表（block 列表、element 列表）时每一项都加上伪类
+	@if list.length(&) > 1 {
+		@at-root #{selector.append(&, ':#{$pseudo}')} {
+			@content;
+		}
+	} @else {
+		@at-root #{&}#{':#{$pseudo}'} {
+			@content;
+		}
 	}
 }
 
