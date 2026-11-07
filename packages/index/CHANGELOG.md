@@ -1,5 +1,16 @@
 # @deot/style ChangeLog
 
+## v1.3.2
+
+_2026-11-07_
+
+### Features
+
+- feat: remfix, add a fallback switch for a rem variable that always has a value ([b221c5b](https://github.com/deot/style/commit/b221c5b78ac85d60e66ea50bb45b8ba70a174095))
+- feat: common, keep string radius in border-1px and make break optional in text-line ([998eef6](https://github.com/deot/style/commit/998eef6335086fb6c170176bde9cf7a931e4a81a))
+- feat: bem, pair spec-selector, meb and configurable-m with a block list ([b7fa18b](https://github.com/deot/style/commit/b7fa18b63bc0b050128138fad7503e61955ab6e1))
+- feat: bem, let block take a list and pair elements with their own block ([a57ff89](https://github.com/deot/style/commit/a57ff8909138b41e8aad2d4ec214a99ec8cfb5fb))
+
 ## v1.3.1
 
 _2026-10-20_
